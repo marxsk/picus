@@ -5,7 +5,7 @@ moduleForModel('node', 'Unit | Model | node', {
 });
 
 test('it exists', function(assert) {
-  let model = this.subject();
+  const model = this.subject();
   assert.ok(!!model);
 });
 
