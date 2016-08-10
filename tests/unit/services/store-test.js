@@ -27,7 +27,6 @@ test('check reloading function', function(assert) {
 });
 
 test('load empty clusters', function(assert) {
-  // @todo should we count also asserts in setTimeout?
   assert.expect(1);
   const RELOAD_TIMEOUT = 1000;
   const CLUSTER_COUNT = 3;
@@ -35,7 +34,9 @@ test('load empty clusters', function(assert) {
   server.createList('cluster', CLUSTER_COUNT);
 
   store.reloadData();
-  setTimeout(function() {
-    assert.equal(CLUSTER_COUNT, store.peekAll('cluster').get('length'));
+  Ember.run.later(function() {
+    assert.equal(CLUSTER_COUNT, store.peekAll('cluster').get('length'), 'invalid number of loaded clusters');
   }, RELOAD_TIMEOUT);
+
+  return application.testHelpers.wait();
 });
