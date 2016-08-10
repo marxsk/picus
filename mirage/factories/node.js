@@ -2,8 +2,7 @@ import { Factory } from 'ember-cli-mirage';
 
 export default Factory.extend({
   name(i) {
-    return `Cluster ${i}`;
+    return `Node #${i}`;
   },
-  status: 'running',
-  nodes: [],
+  status: 'online',
 });
