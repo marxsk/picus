@@ -86,16 +86,41 @@ test('load one cluster with several nodes [added using createNode]', function(as
   return application.testHelpers.wait();
 });
 
-test('load one cluster with several resources', function(assert) {
-  assert.expect(1);
-  const CLUSTER_COUNT = 1;
+test('load one cluster with several resources [added in constructor]', function(assert) {
+  assert.expect(2);
   const RESOURCES_COUNT = 3;
 
-  server.createList('cluster', CLUSTER_COUNT);
+  let resources = server.createList('resource', RESOURCES_COUNT);
+  let cluster = server.create('cluster', {resources});
+  cluster.save();
 
   store.reloadData();
   Ember.run.later(function() {
-    assert.equal(RESOURCES_COUNT, store.peekAll('cluster').get('firstObject').get('nodes').get('length'), 'invalid number of loaded resources for first cluster');
+    assert.ok(store.peekAll('cluster').get('firstObject'), 'loading of first cluster object from store');
+
+    assert.equal(RESOURCES_COUNT, store.peekAll('cluster').get('firstObject').get('resources').get('length'), 'invalid number of loaded resources for first cluster');
+    store.reloadData();
+  }, RELOAD_TIMEOUT);
+
+  return application.testHelpers.wait();
+});
+
+test('load one cluster with several resources [added using createNode]', function(assert) {
+  assert.expect(2);
+  const RESOURCES_COUNT = 3;
+
+  let cluster = server.create('cluster');
+  for (let x=0; x<RESOURCES_COUNT; x++) {
+    cluster.createResource();
+  }
+  cluster.save();
+
+  store.reloadData();
+  Ember.run.later(function() {
+    assert.ok(store.peekAll('cluster').get('firstObject'), 'loading of first cluster object from store');
+
+    assert.equal(RESOURCES_COUNT, store.peekAll('cluster').get('firstObject').get('resources').get('length'), 'invalid number of loaded resources for first cluster');
+    store.reloadData();
   }, RELOAD_TIMEOUT);
 
   return application.testHelpers.wait();
