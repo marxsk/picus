@@ -6,7 +6,7 @@ var application;
 var store;
 const RELOAD_TIMEOUT = 1000;
 
-moduleFor('service:store', 'Unit | Service | store', {
+moduleFor('service:store', 'Integration | Service | store', {
   needs: ['model:cluster'],
   beforeEach: function() {
     application = startApp();
