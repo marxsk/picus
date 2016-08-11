@@ -100,3 +100,7 @@ test('load one cluster with several resources', function(assert) {
 
   return application.testHelpers.wait();
 });
+
+test('periodic reloading', function(assert) {
+  assert.ok(false);
+});
