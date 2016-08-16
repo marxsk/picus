@@ -6,4 +6,5 @@ export default Factory.extend({
   },
   status: 'running',
   nodes: [],
+  resources: [],
 });
