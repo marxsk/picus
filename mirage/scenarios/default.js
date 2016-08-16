@@ -1,11 +1,15 @@
-export default function(/* server */) {
+export default function(server) {
+//  let resource = server.create('resource', {id: 222});
+/*  let cluster = server.create('cluster');//, {resources: [resource]});
+  cluster.createNode();
+  let res = cluster.createResource();
+  res.update('name', 'moje moe');
+  cluster.save();
+*/
+  let cluster = server.create('cluster', {name: 'Second one'});
+  cluster.createNode({id: 222, name: 'Virtual machine'});
+  let resource = cluster.createResource({id: 333, name: 'Apache Mock Server'});
+  resource.createResource({id: 444, name: 'Child Mock'});
+  resource.createResource({id: 445, name: 'Child Mock #2'});
 
-  /*
-    Seed your development database using your factories.
-    This data will not be loaded in your tests.
-
-    Make sure to define a factory for each model you want to create.
-  */
-
-  // server.createList('post', 10);
 }

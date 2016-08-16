@@ -12,10 +12,14 @@ export default DS.Store.extend({
   **/
   reloadData: function() {
     const res = this.retrieveManagedInstance('adapter', 'application').reloadData();
+    const ser = this.retrieveManagedInstance('serializer', 'application');
     const store = this;
 
     res.then(function(response) {
-      store.push(response);
+      var modelClass = store.modelFor('cluster');
+      var normalized = ser.normalizeSingleResponse(store, modelClass, response);
+      store.push(normalized);
+
     }, function(error) {
       alert(error);
     });
