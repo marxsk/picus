@@ -1,4 +1,5 @@
 import { moduleFor, test } from 'ember-qunit';
+import { skip } from 'qunit';
 import Ember from 'ember';
 import startApp from '../../helpers/start-app';
 
@@ -126,12 +127,13 @@ test('load one cluster with several resources [added using createNode]', functio
   return application.testHelpers.wait();
 });
 
-test('load resource with children resources [added in constructor]', function(assert) {
+// Problem in mirage, when create* are used it works as expected.
+skip('load resource with children resources [added in constructor]', function(assert) {
   assert.expect(3);
 
-  const childResource = server.create('resource');
-  const mainResource = server.create('resource', {resources: [childResource]});
-  const cluster = server.create('cluster', {resources: [mainResource]});
+  const childResource = server.create('resource', {id:1});
+  const mainResource = server.create('resource', {id:2, resources: [childResource]});
+  const cluster = server.create('cluster', {id:3, resources: [mainResource]});
   cluster.save();
 
   console.log(server.db);
@@ -161,17 +163,13 @@ test('load resource with children resources [added using createNode]', function(
     assert.ok(store.peekAll('cluster').get('firstObject'), 'loading of first cluster object from store');
     assert.ok(store.peekAll('cluster').get('firstObject').get('resources'), 'load first resource in cluster');
     assert.ok(store.peekAll('cluster').get('firstObject').get('resources').get('firstObject').get('resources'), 'load children of first resource in cluster');
-    assert.equal(11, store.peekAll('cluster').get('firstObject').get('resources').get('firstObject').get('resources').get('length'), 'load first resource in cluster');
-
-    store.reloadData();
+    assert.equal(2, store.peekAll('cluster').get('firstObject').get('resources').get('firstObject').get('resources').get('length'), 'load first resource in cluster');
+    assert.equal('Child Mock', store.peekAll('cluster').get('firstObject').get('resources').get('firstObject').get('resources').get('firstObject').get('name'), 'check name of first children resource');
   }, RELOAD_TIMEOUT);
 
   return application.testHelpers.wait();
 });
-*/
 
-/*
-test('periodic reloading', function(assert) {
+skip('periodic reloading', function(assert) {
   assert.ok(false);
 });
-*/
