@@ -149,13 +149,14 @@ skip('load resource with children resources [added in constructor]', function(as
   return application.testHelpers.wait();
 });
 
-
-/*
 test('load resource with children resources [added using createNode]', function(assert) {
-  assert.expect(4);
+  assert.expect(5);
 
-  const cluster = server.create('cluster');
-  const x = cluster.createResource();
+  let cluster = server.create('cluster', {name: 'Second one'});
+  let resource = cluster.createResource({name: 'Apache Mock Server'});
+  resource.createResource({name: 'Child Mock'});
+  resource.createResource({name: 'Child Mock #2'});
+
   cluster.save();
 
   store.reloadData();
