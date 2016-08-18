@@ -1,0 +1,16 @@
+{{#if isCollapsable}}
+  <span class='menu-item-collapse' {{action 'onSelectCollapse'}}>
+    {{#if isCollapsed}}+{{else}}-{{/if}}
+  </span>
+{{/if}}
+{{input type='checkbox' checked=isChecked}}
+<span class='menu-item' onclick={{action 'onSelectItem'}}>
+  {{title}}
+  {{#if status}}
+    [{{status}}]
+  {{/if}}
+</span>
+
+{{#unless isCollapsed}}
+  {{yield}}
+{{/unless}}
