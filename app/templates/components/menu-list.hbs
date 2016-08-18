@@ -1,0 +1,13 @@
+{{#each data as |item|}}
+  {{#unless item.resources}}
+    <li> {{menu-item title=item.name componentId=item.id status=item.status}} </li>
+  {{else}}
+    <li>
+      {{#menu-item title=item.name isCollapsable=true componentId=item.id status=item.status}}
+        <ul>
+          {{menu-list data=item.resources onCheckAction=(action onCheckAction) onClickAction=(action onClickAction)}}
+        </ul>
+      {{/menu-item}}
+    </li>
+  {{/unless}}
+{{/each}}
