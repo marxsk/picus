@@ -174,3 +174,7 @@ test('load resource with children resources [added using createNode]', function(
 skip('periodic reloading', function(assert) {
   assert.ok(false);
 });
+
+skip('only one request in queue for reloading', function(assert) {
+  assert.ok(false);
+});
