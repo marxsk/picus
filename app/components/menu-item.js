@@ -8,6 +8,7 @@ export default Ember.Component.extend({
   isCollapsed: true,
   isChecked: false,
   onClickAction: undefined,
+  onCheckAction: undefined,
 
   watchChecked: function() {
     this.attrs.onCheckAction(this.get('componentId'), this.get('isChecked'));
