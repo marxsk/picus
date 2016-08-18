@@ -1,0 +1,21 @@
+<span class="menu-header" {{action 'onSelectCollapse'}}>{{title}}</span>
+
+{{#if errorCount}}
+  <span class='errors-count' {{action 'showOnlyErrors'}}>
+    [{{errorCount}}]
+  </span>
+{{/if}}
+
+{{#unless isCollapsed}}
+  {{#unless data}}
+    {{yield}}
+  {{else}}
+  <ul>
+    {{#if onlyErrors}}
+      {{menu-list data=errorList onCheckAction=(action onCheckAction) onClickAction=(action onClickAction)}}
+    {{else}}
+      {{menu-list data=data onCheckAction=(action onCheckAction) onClickAction=(action onClickAction)}}
+    {{/if}}
+    </ul>
+  {{/unless}}
+{{/unless}}
