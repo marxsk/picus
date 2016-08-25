@@ -1,0 +1,15 @@
+{{#menu-header title='Settings'}}
+  <ul>
+  <li> {{menu-item title='Properties' componentId='menu:Properties' onCheckAction=(action 'onCheck') onClickAction=(action 'onClick')}} </li>
+  <li> {{menu-item title='ACLs' componentId='menu:ACLs' onCheckAction=(action 'onCheck') onClickAction=(action 'onClick')}} </li>
+  <li> {{menu-item title='Permissions' componentId='menu:Permissions' onCheckAction=(action 'onCheck') onClickAction=(action 'onClick')}} </li>
+  </ul>
+{{/menu-header}}
+
+{{menu-header title='Nodes' data=model.firstObject.nodes onCheckAction=(action 'onCheck') onClickAction=(action 'onClick')}}
+
+{{menu-header title='Resources' data=model.firstObject.resources onCheckAction=(action 'onCheck') onClickAction=(action 'onClick')}}
+
+<hr />
+
+<!-- @todo: checkboxes are not working -->
