@@ -1,9 +1,9 @@
 {{#each data as |item|}}
   {{#unless item.resources}}
-    <li> {{menu-item title=item.name componentId=item.id status=item.status}} </li>
+    <li> {{menu-item title=item.name componentId=item.id status=item.status onCheckAction=(action onCheckAction) onClickAction=(action onClickAction)}} </li>
   {{else}}
     <li>
-      {{#menu-item title=item.name isCollapsable=true componentId=item.id status=item.status}}
+      {{#menu-item title=item.name isCollapsable=true componentId=item.id status=item.status onCheckAction=(action onCheckAction) onClickAction=(action onClickAction)}}
         <ul>
           {{menu-list data=item.resources onCheckAction=(action onCheckAction) onClickAction=(action onClickAction)}}
         </ul>
