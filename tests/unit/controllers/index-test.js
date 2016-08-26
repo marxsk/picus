@@ -11,12 +11,15 @@ test('it exists', function(assert) {
 });
 
 test('check action onClick', function(assert) {
-  assert.expect(2);
+  assert.expect(4);
 
   let controller = this.subject();
   assert.equal(undefined, controller.get('selectedComponentId'), 'Initially, there is not a selected component');
-  controller.actions.onClick.call(controller, 'menu:foo');
+  controller.actions.onClick.call(controller, undefined, 'menu:foo');
   assert.equal('menu:foo', controller.get('selectedComponentId'), 'Select a component that is not backed by real component');
+  controller.actions.onClick.call(controller, 'abc', 'menu:foo');
+  assert.equal('menu:foo', controller.get('selectedComponentId'), 'Select a component that is backed by real component');
+  assert.equal('abc', controller.get('selectedComponent'), 'Select a component that is backed by real component');
 });
 
 test('check existence of action onCheck', function(assert) {
