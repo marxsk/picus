@@ -5,4 +5,6 @@ export default Factory.extend({
     return `Node #${i}`;
   },
   status: 'online',
+  isCorosyncEnabled: false,
+  isCorosyncRunning: true,
 });

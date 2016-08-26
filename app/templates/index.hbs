@@ -13,3 +13,18 @@
 <hr />
 
 <!-- @todo: checkboxes are not working -->
+
+<div>
+  {{#if isSelectedNode}}
+    <h3>Editable form for Nodes</h3>
+
+    Name: {{{ selectedComponent.name }}} <br />
+
+    Cluster daemons:
+    <ul>
+      <li> Corosync: {{format-running selectedComponent.isCorosyncRunning}} ( {{format-enabled selectedComponent.isCorosyncEnabled}} ) </li>
+      <li> Pacemaker: {{format-running selectedComponent.isPacemakerRunning}} ( {{format-enabled selectedComponent.isPacemakerEnabled}} ) </li>
+      <li> Corosync: {{format-running selectedComponent.isPcsdRunning}} ( {{format-enabled selectedComponent.isPcsdEnabled}} ) </li>
+    </ul>
+  {{/if}}
+</div>
