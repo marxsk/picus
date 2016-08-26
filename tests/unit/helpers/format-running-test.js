@@ -6,6 +6,6 @@ module('Unit | Helper | format running');
 test('it works', function(assert) {
   assert.expect(2);
 
-  assert.equal(formatRunning(true), 'running');
-  assert.equal(formatRunning(false), 'stopped');
+  assert.equal(formatRunning([true]), 'running');
+  assert.equal(formatRunning([false]), 'stopped');
 });
