@@ -9,14 +9,17 @@ moduleForComponent('menu-list', 'Integration | Component | menu list', {
 test('Show X menu items from data when there are no children', function(assert) {
   assert.expect(2);
 
+  this.set('onClick', () => { });
+  this.set('onCheck', () => { });
+
   let ITEMS_COUNT = 2;
   this.set('menuItems', createMenuItems(ITEMS_COUNT));
-  this.render(hbs`{{menu-list data=menuItems}}`);
+  this.render(hbs`{{menu-list data=menuItems onClickAction=(action onClick) onCheckAction=(action onCheck)}}`);
   assert.equal(this.$('li').length, ITEMS_COUNT, 'Count of item matches model');
 
   ITEMS_COUNT = 5;
   this.set('menuItems', createMenuItems(ITEMS_COUNT));
-  this.render(hbs`{{menu-list data=menuItems}}`);
+  this.render(hbs`{{menu-list data=menuItems onClickAction=(action onClick) onCheckAction=(action onCheck)}}`);
   assert.equal(this.$('li').length, ITEMS_COUNT, 'Count of item matches model');
 });
 
