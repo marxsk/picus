@@ -5,6 +5,9 @@ export default DS.Model.extend({
   recordId: DS.attr('string'), // @note: = ID in cluster config
   status: DS.attr('string'),  // @todo: define a set of possible values
 
+  nodeAttributes: DS.hasMany('attribute'),
+  nodeUtilizationAttributes: DS.hasMany('attribute'),
+
   isCorosyncEnabled: DS.attr('boolean'),
   isCorosyncRunning: DS.attr('boolean'),
   isPacemakerEnabled: DS.attr('boolean'),
