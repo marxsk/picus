@@ -26,14 +26,15 @@ test('render title and status', function(assert) {
 });
 
 test('Selected item should propagate ID to closure', function(assert) {
-  assert.expect(3);
+  assert.expect(4);
 
-  this.set('onClick', (componentId) => {
+  this.set('onClick', (component, componentId) => {
     assert.ok(true, 'Closure action after click on item was executed');
+    assert.equal(component, 'abc', 'Component was sent to the onClickAction');
     assert.equal(componentId, 'menu:Foo', 'Component ID is sent to the onClickAction');
   });
 
-  this.render(hbs`{{menu-item title='Hello' componentId='menu:Foo' onClickAction=(action onClick)}}`);
+  this.render(hbs`{{menu-item title='Hello' component='abc' componentId='menu:Foo' onClickAction=(action onClick)}}`);
 
   const $button = this.$('.menu-item');
   assert.equal($button.length, 1, 'There is just one "button" to click on');
@@ -95,16 +96,34 @@ test('Show content if item is not collapsed', function(assert) {
   assert.ok(this.$().text().indexOf('Bar') > -1, 'Content is rendered because item is not collapsabled');
 });
 
-test('Checkox should propagate ID to closure', function(assert) {
-  assert.expect(4);
+test('Checkbox should propagate ID to closure', function(assert) {
+  assert.expect(5);
 
-  this.set('onCheck', (componentId, checkboxValue) => {
+  this.set('onCheck', (component, componentId, checkboxValue) => {
     assert.ok(true, 'Closure action after click on checkbox was executed');
     assert.equal(checkboxValue, true, 'Checkbox is checked');
     assert.equal(componentId, 'menu:Foo', 'Component ID is sent to the onClickAction');
+    assert.equal(component, 'abc', 'Component was sent to the onClickAction');
   });
 
-  this.render(hbs`{{menu-item title='Hello' componentId='menu:Foo' onCheckAction=(action onCheck)}}`);
+  this.render(hbs`{{menu-item title='Hello' component='abc' componentId='menu:Foo' onCheckAction=(action onCheck)}}`);
+
+  const $button = this.$(':checkbox');
+  assert.equal($button.length, 1, 'There is just one checkbox to click on');
+  $button.click();
+});
+
+test('Checkbox should propagate object to closure', function(assert) {
+  assert.expect(5);
+
+  this.set('onCheck', (component, componentId, checkboxValue) => {
+    assert.ok(true, 'Closure action after click on checkbox was executed');
+    assert.equal(checkboxValue, true, 'Checkbox is checked');
+    assert.equal(component, 'abc', 'Component was sent to the onClickAction');
+    assert.equal(componentId, 'menu:Foo', 'Component ID is sent to the onClickAction');
+  });
+
+  this.render(hbs`{{menu-item title='Hello' component='abc' componentId='menu:Foo' onCheckAction=(action onCheck)}}`);
 
   const $button = this.$(':checkbox');
   assert.equal($button.length, 1, 'There is just one checkbox to click on');
