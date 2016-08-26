@@ -26,5 +26,12 @@
       <li> Pacemaker: {{format-running selectedComponent.isPacemakerRunning}} ( {{format-enabled selectedComponent.isPacemakerEnabled}} ) </li>
       <li> Corosync: {{format-running selectedComponent.isPcsdRunning}} ( {{format-enabled selectedComponent.isPcsdEnabled}} ) </li>
     </ul>
+
+    Node attributes:
+    <ul>
+      {{#each selectedComponent.nodeAttributes as |attr|}}
+        <li> {{ attr.key }} :: {{ attr.value }} </li>
+      {{/each}}
+    </ul>
   {{/if}}
 </div>
