@@ -50,8 +50,8 @@ test('check if actions are propagated to children', function(assert) {
   }));
 
   this.set('myAttrs', attrs);
-  this.set('onDelete', () => { assert.ok(true, 'Delete action was called')});
-  this.set('onAppend', () => { assert.ok(true, 'Append action was called')});
+  this.set('onDelete', () => { assert.ok(true, 'Delete action was called'); });
+  this.set('onAppend', () => { assert.ok(true, 'Append action was called'); });
 
   this.render(hbs`{{attr-list title='Hugo Hugo' attributes=myAttrs onDeleteAction=(action onDelete) onAppendAction=(action onAppend)}}`);
 
@@ -59,7 +59,7 @@ test('check if actions are propagated to children', function(assert) {
   assert.equal($button.length, 2, 'There are two "buttons" with delete action');
   $button[0].click();
 
-  $button = this.$('.append-attr')
+  $button = this.$('.append-attr');
   assert.equal($button.length, 1, 'There is just one "button" with append action');
   $button.click();
 });
