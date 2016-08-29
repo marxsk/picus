@@ -1,0 +1,11 @@
+{{title}} ({{attributes.length}}):
+<table border='1'>
+  {{#each attributes as |attr|}}
+    {{attr-single attribute=attr onDeleteAction=(action onDeleteAction)}}
+  {{/each}}
+  <tr>
+    <td>{{input value=attrKey}}</td>
+    <td>{{input value=attrValue}}</td>
+    <td class='append-attr' onClick={{action onAppendAction attrKey attrValue}}>Append</td>
+  </tr>
+</table>
