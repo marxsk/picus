@@ -27,11 +27,6 @@
       <li> Corosync: {{format-running selectedComponent.isPcsdRunning}} ( {{format-enabled selectedComponent.isPcsdEnabled}} ) </li>
     </ul>
 
-    Node attributes:
-    <ul>
-      {{#each selectedComponent.nodeAttributes as |attr|}}
-        <li> {{ attr.key }} :: {{ attr.value }} </li>
-      {{/each}}
-    </ul>
+    {{attr-list title='Node Attributes' attributes=selectedComponent.nodeAttributes onDeleteAction=(action 'deleteNodeAttribute') onAppendAction=(action 'appendNodeAttribute')}}
   {{/if}}
 </div>

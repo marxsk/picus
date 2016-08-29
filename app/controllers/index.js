@@ -18,6 +18,19 @@ export default Ember.Controller.extend({
       this.set('selectedComponent', component);
     },
     onCheck: function() {
-    }
+    },
+    appendNodeAttribute: function(key, value) {
+      var store = this.store;
+      var newAttribute = store.createRecord('attribute', { key, value });
+
+      this.get('selectedComponent').get('nodeAttributes').pushObject(newAttribute);
+      this.set('attrKey', '');
+      this.set('attrValue', '');
+//      this.get('selectedComponent').save();
+    },
+    deleteNodeAttribute: function(attribute) {
+      attribute.deleteRecord();
+//      attribute.save();
+    },
   }
 });
