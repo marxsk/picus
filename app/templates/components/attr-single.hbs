@@ -1,0 +1,15 @@
+<tr>
+  <td>{{attribute.key}}</td>
+  <td>{{attribute.value}}</td>
+  <td>
+    {{#if attribute.isDeleted}}
+      [DELETING]
+    {{else}}
+      {{#unless attribute.id}}
+        [ADDING]
+      {{else}}
+        <span class="delete-attr" onClick={{action onDeleteAction attribute}}>DELETE</span>
+      {{/unless}}
+    {{/if}}
+  </td>
+</tr>
