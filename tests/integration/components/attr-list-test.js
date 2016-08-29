@@ -63,3 +63,33 @@ test('check if actions are propagated to children', function(assert) {
   assert.equal($button.length, 1, 'There is just one "button" with append action');
   $button.click();
 });
+
+test('check if fields are emptied after append action', function(assert) {
+  assert.expect(6);
+
+  let attrs = Ember.A();
+  this.set('myAttrs', attrs);
+  this.set('onDelete', () => { assert.ok(undefined, 'Delete action was called and it should not'); });
+  this.set('onAppend', (key, value) => {
+    assert.ok(true, 'Append action was called');
+    assert.equal(key, 'My First Key', 'Content of "key" was obtained from input box');
+    assert.equal(value, 'Value of key', 'Content of "value" was obtained from input box');
+  });
+
+  this.render(hbs`{{attr-list title='Hugo Hugo' attributes=myAttrs onDeleteAction=(action onDelete) onAppendAction=(action onAppend)}}`);
+  let $button = this.$('.append-attr');
+  assert.equal($button.length, 1, 'There is just one "button" with append action');
+
+  let $input1 = this.$('input:eq(0)');
+  $input1.val('My First Key');
+  $input1.change();
+
+  let $input2 = this.$('input:eq(1)');
+  $input2.val('Value of key');
+  $input2.change();
+
+  $button.click();
+
+  assert.equal($input1.val(), '', 'After click on button, inputboxes should be empty');
+  assert.equal($input2.val(), '', 'After click on button, inputboxes should be empty');
+});
