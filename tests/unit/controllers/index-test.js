@@ -1,5 +1,5 @@
 import { moduleFor, test } from 'ember-qunit';
-import { skip } from 'ember';
+import { skip } from 'qunit';
 
 moduleFor('controller:index', 'Unit | Controller | index', {
   // Specify the other units that are required for this test.
