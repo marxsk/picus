@@ -48,4 +48,12 @@ test('Show X menu items from data with few children', function(assert) {
   $button.click();
   assert.equal(this.$('li').length, ITEMS_COUNT, 'Count of item matches model');
   assert.equal(this.$('ul').length, 0, 'There should be expanded items');
-});
+
+  // Click on the button that should call action
+  const $actionButton = this.$('.menu-item:eq(0)');
+  $actionButton.click();
+
+  // Click on the checkbox that should call action
+  const $checkBox = this.$(':checkbox:eq(0)');
+  $checkBox.click();
+  });
