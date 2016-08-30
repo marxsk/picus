@@ -24,7 +24,7 @@ test('Show X menu items from data when there are no children', function(assert) 
 });
 
 test('Show X menu items from data with few children', function(assert) {
-  assert.expect(7);
+  assert.expect(9);
 
   const ITEMS_COUNT = 2;
   const CHILDREN_COUNT = 3;
@@ -51,6 +51,10 @@ test('Show X menu items from data with few children', function(assert) {
 
   // Click on the button that should call action
   const $actionButton = this.$('.menu-item:eq(0)');
+  this.set('onClick', (component, componentID) => {
+    assert.ok(component, 'Component is defined in onClick action');
+    assert.equal(component.get('id'), componentID, 'Component points to the same object as component ID');
+  });
   $actionButton.click();
 
   // Click on the checkbox that should call action
