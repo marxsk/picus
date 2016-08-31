@@ -30,5 +30,8 @@ export default Ember.Controller.extend({
       attribute.deleteRecord();
 //      attribute.save();
     },
+    forceReload: function() {
+      this.store.reloadData();
+    }
   }
 });
