@@ -30,6 +30,13 @@ export default Ember.Controller.extend({
       attribute.deleteRecord();
 //      attribute.save();
     },
+    appendNodeUtilizationAttribute: function(key, value) {
+      var store = this.store;
+      var newAttribute = store.createRecord('attribute', { key, value });
+
+      this.get('selectedComponent').get('nodeUtilizationAttributes').pushObject(newAttribute);
+//      this.get('selectedComponent').save();
+    },
     forceReload: function() {
       this.store.reloadData();
     }

@@ -10,6 +10,7 @@ export default function(server) {
   const node = cluster.createNode({id: 222, name: 'Virtual machine', isCorosyncRunning: true, isCorosyncEnabled: true});
   node.createNodeAttribute({key: 'attr #1', value: 'foo'});
   node.createNodeAttribute({key: 'attr #2', value: 'bar'});
+  node.createNodeUtilizationAttribute({key: 'util attr #99', value: 'bar bar'});
 
   let resource = cluster.createResource({id: 333, name: 'Apache Mock Server'});
   resource.createResource({id: 444, name: 'Child Mock'});
