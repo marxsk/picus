@@ -39,6 +39,19 @@ export default Ember.Controller.extend({
     },
     forceReload: function() {
       this.store.reloadData();
-    }
+    },
+    nodeAction: function(action, component) {
+      switch(action) {
+        case 'start':
+        case 'stop':
+        case 'reboot':
+          console.log(action + ' node ' + component.get('name'));
+          break;
+        default:
+          console.log('invalid action ' + action + 'on node ' + component.get('name'));
+          // @todo: error
+          break;
+      }
+    },
   }
 });

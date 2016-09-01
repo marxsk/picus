@@ -22,6 +22,13 @@
 
     Name: {{{ selectedComponent.name }}} <br />
 
+    Actions:
+    <ul>
+      <li {{action 'nodeAction' 'start' selectedComponent}}> Start Node </li>
+      <li {{action 'nodeAction' 'stop' selectedComponent}}> Stop Node </li>
+      <li {{action 'nodeAction' 'reboot' selectedComponent}}> Reboot Node </li>
+    </ul>
+
     Cluster daemons:
     <ul>
       <li> Corosync: {{format-running selectedComponent.isCorosyncRunning}} ( {{format-enabled selectedComponent.isCorosyncEnabled}} ) </li>
