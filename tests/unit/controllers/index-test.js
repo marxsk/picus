@@ -1,5 +1,4 @@
 import { moduleFor, test } from 'ember-qunit';
-import { skip } from 'qunit';
 
 moduleFor('controller:index', 'Unit | Controller | index', {
   // Specify the other units that are required for this test.
@@ -39,19 +38,4 @@ test('check existence of action onCheck', function(assert) {
 
   let controller = this.subject();
   controller.actions.onCheck.call(controller, 'menu:foo');
-});
-
-skip('check if selected component is Node', function(assert) {
-  // @todo: Create records of given types to test it properly
-  assert.expect(3);
-
-  let controller = this.subject();
-  let obj = undefined;
-
-  controller.set('selectedComponent', obj);
-  assert.equal(true, controller.get('isSelectedNode'), 'Select node is a real Node');
-  assert.equal(false, controller.get('isSelectedNode'), 'Select node is a Resource, not a Node');
-
-  controller.set('selectedComponent', undefined);
-  assert.equal(false, controller.get('isSelectedNode'), 'There is no select node');
 });
