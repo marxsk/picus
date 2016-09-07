@@ -26,8 +26,9 @@ test('it renders', function(assert) {
   this.set('myAttrs', attrs);
   this.set('onDelete', () => { });
   this.set('onAppend', () => { });
+  this.set('onMultiple', () => { });
 
-  this.render(hbs`{{attr-list title='Hugo Hugo' attributes=myAttrs onDeleteAction=(action onDelete) onAppendAction=(action onAppend)}}`);
+  this.render(hbs`{{attr-list title='Hugo Hugo' attributes=myAttrs onDeleteAction=(action onDelete) onAppendAction=(action onAppend) onDeleteMultipleAction=(action onMultiple)}}`);
   assert.ok(this.$().text().indexOf('Hugo Hugo') > -1, 'Title has to be shown in the component');
   assert.equal((2+1), this.$('tr').length, 'There should be one line in addition to number of attributes');
 });
@@ -52,8 +53,9 @@ test('check if actions are propagated to children', function(assert) {
   this.set('myAttrs', attrs);
   this.set('onDelete', () => { assert.ok(true, 'Delete action was called'); });
   this.set('onAppend', () => { assert.ok(true, 'Append action was called'); });
+  this.set('onMultiple', () => { });
 
-  this.render(hbs`{{attr-list title='Hugo Hugo' attributes=myAttrs onDeleteAction=(action onDelete) onAppendAction=(action onAppend)}}`);
+  this.render(hbs`{{attr-list title='Hugo Hugo' attributes=myAttrs onDeleteAction=(action onDelete) onAppendAction=(action onAppend) onDeleteMultipleAction=(action onMultiple)}}`);
 
   let $button = this.$('.delete-attr');
   assert.equal($button.length, 2, 'There are two "buttons" with delete action');
@@ -70,13 +72,14 @@ test('check if fields are emptied after append action', function(assert) {
   let attrs = Ember.A();
   this.set('myAttrs', attrs);
   this.set('onDelete', () => { assert.ok(undefined, 'Delete action was called and it should not'); });
+  this.set('onMultiple', () => { });
   this.set('onAppend', (key, value) => {
     assert.ok(true, 'Append action was called');
     assert.equal(key, 'My First Key', 'Content of "key" was obtained from input box');
     assert.equal(value, 'Value of key', 'Content of "value" was obtained from input box');
   });
 
-  this.render(hbs`{{attr-list title='Hugo Hugo' attributes=myAttrs onDeleteAction=(action onDelete) onAppendAction=(action onAppend)}}`);
+  this.render(hbs`{{attr-list title='Hugo Hugo' attributes=myAttrs onDeleteAction=(action onDelete) onAppendAction=(action onAppend) onDeleteMultipleAction=(action onMultiple)}}`);
   let $button = this.$('.append-attr');
   assert.equal($button.length, 1, 'There is just one "button" with append action');
 

@@ -34,7 +34,7 @@ export default Ember.Controller.extend({
       attributes.forEach((item) => {
         item.deleteRecord();
 //      item.save();
-      })
+      });
     },
     appendNodeUtilizationAttribute: function(key, value) {
       var store = this.store;
