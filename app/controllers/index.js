@@ -30,6 +30,12 @@ export default Ember.Controller.extend({
       attribute.deleteRecord();
 //      attribute.save();
     },
+    deleteMultipleAttributes: function(attributes) {
+      attributes.forEach((item) => {
+        item.deleteRecord();
+//      item.save();
+      })
+    },
     appendNodeUtilizationAttribute: function(key, value) {
       var store = this.store;
       var newAttribute = store.createRecord('attribute', { key, value });
