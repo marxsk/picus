@@ -1,7 +1,7 @@
 {{title}} ({{attributes.length}}):
 <table border='1'>
   {{#each attributes as |attr|}}
-    {{attr-single attribute=attr onDeleteAction=(action onDeleteAction)}}
+    {{attr-single attribute=attr onCheckAction=(action 'onCheckAction') onDeleteAction=(action onDeleteAction)}}
   {{/each}}
   <tr>
     <td>{{input value=attrKey}}</td>

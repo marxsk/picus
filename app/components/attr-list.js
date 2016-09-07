@@ -5,6 +5,9 @@ export default Ember.Component.extend({
   attributes: undefined,
   onDeleteAction: undefined,
   onAppendAction: undefined,
+  onDeleteMultipleAction: undefined,
+
+  selectedAttributes: Ember.A(),
 
   attrKey: '',
   attrValue: '',
@@ -14,6 +17,13 @@ export default Ember.Component.extend({
       this.attrs.onAppendAction(this.get('attrKey'), this.get('attrValue'));
       this.set('attrKey', '');
       this.set('attrValue', '');
+    },
+    onCheckAction: function(attribute, isChecked) {
+      if (isChecked === true) {
+        this.get('selectedAttributes').pushObject(attribute);
+      } else {
+        this.get('selectedAttributes').removeObject(attribute);
+      }
     },
   }
 });
