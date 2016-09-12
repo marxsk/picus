@@ -4,4 +4,8 @@ export default function() {
   this.get('/managec/my/cluster_status', (schema) => {
     return schema.clusters.all();
   });
+
+  this.del('/attributes/:id');
+
+  this.post('/attributes');
 }

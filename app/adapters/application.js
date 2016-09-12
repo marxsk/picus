@@ -19,5 +19,5 @@ export default JSONAPIAdapter.extend({
         }
       );
     });
-  }
+  },
 });

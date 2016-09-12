@@ -24,16 +24,16 @@ export default Ember.Controller.extend({
       var newAttribute = store.createRecord('attribute', { key, value });
 
       this.get('selectedComponent').get('nodeAttributes').pushObject(newAttribute);
-//      this.get('selectedComponent').save();
+      newAttribute.save();
     },
     deleteNodeAttribute: function(attribute) {
       attribute.deleteRecord();
-//      attribute.save();
+      attribute.save();
     },
     deleteMultipleAttributes: function(attributes) {
       attributes.forEach((item) => {
         item.deleteRecord();
-//      item.save();
+        item.save();
       });
     },
     appendNodeUtilizationAttribute: function(key, value) {
@@ -41,7 +41,7 @@ export default Ember.Controller.extend({
       var newAttribute = store.createRecord('attribute', { key, value });
 
       this.get('selectedComponent').get('nodeUtilizationAttributes').pushObject(newAttribute);
-//      this.get('selectedComponent').save();
+      newAttribute.save();
     },
     forceReload: function() {
       this.store.reloadData();
