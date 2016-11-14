@@ -3,7 +3,9 @@
     {{#if isCollapsed}}+{{else}}-{{/if}}
   </span>
 {{/if}}
-{{input type='checkbox' checked=isChecked}}
+{{#if onCheckAction}}
+  {{input type='checkbox' checked=isChecked}}
+{{/if}}
 <span class='menu-item' onclick={{action 'onSelectItem'}}>
   {{title}}
   {{#if status}}
