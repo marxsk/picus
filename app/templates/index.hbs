@@ -39,4 +39,8 @@
     {{attr-list title='Node Attributes' attributes=selectedComponent.nodeAttributes onDeleteAction=(action 'deleteNodeAttribute') onAppendAction=(action 'appendNodeAttribute') onDeleteMultipleAction=(action 'deleteMultipleAttributes')}}
     {{attr-list title='Node Utilization Attributes' attributes=selectedComponent.nodeUtilizationAttributes onDeleteAction=(action 'deleteNodeAttribute') onAppendAction=(action 'appendNodeUtilizationAttribute')  onDeleteMultipleAction=(action 'deleteMultipleAttributes')}}
   {{/if}}
+
+  {{#if (eq selectedComponentId 'menu:Properties')}}
+    {{properties-form data=model.firstObject.properties onSubmitAction=(action 'submitProperties') onSearchRefresh=(action 'onSearch')}}
+  {{/if}}
 </div>

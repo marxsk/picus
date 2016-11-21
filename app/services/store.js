@@ -2,6 +2,8 @@ import DS from 'ember-data';
 import Ember from 'ember';
 
 export default DS.Store.extend({
+  ajax: Ember.inject.service(),
+
   /** Reload all data from backend
 
   Traditionally, Store works on more standard API so we can ask for specific
@@ -33,6 +35,7 @@ export default DS.Store.extend({
       const knownIds = Ember.A();
       // add ID of cluster itself - we are working with just one cluster in response
       knownIds.addObject(generateId(normalized, 'data.0.'));
+      console.log(normalized);
 
       // add information of all objects that are included with cluster response
       if (Ember.get(normalized, 'included') !== undefined) {
@@ -58,5 +61,20 @@ export default DS.Store.extend({
       alert(error);
     });
     return;
-  }
+  },
+
+  /** Push all cluster properties to server in one request **/
+  pushClusterProperties: function(changeset) {
+    let data = JSON.stringify({
+      data: {
+        type: 'properties',
+        attributes: {
+          ...changeset.get('change'),
+        },
+      }});
+
+    this.get('ajax').patch('/properties', {data: data}).then(() => {
+      this.reloadData();
+    });
+  },
 });

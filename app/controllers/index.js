@@ -1,8 +1,10 @@
 import Ember from 'ember';
 
 export default Ember.Controller.extend({
+  queryParams: ['filterString'],
   selectedComponentId: undefined,
   selectedComponent: undefined,
+  filterString: '',
 
   isSelectedNode: Ember.computed('selectedComponent', function() {
     if (this.get('selectedComponent')) {
@@ -13,6 +15,10 @@ export default Ember.Controller.extend({
   }),
 
   actions: {
+    onSearch: function(search) {
+      this.set('filterString', search);
+      this.send('pageRefresh', search);
+    },
     onClick: function(component, componentId) {
       this.set('selectedComponentId', componentId);
       this.set('selectedComponent', component);
@@ -59,5 +65,18 @@ export default Ember.Controller.extend({
           break;
       }
     },
+    submitProperties: function(properties, changeset) {
+      // update values locally
+      for (let attrName in changeset.get('change')) {
+        properties.forEach(function(item, index) {
+          if (item.get('name') === attrName) {
+            item.set('value', changeset.get(attrName));
+          }
+        });
+      }
+
+      // save changes to remote server
+      this.store.pushClusterProperties(changeset);
+    }
   }
 });

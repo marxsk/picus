@@ -5,4 +5,5 @@ export default DS.Model.extend({
   status: DS.attr('string'),  // @todo: define a set of possible values
   nodes: DS.hasMany('node'),
   resources: DS.hasMany('resource'),
+  properties: DS.hasMany('property'),
 });

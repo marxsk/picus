@@ -8,4 +8,11 @@ export default function() {
   this.del('/attributes/:id');
 
   this.post('/attributes');
+
+  this.patch('/properties', function(schema, request) {
+    const attrs = JSON.parse(request.requestBody);
+    Object.keys(attrs.data.attributes).forEach((i) => {
+        schema.db.properties.update({name: i}, {value: attrs.data.attributes[i]});
+    });
+  });
 }

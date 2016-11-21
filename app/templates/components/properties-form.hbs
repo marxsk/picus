@@ -1,0 +1,28 @@
+Filter: {{input type="text" value=filterString keyUp=(action 'urlRefresh' filterString)}} <br />
+
+<button {{action 'toggleAdvanced'}}>
+  {{#if showAdvanced}}Hide{{else}}Show{{/if}} Advanced Properties
+</button><br />
+
+{{#form-for (changeset simpleProperties) submit=(action onSubmitAction data) as |f|}}
+  {{#each data as |prop| }}
+{{#if (and
+  (incl prop.readableName filterString)
+  (or (eq prop.advanced false) (and (eq prop.advanced true) (eq showAdvanced true)))
+  )
+}}
+  {{#if (eq prop.type 'boolean')}}
+    {{f.select-field prop.name 'default true false' label=prop.readableName hint=prop.shortDesc}}
+  {{else}}
+    {{#if (eq prop.type 'enum')}}
+      {{f.select-field prop.name prop.enum label=prop.readableName hint=prop.shortDesc}}
+    {{else}}
+      {{f.text-field prop.name label=prop.readableName placeholder=prop.default hint=prop.shortDesc}}
+    {{/if}}
+  {{/if}}
+  <!-- @todo: add support for more types: e.g. enum - problem is that we need array in model -->
+{{/if}}
+  {{/each}}
+
+  {{f.submit "Save"}}
+{{/form-for}}
