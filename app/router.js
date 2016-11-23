@@ -7,6 +7,23 @@ const Router = Ember.Router.extend({
 });
 
 Router.map(function() {
+  this.route('properties');
+
+  this.route('nodes', function() {
+    this.route('listing', { path: 'show/' });
+    this.route('new');
+    this.route('show', { path: 'show/:node_id' });
+  });
+
+  this.route('resources', function() {
+    this.route('new');
+    this.route('show', { path: 'show/:resource_id'});
+  });
+
+  this.route('fence', function() {
+    this.route('new');
+    this.route('show', { path: 'show/:fence_id'});
+  });
 });
 
 export default Router;
