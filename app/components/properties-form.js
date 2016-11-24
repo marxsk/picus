@@ -10,7 +10,8 @@ export default Ember.Component.extend({
 
   actions: {
     toggleAdvanced() {
-      this.toggleProperty('showAdvanced');
+      const result = this.toggleProperty('showAdvanced');
+      this.attrs.onAdvancedAction(result);
     },
     urlRefresh(search) {
       Ember.run.debounce(this, '_triggerUrlRefresh', search ,300);
@@ -20,6 +21,9 @@ export default Ember.Component.extend({
   properties: null,
   simpleProperties: Ember.computed('properties.@each.value', {
     get() {
+      if (this.get('properties') === undefined) {
+        return {};
+      }
       let ret = {};
       this.get('properties').forEach(function(x) {
         ret[x.get('name')] = x.get('value');
@@ -29,6 +33,8 @@ export default Ember.Component.extend({
 
   init() {
     this.properties = this.get('data');
+    this.set('filterString', this.get('presetFilter'));
+    console.log(this.get('showAdvanced'));
 
     return this._super();
   }

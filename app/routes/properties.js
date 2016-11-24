@@ -12,11 +12,15 @@ export default Ember.Route.extend({
       this.refresh();
     }
   },
-  model({search}) {
-//    if (!search) {
-      this.store.reloadData();
-//    }
+  model({filterString, advanced}) {
+    const advancedBoolean = advanced ? true : false;
+    // @fix-reload
+    this.store.reloadData();
 
-    return this.store.peekAll('cluster');
+    return Ember.RSVP.hash({
+      filterProperties: filterString,
+      showAdvanced: advancedBoolean,
+      cluster: this.store.peekAll('cluster'),
+    })
   }
 });

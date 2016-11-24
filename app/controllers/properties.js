@@ -1,8 +1,9 @@
 import Ember from 'ember';
 
 export default Ember.Controller.extend({
-  queryParams: ['filterString'],
+  queryParams: ['filterString', 'advanced'],
   filterString: '',
+  advanced: false,
 
   actions: {
     submitProperties: function(properties, changeset) {
@@ -20,7 +21,11 @@ export default Ember.Controller.extend({
     },
     onSearch: function(search) {
       this.set('filterString', search);
-      this.send('pageRefresh', search);
+      this.send('pageRefresh');
+    },
+    onAdvanced: function(value) {
+      this.set('advanced', value);
+      this.send('pageRefresh');
     },
   }
 });

@@ -1,1 +1,12 @@
 {{main-navigation selected='properties'}}
+
+{{properties-form
+  data=model.cluster.firstObject.properties
+
+  onSubmitAction=(action 'submitProperties')
+  onSearchRefresh=(action 'onSearch')
+  onAdvancedAction=(action 'onAdvanced')
+
+  presetFilter=model.filterProperties
+  showAdvanced=model.showAdvanced
+}}
