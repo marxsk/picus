@@ -2,6 +2,8 @@ import Ember from 'ember';
 
 export default Ember.Route.extend({
   redirect(model, transition) {
-    this.transitionTo('nodes.listing');
+    if (transition.targetName == 'nodes.index') {
+      this.transitionTo('nodes.listing');
+    };
   }
 });
