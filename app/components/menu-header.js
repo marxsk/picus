@@ -4,7 +4,6 @@ export default Ember.Component.extend({
   title: undefined,
   isCollapsed: true,
   onlyErrors: false,
-  onClickAction: undefined,
   onCheckAction: undefined,
 
   errorCount: function() {

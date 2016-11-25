@@ -6,12 +6,11 @@
 {{#if onCheckAction}}
   {{input type='checkbox' checked=isChecked}}
 {{/if}}
-<span class='menu-item' onclick={{action 'onSelectItem'}}>
-  {{title}}
+{{#link-to targetRoute componentId}}{{title}}
   {{#if status}}
     [{{status}}]
   {{/if}}
-</span>
+{{/link-to}}
 
 {{#unless isCollapsed}}
   {{yield}}

@@ -1,11 +1,11 @@
 {{#each data as |item|}}
   {{#unless item.resources}}
-    <li> {{menu-item title=item.name component=item componentId=item.id status=item.status onCheckAction=(action onCheckAction) onClickAction=(action onClickAction)}} </li>
+    <li> {{menu-item targetRoute=targetRoute title=item.name component=item componentId=item.id status=item.status onCheckAction=(action onCheckAction)}} </li>
   {{else}}
     <li>
-      {{#menu-item title=item.name isCollapsable=true component=item componentId=item.id status=item.status onCheckAction=(action onCheckAction) onClickAction=(action onClickAction)}}
+      {{#menu-item targetRoute=targetRoute title=item.name isCollapsable=true component=item componentId=item.id status=item.status onCheckAction=(action onCheckAction)}}
         <ul>
-          {{menu-list data=item.resources onCheckAction=(action onCheckAction) onClickAction=(action onClickAction)}}
+          {{menu-list targetRoute=targetRoute data=item.resources onCheckAction=(action onCheckAction)}}
         </ul>
       {{/menu-item}}
     </li>

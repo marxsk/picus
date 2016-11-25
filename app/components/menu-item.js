@@ -5,10 +5,10 @@ export default Ember.Component.extend({
   status: undefined,
   component: undefined,
   componentId: undefined,
+  urlPrefix: undefined,
   isCollapsable: false,
   isCollapsed: true,
   isChecked: false,
-  onClickAction: undefined,
   onCheckAction: undefined,
 
   watchChecked: function() {
@@ -17,7 +17,6 @@ export default Ember.Component.extend({
 
   actions: {
     onSelectItem() {
-      this.attrs.onClickAction(this.get('component'), this.get('componentId'));
       this.toggleProperty('isCollapsed');
     },
     onSelectCollapse() {
