@@ -89,9 +89,12 @@ export default DS.Store.extend({
     });
 
     newNode.save().then(() => {
-      // assign node to cluster
-
       this.reloadData();
     });
-  }
+  },
+
+  /** Get available fence agents ; this info is not part of cluster overview **/
+  getAvailableFenceAgents() {
+    return ["fence_apc", "fence_brocade"];
+  },
 });

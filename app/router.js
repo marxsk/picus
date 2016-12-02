@@ -21,6 +21,7 @@ Router.map(function() {
   });
 
   this.route('fence', function() {
+    this.route('listing', { path: 'show/' });
     this.route('create');
     this.route('show', { path: 'show/:fence_id'});
   });
