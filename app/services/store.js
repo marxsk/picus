@@ -95,6 +95,17 @@ export default DS.Store.extend({
 
   /** Get available fence agents ; this info is not part of cluster overview **/
   getAvailableFenceAgents() {
-    return ["fence_apc", "fence_brocade"];
+    const _this = this;
+
+    let prom = new Ember.RSVP.Promise(function(resolve) {
+      _this.get('ajax').request('/remote/get_avail_fence_agents').then((response) => {
+        resolve(response);
+      });
+
+    }, function(error) {
+      alert(error);
+    });
+
+    return prom;
   },
 });

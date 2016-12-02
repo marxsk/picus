@@ -5,6 +5,10 @@ export default function() {
     return schema.clusters.all();
   });
 
+  this.get('/remote/get_avail_fence_agents', () => {
+    return ['fence_apc', 'fence_brocade', 'fence_ipmilan'];
+  });
+
   this.del('/attributes/:id');
 
   this.post('/attributes');
