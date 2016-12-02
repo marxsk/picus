@@ -80,4 +80,18 @@ export default DS.Store.extend({
       this.reloadData();
     });
   },
+
+  /** Push new node into cluster **/
+  pushNewNode: function(changeset) {
+    const newNode = this.createRecord('node',
+    {
+      name: changeset.nodeName
+    });
+
+    newNode.save().then(() => {
+      // assign node to cluster
+
+      this.reloadData();
+    });
+  }
 });

@@ -1,0 +1,5 @@
+{{#form-for (changeset model.formData) submit=(action 'onSubmitAction') as |f|}}
+  {{f.text-field 'nodeName' label='Node Name' hint='small help'}}
+  {{f.checkbox-field 'autoStart' label='Auto Start/Enable' hint='???'}}
+  {{f.submit "Create"}}
+{{/form-for}}
