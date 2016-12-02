@@ -1,4 +1,4 @@
-{{title}} ({{attributes.length}}): <span class='delete-attrs' onClick={{action onDeleteMultipleAction selectedAttributes}}>Delete selected</span> 
+{{title}} ({{attributes.length}}): <span class='delete-attrs' onClick={{action onDeleteMultipleAction selectedAttributes}}>Delete selected</span>
 <table border='1'>
   {{#each attributes as |attr|}}
     {{attr-single attribute=attr onCheckAction=(action 'onCheckAction') onDeleteAction=(action onDeleteAction)}}
@@ -6,6 +6,6 @@
   <tr>
     <td>{{input value=attrKey}}</td>
     <td>{{input value=attrValue}}</td>
-    <td class='append-attr' onClick={{action 'appendCleanAction'}}>Append</td>
+    <td class='append-attr' onClick={{action 'appendCleanAction' attributes}}>Append</td>
   </tr>
 </table>

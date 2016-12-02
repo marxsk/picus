@@ -9,11 +9,10 @@ export default Ember.Controller.extend({
     },
     onCheck: function() {    },
 
-    appendNodeAttribute: function(key, value) {
+    appendNodeAttribute: function(attributes, key, value) {
       var store = this.store;
       var newAttribute = store.createRecord('attribute', { key, value });
-
-      this.get('selectedNode').get('nodeAttributes').pushObject(newAttribute);
+      attributes.pushObject(newAttribute);
       newAttribute.save();
     },
     deleteNodeAttribute: function(attribute) {
@@ -26,11 +25,10 @@ export default Ember.Controller.extend({
         item.save();
       });
     },
-    appendNodeUtilizationAttribute: function(key, value) {
+    appendNodeUtilizationAttribute: function(attributes, key, value) {
       var store = this.store;
       var newAttribute = store.createRecord('attribute', { key, value });
-
-      this.get('selectedNode').get('nodeUtilizationAttributes').pushObject(newAttribute);
+      attributes.pushObject(newAttribute);
       newAttribute.save();
     },
     nodeAction: function(action, component) {

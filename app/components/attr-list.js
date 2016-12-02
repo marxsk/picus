@@ -13,8 +13,8 @@ export default Ember.Component.extend({
   attrValue: '',
 
   actions: {
-    appendCleanAction: function() {
-      this.attrs.onAppendAction(this.get('attrKey'), this.get('attrValue'));
+    appendCleanAction: function(attributes) {
+      this.attrs.onAppendAction(attributes, this.get('attrKey'), this.get('attrValue'));
       this.set('attrKey', '');
       this.set('attrValue', '');
     },
