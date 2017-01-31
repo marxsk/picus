@@ -1,12 +1,38 @@
 import Ember from 'ember';
 
 export default Ember.Route.extend({
+  selectedAgent : 'fence_apc',
+  modelForm: {},
+  metadata: {},
+
   model() {
-    let modelForm = {};
+    this.set('metadata', this.store.getMetadataFenceAgent(this.get('selectedAgent')));
 
     return Ember.RSVP.hash({
       availableAgents: this.store.getAvailableFenceAgents(),
-      formData: modelForm,
+      formData: this.get('modelForm'),
+      // @note: this should be computed property based on agent selected in combobox
+      metadata: this.get('metadata'),
+      selectedAgent: this.get('selectedAgent'),
     });
+  },
+
+  actions: {
+    changeSelectedAgent: function(form, fieldName, selectedItem) {
+      this.set('modelForm', form);
+      this.set('selectedAgent', selectedItem);
+      this.refresh();
+    },
+    onSubmitAction: function(selectedAgent, form) {
+      this.set('modelForm', form);
+
+      this.store.pushNewFence({
+        name: form.get('fenceName'),
+        agentType: this.get('selectedAgent'),
+        properties: form.get('changes'),
+      });
+
+      this.transitionTo('fence.listing');
+    }
   }
 });

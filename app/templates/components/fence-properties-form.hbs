@@ -1,0 +1,18 @@
+{{#form-for formData submit=(route-action 'onSubmitAction' selectedAgent) as |f|}}
+  {{#if create}}
+    {{f.text-field 'fenceName' label='Fence Device Name' hint='small help'}}
+    {{f.select-field 'fenceAgent' availableAgents label='Fence Agent' update=(route-action 'changeSelectedAgent')}}
+  {{/if}}
+  {{metadata.shortdesc}}
+  <hr />
+  {{#each metadata.parameters as |p|}}
+    {{#if (eq p.type 'boolean')}}
+      {{f.select-field p.name 'default true false' label=p.shortdesc}}
+    {{/if}}
+
+    {{#if (eq p.type 'string')}}
+      {{f.text-field p.name label=p.shortdesc placeholder=p.default}}
+    {{/if}}
+  {{/each}}
+  {{f.submit submitText}}
+{{/form-for}}

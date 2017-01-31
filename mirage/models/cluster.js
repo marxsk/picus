@@ -4,4 +4,5 @@ export default Model.extend({
   nodes: hasMany('node'),
   resources: hasMany('resource'),
   properties: hasMany('property'),
+  fences: hasMany('fence'),
 });

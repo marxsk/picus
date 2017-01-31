@@ -1,5 +1,9 @@
-{{#form-for (changeset model.formData) as |f|}}
-  {{f.text-field 'fenceName' label='Fence Device Name' hint='small help'}}
-  {{f.select-field 'fenceAgent' model.availableAgents label='Fence Agent'}}
-  {{f.submit "Create"}}
-{{/form-for}}
+{{fence-properties-form
+    formData=(changeset model.formData)
+    metadata=model.metadata
+    availableAgents=model.availableAgents
+    selectedAgent=model.selectedAgent
+    create=true
+
+    submitText='Create'
+}}

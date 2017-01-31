@@ -6,4 +6,5 @@ export default DS.Model.extend({
   nodes: DS.hasMany('node'),
   resources: DS.hasMany('resource'),
   properties: DS.hasMany('property'),
+  fences: DS.hasMany('fence'),
 });

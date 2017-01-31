@@ -45,7 +45,7 @@ export default DS.Store.extend({
         }
 
         // remove records which no longer exists on backend from store for every used model
-        ['node', 'resource', 'attribute'].forEach(function(modelName) {
+        ['node', 'fence', 'resource', 'attribute'].forEach(function(modelName) {
             store.peekAll(modelName).forEach(function(item) {
               if (!knownIds.contains(modelName + '::' + item.get('id'))) {
                 item.deleteRecord();
@@ -93,6 +93,45 @@ export default DS.Store.extend({
     });
   },
 
+  pushNewFence: function(attrs) {
+    let properties = {}
+    attrs.properties.forEach(function(o) { properties[o.key] = o.value });
+    delete properties['fenceName'];
+
+    const data = JSON.stringify({
+      data: {
+        type: 'fence',
+        attributes: {
+          name: attrs.name,
+          agentType: attrs.agentType,
+          ...properties,
+        },
+      }});
+
+    this.get('ajax').post('/fences', {data: data}).then(() => {
+      this.reloadData();
+    });
+  },
+
+  pushUpdateFence: function(attrs) {
+    let properties = {}
+    attrs.properties.forEach(function(o) { properties[o.key] = o.value });
+    delete properties['fenceName'];
+
+    const data = JSON.stringify({
+      data: {
+        type: 'fence',
+        attributes: {
+          id: attrs.id,
+          ...properties,
+        },
+      }});
+
+      this.get('ajax').patch('/fences', {data: data}).then(() => {
+        this.reloadData();
+      });
+  },
+
   /** Get available fence agents ; this info is not part of cluster overview **/
   getAvailableFenceAgents() {
     const _this = this;
@@ -108,4 +147,17 @@ export default DS.Store.extend({
 
     return prom;
   },
+
+  getMetadataFenceAgent(agentName) {
+    const _this = this;
+    let prom = new Ember.RSVP.Promise(function(resolve) {
+    _this.get('ajax').request(`/remote/fence-metadata/${agentName}`).then((response) => {
+      resolve(response);
+    });
+    }, function(error) {
+      alert(error);
+    });
+
+    return prom;
+  }
 });

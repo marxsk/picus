@@ -9,6 +9,6 @@ export default Ember.Route.extend({
       xyz: this.store.reloadData(),
       params: params,
       cluster: this.store.peekAll('cluster'),
-    })
+    });
   }
 });

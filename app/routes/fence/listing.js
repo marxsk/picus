@@ -1,13 +1,22 @@
 import Ember from 'ember';
 
 export default Ember.Route.extend({
-//  templateName: 'fence/show',
-//  controllerName: 'fence/show',
+  templateName: 'fence/show',
+
+  beforeModel(transition) {
+    return this.store.reloadData();
+  },
 
   model(params) {
-    console.log('123');
     return Ember.RSVP.hash({
+      listing: true,
       params: params,
-    })
-  }
+      cluster: this.store.peekAll('cluster'),
+    });
+  },
+  actions: {
+    onCheck: function() {
+
+    }
+  },
 });

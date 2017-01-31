@@ -21,6 +21,6 @@ export default Ember.Route.extend({
       filterProperties: filterString,
       showAdvanced: advancedBoolean,
       cluster: this.store.peekAll('cluster'),
-    })
+    });
   }
 });

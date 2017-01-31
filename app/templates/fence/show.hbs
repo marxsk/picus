@@ -1,5 +1,34 @@
-{{outlet}}
+{{menu-header
+  title='Fence Devices'
+  data=model.cluster.firstObject.fences
+  isCollapsed=false
+  targetRoute='fence.show'
+  onCheckAction=(route-action 'onCheck')
+}}
 
-{{model.params.fence_id}}
+<hr />
+{{#link-to 'fence.create'}}Add fence devices to the cluster{{/link-to}}
+<hr />
 
-SHOW
+{{#unless model.listing}}
+{{#unless model.selectedFence}}
+  The fence device with ID '{{model.params.fence_id}}' was not found, please select a different fence device.
+{{/unless}}
+{{/unless}}
+
+{{#with model.selectedFence.firstObject as |selFence| }}
+  <h3>Editable form for Fence Device</h3>
+  Name: {{ selFence.name }}<br />
+  Fence Agent: <select disabled="1">
+    <option>{{selFence.agentType}}</option>
+  </select>
+
+  {{fence-properties-form
+      formData=(changeset model.formData)
+      metadata=model.metadata
+      availableAgents=model.availableAgents
+      selectedAgent=selFence.id
+
+      submitText='Update'
+  }}
+{{/with}}
