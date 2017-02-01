@@ -15,7 +15,8 @@ Router.map(function() {
     this.route('show', { path: 'show/:node_id' });
   });
 
-  this.route('resources', function() {
+  this.route('resource', function() {
+    this.route('listing', { path: 'show/' });
     this.route('create');
     this.route('show', { path: 'show/:resource_id'});
   });

@@ -3,7 +3,7 @@ import Ember from 'ember';
 export default Ember.Route.extend({
   modelForm: {},
 
-  beforeModel(transition) {
+  beforeModel() {
     return this.store.reloadData();
   },
 
@@ -26,7 +26,7 @@ export default Ember.Route.extend({
       metadata: this.store.getMetadataFenceAgent(this.store.peekRecord('fence', params.fence_id).get('agentType')),
       formData: this.get('modelForm'),
       cluster: this.store.peekAll('cluster'),
-      selectedFence: this.store.filter('fence', (item) => { return item.id === params.fence_id}),
+      selectedFence: this.store.filter('fence', (item) => { return item.id === params.fence_id; }),
     });
   },
 

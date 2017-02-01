@@ -94,8 +94,8 @@ export default DS.Store.extend({
   },
 
   pushNewFence: function(attrs) {
-    let properties = {}
-    attrs.properties.forEach(function(o) { properties[o.key] = o.value });
+    let properties = {};
+    attrs.properties.forEach(function(o) { properties[o.key] = o.value; });
     delete properties['fenceName'];
 
     const data = JSON.stringify({
@@ -113,9 +113,35 @@ export default DS.Store.extend({
     });
   },
 
+  pushNewResource: function(attrs) {
+    let properties = {};
+    attrs.properties.forEach(function(o) { properties[o.key] = o.value; });
+    delete properties['resourceName'];
+
+    console.log(JSON.stringify(properties));
+    console.log(JSON.stringify(attrs));
+
+    const data = JSON.stringify({
+      data: {
+        type: 'resource',
+        attributes: {
+          name: attrs.name,
+          agentProvider: attrs.agentProvider,
+          agentType: attrs.agentType,
+          ...properties,
+        },
+      }});
+
+      console.log(data);
+
+    this.get('ajax').post('/resources', {data: data}).then(() => {
+      this.reloadData();
+    });
+  },
+
   pushUpdateFence: function(attrs) {
-    let properties = {}
-    attrs.properties.forEach(function(o) { properties[o.key] = o.value });
+    let properties = {};
+    attrs.properties.forEach(function(o) { properties[o.key] = o.value; });
     delete properties['fenceName'];
 
     const data = JSON.stringify({
@@ -128,6 +154,25 @@ export default DS.Store.extend({
       }});
 
       this.get('ajax').patch('/fences', {data: data}).then(() => {
+        this.reloadData();
+      });
+  },
+
+  pushUpdateResource: function(attrs) {
+    let properties = {};
+    attrs.properties.forEach(function(o) { properties[o.key] = o.value; });
+    delete properties['resourceName'];
+
+    const data = JSON.stringify({
+      data: {
+        type: 'resource',
+        attributes: {
+          id: attrs.id,
+          ...properties,
+        },
+      }});
+
+      this.get('ajax').patch('/resources', {data: data}).then(() => {
         this.reloadData();
       });
   },
@@ -148,10 +193,54 @@ export default DS.Store.extend({
     return prom;
   },
 
+  getAvailableResourceAgents() {
+    const _this = this;
+
+    let prom = new Ember.RSVP.Promise(function(resolve) {
+      _this.get('ajax').request('/remote/get_avail_resource_agents').then((response) => {
+        const agents = {};
+        agents._providers = [];
+
+        Object.keys(response).forEach((agent) => {
+          const lastSemicolon = agent.lastIndexOf(':');
+
+          const provider = agent.substring(0, lastSemicolon);
+          const name = agent.substring(lastSemicolon + 1);
+
+          if (! (provider in agents)) {
+            agents._providers.push(provider);
+            agents[provider] = [];
+          }
+
+          agents[provider].push(name);
+        });
+
+        resolve(agents);
+      });
+    }, function(error) {
+      alert(error);
+    });
+
+    return prom;
+  },
+
   getMetadataFenceAgent(agentName) {
     const _this = this;
     let prom = new Ember.RSVP.Promise(function(resolve) {
     _this.get('ajax').request(`/remote/fence-metadata/${agentName}`).then((response) => {
+      resolve(response);
+    });
+    }, function(error) {
+      alert(error);
+    });
+
+    return prom;
+  },
+
+  getMetadataResourceAgent(agentName) {
+    const _this = this;
+    let prom = new Ember.RSVP.Promise(function(resolve) {
+    _this.get('ajax').request(`/remote/resource-metadata/${agentName}`).then((response) => {
       resolve(response);
     });
     }, function(error) {

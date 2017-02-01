@@ -1,0 +1,39 @@
+{{menu-header
+  title='Resources'
+  data=model.cluster.firstObject.resources
+  isCollapsed=false
+  targetRoute='resource.show'
+  onCheckAction=(route-action 'onCheck')
+}}
+
+<hr />
+{{#link-to 'resource.create'}}Add resource to the cluster{{/link-to}}
+<hr />
+
+{{#unless model.listing}}
+{{#unless model.selectedResource}}
+  The resource device with ID '{{model.params.resource_id}}' was not found, please select a different resource.
+{{/unless}}
+{{/unless}}
+
+{{#with model.selectedResource.firstObject as |selResource| }}
+  <h3>Editable form for Resource Agents</h3>
+  Name: {{ selResource.name }}<br />
+  Resource Provider: <select disabled="1">
+    <option>{{selResource.resourceProvider}}</option>
+  </select><br />
+  Resource Agent: <select disabled="1">
+    <option>{{selResource.resourceType}}</option>
+  </select>
+
+  {{resource-property-form
+      formData=(changeset model.formData)
+      metadata=model.metadata
+      availableAgents=model.availableAgents
+      selectedAgent=model.selectedAgent
+      selectedProvider=model.selectedProvider
+      selectedResource=selResource.id
+
+      submitText='Update'
+  }}
+{{/with}}

@@ -1,7 +1,8 @@
 import Ember from 'ember';
 
+// very same as fence/listing
 export default Ember.Route.extend({
-  templateName: 'fence/show',
+  templateName: 'resource/show',
 
   beforeModel() {
     return this.store.reloadData();

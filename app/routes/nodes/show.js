@@ -8,7 +8,7 @@ export default Ember.Route.extend({
       xyz: this.store.reloadData(),
       params: params,
       cluster: this.store.peekAll('cluster'),
-      selectedNode: this.store.filter('node', (item) => { return item.id === params.node_id}),
+      selectedNode: this.store.filter('node', (item) => { return item.id === params.node_id; }),
     });
   },
 });
