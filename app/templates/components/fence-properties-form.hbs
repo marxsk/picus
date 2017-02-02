@@ -5,14 +5,6 @@
   {{/if}}
   {{metadata.shortdesc}}
   <hr />
-  {{#each metadata.parameters as |p|}}
-    {{#if (eq p.type 'boolean')}}
-      {{f.select-field p.name 'default true false' label=p.shortdesc}}
-    {{/if}}
-
-    {{#if (eq p.type 'string')}}
-      {{f.text-field p.name label=p.shortdesc placeholder=p.default}}
-    {{/if}}
-  {{/each}}
+  {{agent-properties-form metadata=metadata form=f}}
   {{f.submit submitText}}
 {{/form-for}}
