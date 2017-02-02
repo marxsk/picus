@@ -34,12 +34,10 @@ export default Ember.Route.extend({
       this.set('selectedAgent', agent);
     }
 
-    this.set('metadata', this.store.getAgentMetadata('resource', this.get('selectedAgent')));
     return Ember.RSVP.hash({
       availableAgents: this.get('availables'),
       formData: this.get('modelForm'),
-      // @note: this should be computed property based on agent selected in combobox
-      metadata: this.get('metadata'),
+      metadata: this.store.getAgentMetadata('resource', this.get('selectedAgent')),
       selectedAgent: this.get('selectedAgent'),
       selectedProvider: this.get('selectedProvider'),
     });

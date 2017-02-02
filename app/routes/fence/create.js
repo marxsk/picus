@@ -1,18 +1,37 @@
 import Ember from 'ember';
+const { RSVP } = Ember;
 
 export default Ember.Route.extend({
-  selectedAgent : 'fence_apc',
+  selectedAgent : undefined,
   modelForm: {},
   metadata: {},
 
+  beforeModel() {
+    const _this = this;
+
+    return new RSVP.Promise(function(resolve, reject) {
+      _this.store.getAvailableAgents('fence').then(
+        function(response) {
+          _this.set('availables', response);
+          resolve(response);
+        }, function(xhr) {
+          reject(xhr);
+        }
+      );
+    });
+  },
+
   model() {
-    this.set('metadata', this.store.getAgentMetadata('fence', this.get('selectedAgent')));
+    if (! (this.get('selectedAgent'))) {
+      const agent = this.get('availables.undefinedProvider')[0];
+      this.set('modelForm.fenceAgent', agent);
+      this.set('selectedAgent', agent);
+    }
 
     return Ember.RSVP.hash({
-      availableAgents: this.store.getAvailableAgents('fence'),
+      availableAgents: this.get('availables'),
       formData: this.get('modelForm'),
-      // @note: this should be computed property based on agent selected in combobox
-      metadata: this.get('metadata'),
+      metadata: this.store.getAgentMetadata('fence', this.get('selectedAgent')),
       selectedAgent: this.get('selectedAgent'),
     });
   },
