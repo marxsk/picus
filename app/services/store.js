@@ -143,7 +143,7 @@ export default DS.Store.extend({
    * Push update of agent (dynamic) properties to pcsd
    *
    *  @param {string} agentType - Type of agent (resource|fence)
-   *  @param {attrs} attrs - Array of objects with properties ({key: FIELD, value: VALUE})
+   *  @param {Object[]} attrs - Array of objects with properties ({key: FIELD, value: VALUE})
    *
    *  @todo Create proper error handlers
    *  @todo Method should return promise?
