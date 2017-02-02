@@ -34,7 +34,7 @@ export default Ember.Route.extend({
       this.set('selectedAgent', agent);
     }
 
-    this.set('metadata', this.store.getMetadataResourceAgent(this.get('selectedAgent')));
+    this.set('metadata', this.store.getAgentMetadata('resource', this.get('selectedAgent')));
     return Ember.RSVP.hash({
       availableAgents: this.get('availables'),
       formData: this.get('modelForm'),

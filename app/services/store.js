@@ -224,29 +224,36 @@ export default DS.Store.extend({
     return prom;
   },
 
-  getMetadataFenceAgent(agentName) {
+  /**
+   * Download XML metadata that describes agent from pcsd
+   *  @param {string} agentType - Type of agent (resource|fence)
+   *  @param {string} agentName - Agent name without class/provider prefix
+   *
+   *  @todo Create proper error handlers
+   */
+  getAgentMetadata(agentType, agentName) {
+    let URL = '/remote';
+
+    switch (agentType) {
+      case 'resource':
+        URL += '/resource-metadata';
+        break;
+      case 'fence':
+        URL += '/fence-metadata';
+        break;
+      default:
+        URL = undefined;
+    }
+
+    console.assert((typeof URL !== 'undefined'), `Invalid agentType (${agentType}) entered`);
+
     const _this = this;
-    let prom = new Ember.RSVP.Promise(function(resolve) {
-    _this.get('ajax').request(`/remote/fence-metadata/${agentName}`).then((response) => {
-      resolve(response);
-    });
+    return new Ember.RSVP.Promise(function(resolve) {
+      _this.get('ajax').request(`${URL}/${agentName}`).then((response) => {
+        resolve(response);
+      });
     }, function(error) {
       alert(error);
     });
-
-    return prom;
   },
-
-  getMetadataResourceAgent(agentName) {
-    const _this = this;
-    let prom = new Ember.RSVP.Promise(function(resolve) {
-    _this.get('ajax').request(`/remote/resource-metadata/${agentName}`).then((response) => {
-      resolve(response);
-    });
-    }, function(error) {
-      alert(error);
-    });
-
-    return prom;
-  }
 });

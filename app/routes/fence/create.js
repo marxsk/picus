@@ -6,7 +6,7 @@ export default Ember.Route.extend({
   metadata: {},
 
   model() {
-    this.set('metadata', this.store.getMetadataFenceAgent(this.get('selectedAgent')));
+    this.set('metadata', this.store.getAgentMetadata('fence', this.get('selectedAgent')));
 
     return Ember.RSVP.hash({
       availableAgents: this.store.getAvailableFenceAgents(),
