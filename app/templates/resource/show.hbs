@@ -26,14 +26,10 @@
     <option>{{selResource.resourceType}}</option>
   </select>
 
-  {{resource-property-form
-      formData=(changeset model.formData)
-      metadata=model.metadata
-      availableAgents=model.availableAgents
-      selectedAgent=model.selectedAgent
-      selectedProvider=model.selectedProvider
-      selectedResource=selResource.id
-
-      submitText='Update'
-  }}
+  {{#form-for (changeset model.formData) submit=(route-action 'onSubmitAction' selResource.id) as |f|}}
+    {{metadata.shortdesc}}
+    <hr />
+    {{agent-properties-form metadata=model.metadata form=f}}
+    {{f.submit "Update"}}
+  {{/form-for}}
 {{/with}}

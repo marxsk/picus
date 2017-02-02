@@ -1,10 +1,9 @@
-{{resource-property-form
-    formData=(changeset model.formData)
-    metadata=model.metadata
-    availableAgents=model.availableAgents
-    selectedAgent=model.selectedAgent
-    selectedProvider=model.selectedProvider
-    create=true
-
-    submitText='Create'
-}}
+{{#form-for (changeset model.formData) submit=(route-action 'onSubmitAction' model.selectedAgent) as |f|}}
+  {{f.text-field 'resourceName' label='Resource Name' hint='small help'}}
+  {{f.select-field 'resourceProvider' model.availableAgents._providers label='Class/Providers' update=(route-action 'changeSelectedProvider')}}
+  {{f.select-field 'resourceAgent' (get model.availableAgents model.selectedProvider) label='Resource Agent' update=(route-action 'changeSelectedAgent')}}
+  {{metadata.shortdesc}}
+  <hr />
+  {{agent-properties-form metadata=model.metadata form=f}}
+  {{f.submit "Create"}}
+{{/form-for}}

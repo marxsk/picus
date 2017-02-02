@@ -1,9 +1,8 @@
-{{fence-properties-form
-    formData=(changeset model.formData)
-    metadata=model.metadata
-    availableAgents=model.availableAgents.undefinedProvider
-    selectedAgent=model.selectedAgent
-    create=true
-
-    submitText='Create'
-}}
+{{#form-for (changeset model.formData) submit=(route-action 'onSubmitAction' model.selectedAgent) as |f|}}
+  {{f.text-field 'fenceName' label='Fence Device Name' hint='small help'}}
+  {{f.select-field 'fenceAgent' model.availableAgents.undefinedProvider label='Fence Agent' update=(route-action 'changeSelectedAgent')}}
+  {{model.metadata.shortdesc}}
+  <hr />
+  {{agent-properties-form metadata=model.metadata form=f}}
+  {{f.submit "Create"}}
+{{/form-for}}
