@@ -143,26 +143,26 @@ export default DS.Store.extend({
    * Push update of agent (dynamic) properties to pcsd
    *
    *  @param {string} agentType - Type of agent (resource|fence)
-   *  @param {attrs} - Array of objects with properties ({key: FIELD, value: VALUE})
+   *  @param {attrs} attrs - Array of objects with properties ({key: FIELD, value: VALUE})
    *
    *  @todo Create proper error handlers
    *  @todo Method should return promise?
    **/
   pushUpdateAgentProperties: function(agentType, attrs) {
-    let URL = '';
+    let url = '';
 
     switch (agentType) {
       case 'resource':
-        URL += '/resources';
+        url += '/resources';
         break;
       case 'fence':
-        URL += '/fences';
+        url += '/fences';
         break;
       default:
-        URL = undefined;
+        url = undefined;
     }
 
-    console.assert((typeof URL !== 'undefined'), `Invalid agentType (${agentType}) entered`);
+    console.assert((typeof url !== 'undefined'), `Invalid agentType (${agentType}) entered`);
 
     let properties = {};
     attrs.properties.forEach(function(o) { properties[o.key] = o.value; });
@@ -176,7 +176,7 @@ export default DS.Store.extend({
         },
       }});
 
-      this.get('ajax').patch(URL, {data: data}).then(() => {
+      this.get('ajax').patch(url, {data: data}).then(() => {
         this.reloadData();
       });
   },
@@ -195,24 +195,24 @@ export default DS.Store.extend({
    *  @todo Create proper error handlers
    **/
   getAvailableAgents(agentType) {
-    let URL = '/remote';
+    let url = '/remote';
 
     switch (agentType) {
       case 'resource':
-        URL += '/get_avail_resource_agents';
+        url += '/get_avail_resource_agents';
         break;
       case 'fence':
-        URL += '/get_avail_fence_agents';
+        url += '/get_avail_fence_agents';
         break;
       default:
-        URL = undefined;
+        url = undefined;
     }
 
-    console.assert((typeof URL !== 'undefined'), `Invalid agentType (${agentType}) entered`);
+    console.assert((typeof url !== 'undefined'), `Invalid agentType (${agentType}) entered`);
 
     const _this = this;
     return new Ember.RSVP.Promise(function(resolve) {
-      _this.get('ajax').request(URL).then((response) => {
+      _this.get('ajax').request(url).then((response) => {
         const agents = {};
         agents._providers = [];
 
@@ -243,24 +243,24 @@ export default DS.Store.extend({
    *  @todo Create proper error handlers
    */
   getAgentMetadata(agentType, agentName) {
-    let URL = '/remote';
+    let url = '/remote';
 
     switch (agentType) {
       case 'resource':
-        URL += '/resource-metadata';
+        url += '/resource-metadata';
         break;
       case 'fence':
-        URL += '/fence-metadata';
+        url += '/fence-metadata';
         break;
       default:
-        URL = undefined;
+        url = undefined;
     }
 
-    console.assert((typeof URL !== 'undefined'), `Invalid agentType (${agentType}) entered`);
+    console.assert((typeof url !== 'undefined'), `Invalid agentType (${agentType}) entered`);
 
     const _this = this;
     return new Ember.RSVP.Promise(function(resolve) {
-      _this.get('ajax').request(`${URL}/${agentName}`).then((response) => {
+      _this.get('ajax').request(`${url}/${agentName}`).then((response) => {
         resolve(response);
       });
     }, function(error) {
