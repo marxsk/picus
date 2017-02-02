@@ -93,48 +93,57 @@ export default DS.Store.extend({
     });
   },
 
-  pushNewFence: function(attrs) {
+  /**
+   * Push new agent with basic configuration to pcsd
+   * We distinguish two categories of 'properties'. There are first-class ones
+   * e.g. name of agent, that are defined in model and dynamic ones. Backend does
+   * not have to have same classification.
+   *
+   *  @param {string} agentType - Type of agent (resource|fence)
+   *  @param {Object[]} attrs - Array of objects with properties ({key: FIELD, value: VALUE})
+   *  @param {string[]} propsToDelete - Remove property names before pushing to backend
+   *
+   *  @todo Create proper error handlers
+   *  @todo Method should return promise?
+   **/
+  pushNewAgent: function(agentType, attrs, propsToDelete = []) {
+    let url = '';
+
+    switch (agentType) {
+      case 'resource':
+        url += '/resources';
+        break;
+      case 'fence':
+        url += '/fences';
+        break;
+      default:
+        url = undefined;
+    }
+
+    console.assert((typeof url !== 'undefined'), `Invalid agentType (${agentType}) entered`);
+
     let properties = {};
     attrs.properties.forEach(function(o) { properties[o.key] = o.value; });
-    delete properties['fenceName'];
 
-    const data = JSON.stringify({
-      data: {
-        type: 'fence',
-        attributes: {
-          name: attrs.name,
-          agentType: attrs.agentType,
-          ...properties,
-        },
-      }});
+    const mainAttributes = Object.assign({}, attrs);
+    delete mainAttributes['properties'];
 
-    this.get('ajax').post('/fences', {data: data}).then(() => {
-      this.reloadData();
+    Object.keys(properties).forEach((key) => {
+      if (propsToDelete.indexOf(key) >= 0) {
+        delete properties[key];
+      }
     });
-  },
-
-  pushNewResource: function(attrs) {
-    let properties = {};
-    attrs.properties.forEach(function(o) { properties[o.key] = o.value; });
-    delete properties['resourceName'];
-
-    console.log(JSON.stringify(properties));
-    console.log(JSON.stringify(attrs));
 
     const data = JSON.stringify({
       data: {
-        type: 'resource',
+        type: agentType,
         attributes: {
-          name: attrs.name,
-          agentProvider: attrs.agentProvider,
-          agentType: attrs.agentType,
+          ...mainAttributes,
           ...properties,
         },
       }});
 
-      console.log(data);
-
-    this.get('ajax').post('/resources', {data: data}).then(() => {
+    this.get('ajax').post(url, {data: data}).then(() => {
       this.reloadData();
     });
   },

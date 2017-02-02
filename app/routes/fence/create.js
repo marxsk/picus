@@ -26,11 +26,11 @@ export default Ember.Route.extend({
     onSubmitAction: function(selectedAgent, form) {
       this.set('modelForm', form);
 
-      this.store.pushNewFence({
+      this.store.pushNewAgent('fence', {
         name: form.get('fenceName'),
         agentType: this.get('selectedAgent'),
         properties: form.get('changes'),
-      });
+      }, ['fenceName']);
 
       this.transitionTo('fence.listing');
     }
