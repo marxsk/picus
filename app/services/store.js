@@ -139,40 +139,44 @@ export default DS.Store.extend({
     });
   },
 
-  pushUpdateFence: function(attrs) {
+  /**
+   * Push update of agent (dynamic) properties to pcsd
+   *
+   *  @param {string} agentType - Type of agent (resource|fence)
+   *  @param {attrs} - Array of objects with properties ({key: FIELD, value: VALUE})
+   *
+   *  @todo Create proper error handlers
+   *  @todo Method should return promise?
+   **/
+  pushUpdateAgentProperties: function(agentType, attrs) {
+    let URL = '';
+
+    switch (agentType) {
+      case 'resource':
+        URL += '/resources';
+        break;
+      case 'fence':
+        URL += '/fences';
+        break;
+      default:
+        URL = undefined;
+    }
+
+    console.assert((typeof URL !== 'undefined'), `Invalid agentType (${agentType}) entered`);
+
     let properties = {};
     attrs.properties.forEach(function(o) { properties[o.key] = o.value; });
-    delete properties['fenceName'];
 
     const data = JSON.stringify({
       data: {
-        type: 'fence',
+        type: agentType,
         attributes: {
           id: attrs.id,
           ...properties,
         },
       }});
 
-      this.get('ajax').patch('/fences', {data: data}).then(() => {
-        this.reloadData();
-      });
-  },
-
-  pushUpdateResource: function(attrs) {
-    let properties = {};
-    attrs.properties.forEach(function(o) { properties[o.key] = o.value; });
-    delete properties['resourceName'];
-
-    const data = JSON.stringify({
-      data: {
-        type: 'resource',
-        attributes: {
-          id: attrs.id,
-          ...properties,
-        },
-      }});
-
-      this.get('ajax').patch('/resources', {data: data}).then(() => {
+      this.get('ajax').patch(URL, {data: data}).then(() => {
         this.reloadData();
       });
   },

@@ -34,7 +34,7 @@ export default Ember.Route.extend({
 
   actions: {
     onSubmitAction: function(id, form) {
-      this.store.pushUpdateResource({
+      this.store.pushUpdateAgentProperties('resource', {
         id,
         properties: form.get('changes'),
       });
