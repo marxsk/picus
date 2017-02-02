@@ -6,7 +6,7 @@ export default function() {
   });
 
   this.get('/remote/get_avail_fence_agents', () => {
-    return ['fence_apc', 'fence_ipmilan'];
+    return '{"fence_apc":{"type":"fence_apc"},"fence_ipmilan":{"type":"fence_ipmilan"}}';
   });
 
   this.get('/remote/get_avail_resource_agents', () => {

@@ -12,7 +12,7 @@ export default Ember.Route.extend({
     const _this = this;
 
     return new RSVP.Promise(function(resolve, reject) {
-      _this.store.getAvailableResourceAgents().then(
+      _this.store.getAvailableAgents('resource').then(
         function(response) {
           _this.set('availables', response);
           resolve(response);

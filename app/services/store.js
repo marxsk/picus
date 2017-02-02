@@ -177,51 +177,58 @@ export default DS.Store.extend({
       });
   },
 
-  /** Get available fence agents ; this info is not part of cluster overview **/
-  getAvailableFenceAgents() {
+  /**
+   * Download a list of installed agents from pcsd
+   *
+   *  @param {string} agentType - Type of agent (resource|fence)
+   *  @return {Object} Object that have providers as a key and under the key is stored with
+   *    array of available agents. If the provider name is not defined then undefinedProvider
+   *    is used as the provider name.
+   *
+   *  @todo Additional item _providers is contained in the result because it is useful
+   *    in the templates. This may (should) be replaced by template handlebar that will
+   *    do Object.keys(result).
+   *  @todo Create proper error handlers
+   **/
+  getAvailableAgents(agentType) {
+    let URL = '/remote';
+
+    switch (agentType) {
+      case 'resource':
+        URL += '/get_avail_resource_agents';
+        break;
+      case 'fence':
+        URL += '/get_avail_fence_agents';
+        break;
+      default:
+        URL = undefined;
+    }
+
+    console.assert((typeof URL !== 'undefined'), `Invalid agentType (${agentType}) entered`);
+
     const _this = this;
-
-    let prom = new Ember.RSVP.Promise(function(resolve) {
-      _this.get('ajax').request('/remote/get_avail_fence_agents').then((response) => {
-        resolve(response);
-      });
-
-    }, function(error) {
-      alert(error);
-    });
-
-    return prom;
-  },
-
-  getAvailableResourceAgents() {
-    const _this = this;
-
-    let prom = new Ember.RSVP.Promise(function(resolve) {
-      _this.get('ajax').request('/remote/get_avail_resource_agents').then((response) => {
+    return new Ember.RSVP.Promise(function(resolve) {
+      _this.get('ajax').request(URL).then((response) => {
         const agents = {};
         agents._providers = [];
 
         Object.keys(response).forEach((agent) => {
           const lastSemicolon = agent.lastIndexOf(':');
-
-          const provider = agent.substring(0, lastSemicolon);
+          let provider = agent.substring(0, lastSemicolon);
+          provider = (provider === '') ? 'undefinedProvider' : provider;
           const name = agent.substring(lastSemicolon + 1);
 
           if (! (provider in agents)) {
             agents._providers.push(provider);
             agents[provider] = [];
           }
-
           agents[provider].push(name);
         });
-
         resolve(agents);
       });
     }, function(error) {
       alert(error);
     });
-
-    return prom;
   },
 
   /**
