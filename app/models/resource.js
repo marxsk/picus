@@ -10,4 +10,6 @@ export default DS.Model.extend({
     async: true,
   }),
   properties: DS.hasMany('resourceProperty'),
+
+  metaAttributes: DS.hasMany('attribute'),
 });

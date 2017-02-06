@@ -97,11 +97,8 @@ export default function() {
 
   this.patch('/resources', (schema, request) => {
     const params = JSON.parse(request.requestBody);
-    console.log(params);
     const resource = schema.resources.find(params.data.attributes.id);
-    console.log(resource);
     const resourceId = params.data.attributes.id;
-    console.log('XX');
 
     delete params.data.attributes.id;
 
@@ -109,6 +106,19 @@ export default function() {
       const prop = schema.db.resourceProperties.firstOrCreate({resourceId, name:i});
       schema.db.resourceProperties.update(prop['id'], {value: params.data.attributes[i]});
     });
+  });
+
+  this.post('/meta', (schema, request) => {
+    const params = JSON.parse(request.requestBody);
+    const cluster = schema.clusters.find(1);
+    const resource = schema.resources.find(params.data.attributes.resource);
+
+    const attr = resource.createMetaAttribute({
+      key: params.data.attributes.key,
+      value: params.data.attributes.value
+    })
+
+    return attr;
   });
 
 }

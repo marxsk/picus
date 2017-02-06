@@ -276,4 +276,26 @@ export default DS.Store.extend({
       alert(error);
     });
   },
+
+  pushAppendMetaAttribute(resourceId, attribute) {
+    const _this = this;
+    return new Ember.RSVP.Promise(function(resolve) {
+      const data = JSON.stringify({
+        data: {
+          type: 'meta-attribute',
+          attributes: {
+            resource: resourceId,
+            ...attribute
+          },
+        }});
+
+      _this.get('ajax').post('/meta/', {data: data}).then((response) => {
+        _this.reloadData();
+        resolve(response);
+      })
+    }, function(error) {
+
+    });
+  }
+
 });

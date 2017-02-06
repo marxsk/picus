@@ -30,6 +30,16 @@
     {{metadata.shortdesc}}
     <hr />
     {{agent-properties-form metadata=model.metadata form=f}}
+
     {{f.submit "Update"}}
   {{/form-for}}
+
+  {{attr-list
+      title='Resource Meta Attributes'
+      attributes=selResource.metaAttributes
+      onDeleteAction=(route-action 'deleteMetaAttribute')
+      onAppendAction=(route-action 'appendMetaAttribute')
+      onDeleteMultipleAction=(route-action 'deleteMultipleMetaAttributes')
+  }}
+
 {{/with}}

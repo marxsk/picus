@@ -2,6 +2,7 @@ import Ember from 'ember';
 
 export default Ember.Route.extend({
   modelForm: {},
+  resourceId: undefined,
 
   beforeModel() {
     return this.store.reloadData();
@@ -9,6 +10,7 @@ export default Ember.Route.extend({
 
   model(params) {
     const resource = this.store.peekRecord('resource', params.resource_id);
+    this.set('resourceId', params.resource_id);
 
     if (resource === null) {
       return Ember.RSVP.hash({
@@ -43,5 +45,19 @@ export default Ember.Route.extend({
     },
     onCheck: function() {},
     changeSelectedAgent: function() {},
+
+    appendMetaAttribute: function(attributes, key, value) {
+      this.store.pushAppendMetaAttribute(this.get('resourceId'), { key, value });
+    },
+    deleteMetaAttribute: function(attribute) {
+      attribute.deleteRecord();
+      attribute.save();
+    },
+    deleteMultipleMetaAttributes: function(attributes) {
+      attributes.forEach((item) => {
+        item.deleteRecord();
+        item.save();
+      });
+    },
   }
 });
