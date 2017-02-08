@@ -52,6 +52,48 @@
   {{/attr-list}}
 
   {{#attr-list
+      title='Resource Ordering Preference'
+      attributes=selResource.orderingPreferences
+      onDeleteAction=(route-action 'deleteOrderingPreference')
+      onAppendAction=(route-action 'appendOrderingPreference')
+      onDeleteMultipleAction=(route-action 'deleteMultipleOrderingPreferences')
+      as |form mode attr|
+  }}
+    {{#if (eq mode 'edit')}}
+      <td>{{input value=form.attr.resource2}}</td>
+      <td>
+        <select onchange={{action (mut form.attr.action1) value="target.value"}}>
+            <option value="starts">starts</option>
+            <option value="promotes">promotes</option>
+            <option value="demots">demotes</option>
+            <option value="stops">stops</option>
+        </select>
+      </td>
+      <td>
+        <select onchange={{action (mut form.attr.before) value="target.value"}}>
+            <option value="before">before</option>
+            <option value="after">after</option>
+        </select>
+      </td>
+      <td>
+        <select onchange={{action (mut form.attr.action2) value="target.value"}}>
+            <option value="starts">starts</option>
+            <option value="promotes">promotes</option>
+            <option value="demots">demotes</option>
+            <option value="stops">stops</option>
+        </select>
+      </td>
+      <td>{{input value=form.attr.score}}</td>
+    {{else}}
+      <td>{{attr.resource2}}</td>
+      <td>{{attr.action1}}</td>
+      <td>{{attr.before}}</td>
+      <td>{{attr.action2}}</td>
+      <td>{{attr.score}}</td>
+    {{/if}}
+  {{/attr-list}}
+
+  {{#attr-list
       title='Resource Meta Attributes'
       attributes=selResource.metaAttributes
       onDeleteAction=(route-action 'deleteMetaAttribute')

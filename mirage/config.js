@@ -135,4 +135,22 @@ export default function() {
   });
   this.del('/location-preferences/:id');
 
+  this.post('/ordering-preference', (schema, request) => {
+    const params = JSON.parse(request.requestBody);
+    const cluster = schema.clusters.find(1);
+    const resource = schema.resources.find(params.data.attributes.resource);
+
+    console.log(request.requestBody);
+
+    const attr = resource.createOrderingPreference({
+      resource2: params.data.attributes.resource2,
+      action1: params.data.attributes.action1,
+      before: params.data.attributes.before,
+      action2: params.data.attributes.action2,
+      score: params.data.attributes.score,
+    })
+
+    return attr;
+  });
+  this.del('/ordering-preferences/:id');
 }

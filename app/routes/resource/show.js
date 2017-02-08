@@ -74,5 +74,26 @@ export default Ember.Route.extend({
       });
     },
 
+    appendOrderingPreference: function(attributes, attr) {
+      // @todo: ugly hack, we should set this value in template?
+      attr.before = ('before' in attr) ? attr.before : 'before';
+      attr.action1 = ('action1' in attr) ? attr.action1 : 'starts';
+      attr.action2 = ('action2' in attr) ? attr.action2 : 'starts';
+      //
+
+      console.log(JSON.stringify(attr));
+      this.store.pushAppendOrderingPreference(this.get('resourceId'), attr);
+    },
+    deleteOrderingPreference: function(attribute) {
+      attribute.deleteRecord();
+      attribute.save();
+    },
+    deleteMultipleOrderingPreferences: function(attributes) {
+      attributes.forEach((item) => {
+        item.deleteRecord();
+        item.save();
+      });
+    },
+
   }
 });

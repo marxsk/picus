@@ -316,6 +316,26 @@ export default DS.Store.extend({
     }, function(error) {
 
     });
+  },
+  pushAppendOrderingPreference(resourceId, attribute) {
+    const _this = this;
+    return new Ember.RSVP.Promise(function(resolve) {
+      const data = JSON.stringify({
+        data: {
+          type: 'ordering-preference',
+          attributes: {
+            resource: resourceId,
+            ...attribute
+          },
+        }});
+
+      _this.get('ajax').post('/ordering-preference/', {data: data}).then((response) => {
+        _this.reloadData();
+        resolve(response);
+      })
+    }, function(error) {
+
+    });
   }
 
 });
