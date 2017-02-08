@@ -296,6 +296,26 @@ export default DS.Store.extend({
     }, function(error) {
 
     });
+  },
+  pushAppendLocationPreference(resourceId, attribute) {
+    const _this = this;
+    return new Ember.RSVP.Promise(function(resolve) {
+      const data = JSON.stringify({
+        data: {
+          type: 'location-preference',
+          attributes: {
+            resource: resourceId,
+            ...attribute
+          },
+        }});
+
+      _this.get('ajax').post('/location-preference/', {data: data}).then((response) => {
+        _this.reloadData();
+        resolve(response);
+      })
+    }, function(error) {
+
+    });
   }
 
 });

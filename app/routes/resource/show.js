@@ -59,5 +59,20 @@ export default Ember.Route.extend({
         item.save();
       });
     },
+
+    appendLocationPreference: function(attributes, attr) {
+      this.store.pushAppendLocationPreference(this.get('resourceId'), attr);
+    },
+    deleteLocationPreference: function(attribute) {
+      attribute.deleteRecord();
+      attribute.save();
+    },
+    deleteMultipleLocationPreferences: function(attributes) {
+      attributes.forEach((item) => {
+        item.deleteRecord();
+        item.save();
+      });
+    },
+
   }
 });

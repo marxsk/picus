@@ -4,4 +4,5 @@ export default Model.extend({
   resources: hasMany('resource'),
   properties: hasMany('resourceProperty'),
   metaAttributes: hasMany('attribute', {inverse: 'unused3'}),
+  locationPreferences: hasMany('locationPreference', {inverse: 'unused'}),
 });

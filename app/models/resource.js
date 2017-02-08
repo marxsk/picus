@@ -12,4 +12,5 @@ export default DS.Model.extend({
   properties: DS.hasMany('resourceProperty'),
 
   metaAttributes: DS.hasMany('attribute'),
+  locationPreferences: DS.hasMany('locationPreference'),
 });

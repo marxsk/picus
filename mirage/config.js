@@ -121,4 +121,18 @@ export default function() {
     return attr;
   });
 
+  this.post('/location-preference', (schema, request) => {
+    const params = JSON.parse(request.requestBody);
+    const cluster = schema.clusters.find(1);
+    const resource = schema.resources.find(params.data.attributes.resource);
+
+    const attr = resource.createLocationPreference({
+      node: params.data.attributes.node,
+      score: params.data.attributes.score
+    })
+
+    return attr;
+  });
+  this.del('/location-preferences/:id');
+
 }

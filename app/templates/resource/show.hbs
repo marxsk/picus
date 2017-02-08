@@ -35,6 +35,23 @@
   {{/form-for}}
 
   {{#attr-list
+      title='Resource Location Preference'
+      attributes=selResource.locationPreferences
+      onDeleteAction=(route-action 'deleteLocationPreference')
+      onAppendAction=(route-action 'appendLocationPreference')
+      onDeleteMultipleAction=(route-action 'deleteMultipleLocationPreferences')
+      as |form mode attr|
+  }}
+    {{#if (eq mode 'edit')}}
+      <td>{{input value=form.attr.node}}</td>
+      <td>{{input value=form.attr.score}}</td>
+    {{else}}
+      <td>{{attr.node}}</td>
+      <td>{{attr.score}}</td>
+    {{/if}}
+  {{/attr-list}}
+
+  {{#attr-list
       title='Resource Meta Attributes'
       attributes=selResource.metaAttributes
       onDeleteAction=(route-action 'deleteMetaAttribute')
