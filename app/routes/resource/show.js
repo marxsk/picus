@@ -46,8 +46,8 @@ export default Ember.Route.extend({
     onCheck: function() {},
     changeSelectedAgent: function() {},
 
-    appendMetaAttribute: function(attributes, key, value) {
-      this.store.pushAppendMetaAttribute(this.get('resourceId'), { key, value });
+    appendMetaAttribute: function(attributes, attr) {
+      this.store.pushAppendMetaAttribute(this.get('resourceId'), attr);
     },
     deleteMetaAttribute: function(attribute) {
       attribute.deleteRecord();

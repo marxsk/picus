@@ -9,14 +9,17 @@ export default Ember.Component.extend({
 
   selectedAttributes: Ember.A(),
 
-  attrKey: '',
-  attrValue: '',
+  attr: null,
+
+  init() {
+    this._super();
+    this.set('attr', {});
+  },
 
   actions: {
     appendCleanAction: function(attributes) {
-      this.attrs.onAppendAction(attributes, this.get('attrKey'), this.get('attrValue'));
-      this.set('attrKey', '');
-      this.set('attrValue', '');
+      this.attrs.onAppendAction(attributes, this.get('attr'));
+      this.set('attr', {});
     },
     onCheckAction: function(attribute, isChecked) {
       if (isChecked === true) {

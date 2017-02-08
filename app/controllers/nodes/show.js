@@ -9,9 +9,9 @@ export default Ember.Controller.extend({
     },
     onCheck: function() {    },
 
-    appendNodeAttribute: function(attributes, key, value) {
+    appendNodeAttribute: function(attributes, attr) {
       var store = this.store;
-      var newAttribute = store.createRecord('attribute', { key, value });
+      var newAttribute = store.createRecord('attribute', attr);
       attributes.pushObject(newAttribute);
       newAttribute.save();
     },
@@ -25,9 +25,9 @@ export default Ember.Controller.extend({
         item.save();
       });
     },
-    appendNodeUtilizationAttribute: function(attributes, key, value) {
+    appendNodeUtilizationAttribute: function(attributes, attr) {
       var store = this.store;
-      var newAttribute = store.createRecord('attribute', { key, value });
+      var newAttribute = store.createRecord('attribute', attr);
       attributes.pushObject(newAttribute);
       newAttribute.save();
     },

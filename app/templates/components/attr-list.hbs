@@ -4,8 +4,8 @@
     {{attr-single attribute=attr onCheckAction=(action 'onCheckAction') onDeleteAction=(action onDeleteAction)}}
   {{/each}}
   <tr>
-    <td>{{input value=attrKey}}</td>
-    <td>{{input value=attrValue}}</td>
+    <td>{{input value=attr.key}}</td>
+    <td>{{input value=attr.value}}</td>
     <td class='append-attr' onClick={{action 'appendCleanAction' attributes}}>Append</td>
   </tr>
 </table>
