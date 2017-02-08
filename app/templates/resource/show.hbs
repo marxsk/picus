@@ -34,12 +34,21 @@
     {{f.submit "Update"}}
   {{/form-for}}
 
-  {{attr-list
+  {{#attr-list
       title='Resource Meta Attributes'
       attributes=selResource.metaAttributes
       onDeleteAction=(route-action 'deleteMetaAttribute')
       onAppendAction=(route-action 'appendMetaAttribute')
       onDeleteMultipleAction=(route-action 'deleteMultipleMetaAttributes')
+      as |form mode attr|
   }}
+    {{#if (eq mode 'edit')}}
+      <td>{{input value=form.attr.key}}</td>
+      <td>{{input value=form.attr.value}}</td>
+    {{else}}
+      <td>{{attr.key}}</td>
+      <td>{{attr.value}}</td>
+    {{/if}}
+  {{/attr-list}}
 
 {{/with}}

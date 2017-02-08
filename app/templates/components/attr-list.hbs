@@ -1,11 +1,12 @@
 {{title}} ({{attributes.length}}): <span class='delete-attrs' onClick={{action onDeleteMultipleAction selectedAttributes}}>Delete selected</span>
 <table border='1'>
   {{#each attributes as |attr|}}
-    {{attr-single attribute=attr onCheckAction=(action 'onCheckAction') onDeleteAction=(action onDeleteAction)}}
+    {{#attr-single attribute=attr onCheckAction=(action 'onCheckAction') onDeleteAction=(action onDeleteAction) as |attr|}}
+      {{yield this 'show' attr}}
+    {{/attr-single}}
   {{/each}}
   <tr>
-    <td>{{input value=attr.key}}</td>
-    <td>{{input value=attr.value}}</td>
+    {{yield this 'edit' attr}}
     <td class='append-attr' onClick={{action 'appendCleanAction' attributes}}>Append</td>
   </tr>
 </table>

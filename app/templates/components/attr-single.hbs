@@ -1,7 +1,6 @@
 <tr>
   <td>{{input type='checkbox' checked=isChecked}}</td>
-  <td>{{attribute.key}}</td>
-  <td>{{attribute.value}}</td>
+  {{yield attribute}}
   <td>
     {{#if attribute.isDeleted}}
       [DELETING]

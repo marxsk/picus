@@ -28,8 +28,25 @@
     <li> Corosync: {{format-running selectedNode.isPcsdRunning}} ( {{format-enabled selectedNode.isPcsdEnabled}} ) </li>
   </ul>
 
-  {{attr-list title='Node Attributes' attributes=selectedNode.nodeAttributes onDeleteAction=(action 'deleteNodeAttribute') onAppendAction=(action 'appendNodeAttribute') onDeleteMultipleAction=(action 'deleteMultipleAttributes')}}
-  {{attr-list title='Node Utilization Attributes' attributes=selectedNode.nodeUtilizationAttributes onDeleteAction=(action 'deleteNodeAttribute') onAppendAction=(action 'appendNodeUtilizationAttribute')  onDeleteMultipleAction=(action 'deleteMultipleAttributes')}}
+  {{#attr-list title='Node Attributes' attributes=selectedNode.nodeAttributes onDeleteAction=(action 'deleteNodeAttribute') onAppendAction=(action 'appendNodeAttribute') onDeleteMultipleAction=(action 'deleteMultipleAttributes') as |form mode attr|}}
+    {{#if (eq mode 'edit')}}
+      <td>{{input value=form.attr.key}}</td>
+      <td>{{input value=form.attr.value}}</td>
+    {{else}}
+      <td>{{attr.key}}</td>
+      <td>{{attr.value}}</td>
+    {{/if}}
+  {{/attr-list}}
+
+  {{#attr-list title='Node Utilization Attributes' attributes=selectedNode.nodeUtilizationAttributes onDeleteAction=(action 'deleteNodeAttribute') onAppendAction=(action 'appendNodeUtilizationAttribute')  onDeleteMultipleAction=(action 'deleteMultipleAttributes') as |form mode attr|}}
+    {{#if (eq mode 'edit')}}
+      <td>{{input value=form.attr.key}}</td>
+      <td>{{input value=form.attr.value}}</td>
+    {{else}}
+      <td>{{attr.key}}</td>
+      <td>{{attr.value}}</td>
+    {{/if}}
+  {{/attr-list}}
 {{else}}
   {{#if mode.params.node_id}}
     Node with ID '{{model.params.node_id}}' was not found, please select a different node.
