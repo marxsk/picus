@@ -19,6 +19,10 @@ export default Ember.Route.extend({
       });
     }
 
+    let ourName = resource.get('name');
+    let otherResourcesName = this.store.peekAll('resource').map((i) => { return i.get('name'); });
+    otherResourcesName = otherResourcesName.filter((name) => { return name !== ourName; } );
+
     if (resource.get('properties')) {
       resource.get('properties').forEach((item) => {
         this.set('modelForm.' + item.get('name'), item.get('value'));
@@ -31,6 +35,7 @@ export default Ember.Route.extend({
       formData: this.get('modelForm'),
       cluster: this.store.peekAll('cluster'),
       selectedResource: this.store.filter('resource', (item) => { return item.id === params.resource_id; }),
+      otherResourcesName: otherResourcesName,
     });
   },
 

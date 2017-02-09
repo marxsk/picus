@@ -10,6 +10,10 @@
 {{#link-to 'resource.create'}}Add resource to the cluster{{/link-to}}
 <hr />
 
+{{#each model.otherResourcesName as |m|}}
+  <li>{{m}}</li>
+{{/each}}
+
 {{#unless model.listing}}
 {{#unless model.selectedResource}}
   The resource device with ID '{{model.params.resource_id}}' was not found, please select a different resource.
@@ -60,7 +64,18 @@
       as |form mode attr|
   }}
     {{#if (eq mode 'edit')}}
-      <td>{{input value=form.attr.resource2}}</td>
+      <td width="300">
+        {{#power-select
+          selected=attr.resource2
+          options=model.otherResourcesName
+          placeholder='Select a resource'
+          onchange=(action (mut attr.resource2))
+          allowClear=true
+          as |record|
+        }}
+          {{record}}
+        {{/power-select}}
+      </td>
       <td>
         <select onchange={{action (mut form.attr.action1) value="target.value"}}>
             <option value="starts">starts</option>
