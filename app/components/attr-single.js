@@ -7,6 +7,8 @@ export default Ember.Component.extend({
 
   isChecked: false,
 
+  tagName: 'tr',
+
   watchChecked: function() {
     this.attrs.onCheckAction(this.get('attribute'), this.get('isChecked'));
   }.observes('isChecked'),

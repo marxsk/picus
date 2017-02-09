@@ -1,15 +1,13 @@
-<tr>
-  <td>{{input type='checkbox' checked=isChecked}}</td>
-  {{yield attribute}}
-  <td>
-    {{#if attribute.isDeleted}}
-      [DELETING]
+<td>{{input type='checkbox' checked=isChecked}}</td>
+{{yield attribute}}
+<td>
+  {{#if attribute.isDeleted}}
+    [DELETING]
+  {{else}}
+    {{#unless attribute.id}}
+      [ADDING]
     {{else}}
-      {{#unless attribute.id}}
-        [ADDING]
-      {{else}}
-        <span class="delete-attr" onClick={{action onDeleteAction attribute}}>DELETE</span>
-      {{/unless}}
-    {{/if}}
-  </td>
-</tr>
+      <span class="delete-attr" onClick={{action onDeleteAction attribute}}>DELETE</span>
+    {{/unless}}
+  {{/if}}
+</td>
