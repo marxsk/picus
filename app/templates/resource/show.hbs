@@ -41,9 +41,9 @@
   {{#attr-list
       title='Resource Location Preference'
       attributes=selResource.locationPreferences
-      onDeleteAction=(route-action 'deleteLocationPreference')
+      onDeleteAction=(route-action 'deleteAttribute')
       onAppendAction=(route-action 'appendLocationPreference')
-      onDeleteMultipleAction=(route-action 'deleteMultipleLocationPreferences')
+      onDeleteMultipleAction=(route-action 'deleteAttributes')
       as |form mode attr|
   }}
     {{#if (eq mode 'edit')}}
@@ -58,9 +58,9 @@
   {{#attr-list
       title='Resource Ordering Preference'
       attributes=selResource.orderingPreferences
-      onDeleteAction=(route-action 'deleteOrderingPreference')
+      onDeleteAction=(route-action 'deleteAttribute')
       onAppendAction=(route-action 'appendOrderingPreference')
-      onDeleteMultipleAction=(route-action 'deleteMultipleOrderingPreferences')
+      onDeleteMultipleAction=(route-action 'deleteAttributes')
       as |form mode attr|
   }}
     {{#if (eq mode 'edit')}}
@@ -111,9 +111,9 @@
   {{#attr-list
       title='Resource Meta Attributes'
       attributes=selResource.metaAttributes
-      onDeleteAction=(route-action 'deleteMetaAttribute')
+      onDeleteAction=(route-action 'deleteAttribute')
       onAppendAction=(route-action 'appendMetaAttribute')
-      onDeleteMultipleAction=(route-action 'deleteMultipleMetaAttributes')
+      onDeleteMultipleAction=(route-action 'deleteAttributes')
       as |form mode attr|
   }}
     {{#if (eq mode 'edit')}}

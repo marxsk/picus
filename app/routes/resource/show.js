@@ -54,11 +54,12 @@ export default Ember.Route.extend({
     appendMetaAttribute: function(attributes, attr) {
       this.store.pushAppendMetaAttribute(this.get('resourceId'), attr);
     },
-    deleteMetaAttribute: function(attribute) {
+
+    deleteAttribute: function(attribute) {
       attribute.deleteRecord();
       attribute.save();
     },
-    deleteMultipleMetaAttributes: function(attributes) {
+    deleteAttributes: function(attributes) {
       attributes.forEach((item) => {
         item.deleteRecord();
         item.save();
@@ -67,16 +68,6 @@ export default Ember.Route.extend({
 
     appendLocationPreference: function(attributes, attr) {
       this.store.pushAppendLocationPreference(this.get('resourceId'), attr);
-    },
-    deleteLocationPreference: function(attribute) {
-      attribute.deleteRecord();
-      attribute.save();
-    },
-    deleteMultipleLocationPreferences: function(attributes) {
-      attributes.forEach((item) => {
-        item.deleteRecord();
-        item.save();
-      });
     },
 
     appendOrderingPreference: function(attributes, attr) {
@@ -89,16 +80,5 @@ export default Ember.Route.extend({
       console.log(JSON.stringify(attr));
       this.store.pushAppendOrderingPreference(this.get('resourceId'), attr);
     },
-    deleteOrderingPreference: function(attribute) {
-      attribute.deleteRecord();
-      attribute.save();
-    },
-    deleteMultipleOrderingPreferences: function(attributes) {
-      attributes.forEach((item) => {
-        item.deleteRecord();
-        item.save();
-      });
-    },
-
   }
 });
