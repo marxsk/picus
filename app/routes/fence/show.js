@@ -12,6 +12,7 @@ export default Ember.Route.extend({
 
     if (fence === null) {
       return Ember.RSVP.hash({
+        listing: (params.fence_id.length === 0) ? true : false,
         cluster: this.store.peekAll('cluster'),
         params: params,
       });
