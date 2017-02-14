@@ -3,6 +3,7 @@ import Ember from 'ember';
 export default Ember.Route.extend({
   modelForm: {},
   resourceId: undefined,
+  selectedResources: Ember.A(),
 
   beforeModel() {
     return this.store.reloadData();
@@ -48,7 +49,13 @@ export default Ember.Route.extend({
 
       this.transitionTo('resource.listing');
     },
-    onCheck: function() {},
+    onCheckx: function(x) {
+      if (this.get('selectedResources').includes(x)) {
+        this.get('selectedResources').removeObject(x);
+      } else {
+        this.get('selectedResources').addObject(x);
+      }
+    },
     changeSelectedAgent: function() {},
 
     appendMetaAttribute: function(attributes, attr) {

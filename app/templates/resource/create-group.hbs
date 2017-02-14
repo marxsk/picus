@@ -1,0 +1,47 @@
+<!-- computed property hack -->
+{{#each allResources as |r|}} {{/each}}
+
+<hr>
+PRE-SELECTED:
+NOT-YET
+<hr>
+
+IN-GROUP:
+
+{{#draggable-object-target action="increaseRating" amount="5"}}
+<ul>
+{{#sortable-objects sortableObjectList=validResources sortEndAction='sortEndAction' sortingScope='a' }}
+  {{#each validResources as |r|}}
+    {{#draggable-object content=r isSortable=true sortingScope='a'}}
+      {{#double-clickable action=(action "increaseRating2") content=r}}
+        <li>{{r.name}}</li>
+      {{/double-clickable}}
+    {{/draggable-object}}
+  {{/each}}
+{{/sortable-objects}}
+</ul>
+{{/draggable-object-target}}
+
+<hr>
+Target:
+{{#draggable-object-target action="increaseRating2" amount="5"}}
+{{#sortable-objects sortableObjectList=groupedResources sortEndAction='sortEndAction' enableSort=true useSwap=true sortingScope='b'}}
+  {{#each groupedResources as |r|}}
+    {{#draggable-object content=r sortingScope='b' isSortable=true}}
+    {{#double-clickable action=(action "increaseRating") content=r}}
+      <li>{{r.name}}</li>
+    {{/double-clickable}}
+    {{/draggable-object}}
+  {{/each}}
+{{/sortable-objects}}
+  Drag here to extend resource group
+
+{{/draggable-object-target}}
+<hr>
+<h3>Order of objects is:</h3>
+
+{{#each groupedResources as |r|}}
+  {{#draggable-object content=r}}
+    <li>{{r.name}}</li>
+  {{/draggable-object}}
+{{/each}}

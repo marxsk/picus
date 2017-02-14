@@ -19,6 +19,7 @@ Router.map(function() {
     this.route('listing', { path: 'show/' });
     this.route('create');
     this.route('show', { path: 'show/:resource_id'});
+    this.route('createGroup', {path: 'create-group'});
   });
 
   this.route('fence', function() {

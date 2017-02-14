@@ -3,11 +3,12 @@
   data=model.cluster.firstObject.resources
   isCollapsed=false
   targetRoute='resource.show'
-  onCheckAction=(route-action 'onCheck')
+  onCheckAction=(route-action 'onCheckx')
 }}
 
 <hr />
-{{#link-to 'resource.create'}}Add resource to the cluster{{/link-to}}
+{{#link-to 'resource.create'}}Add resource to the cluster{{/link-to}} <br />
+{{#link-to 'resource.createGroup'}}Add resource group to the cluster{{/link-to}}
 <hr />
 
 {{#each model.otherResourcesName as |m|}}
