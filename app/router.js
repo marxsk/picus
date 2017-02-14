@@ -11,21 +11,21 @@ Router.map(function() {
 
   this.route('nodes', function() {
     this.route('listing', { path: 'show/' });
-    this.route('create');
     this.route('show', { path: 'show/:node_id' });
+    this.route('create');
   });
 
   this.route('resource', function() {
     this.route('listing', { path: 'show/' });
+    this.route('show', { path: 'show/:resource_id' });
     this.route('create');
-    this.route('show', { path: 'show/:resource_id'});
-    this.route('createGroup', {path: 'create-group'});
+    this.route('createGroup', { path: 'create-group' });
   });
 
   this.route('fence', function() {
     this.route('listing', { path: 'show/' });
+    this.route('show', { path: 'show/:fence_id' });
     this.route('create');
-    this.route('show', { path: 'show/:fence_id'});
   });
 });
 
