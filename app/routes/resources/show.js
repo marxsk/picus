@@ -33,7 +33,7 @@ export default Ember.Route.extend({
 
     return Ember.RSVP.hash({
       params: params,
-      metadata: this.store.getAgentMetadata('resource', this.store.peekRecord('resource', params.resource_id).get('resourceType')),
+      metadata: this.store.getAgentMetadata('resource', this.store.peekRecord('resource', params.resource_id).get('resourceProvider') + ':' + this.store.peekRecord('resource', params.resource_id).get('resourceType')),
       formData: this.get('modelForm'),
       cluster: this.store.peekAll('cluster'),
       selectedResource: this.store.filter('resource', (item) => { return item.id === params.resource_id; }),

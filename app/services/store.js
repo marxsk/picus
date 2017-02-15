@@ -3,6 +3,7 @@ import Ember from 'ember';
 
 export default DS.Store.extend({
   ajax: Ember.inject.service(),
+  clusterName: 'my',
 
   /** Reload all data from backend
 
@@ -252,14 +253,14 @@ export default DS.Store.extend({
    *  @todo Create proper error handlers
    */
   getAgentMetadata(agentType, agentName) {
-    let url = '/remote';
+    let url = '/managec/' + this.get('clusterName');
 
     switch (agentType) {
       case 'resource':
-        url += '/resource-metadata';
+        url += '/get_resource_agent_metadata';
         break;
       case 'fence':
-        url += '/fence-metadata';
+        url += '/get_fence_agent_metadata';
         break;
       default:
         url = undefined;
@@ -269,7 +270,7 @@ export default DS.Store.extend({
 
     const _this = this;
     return new Ember.RSVP.Promise(function(resolve) {
-      _this.get('ajax').request(`${url}/${agentName}`).then((response) => {
+      _this.get('ajax').request(url, {data: {agent: agentName}}).then((response) => {
         resolve(response);
       });
     }, function(error) {

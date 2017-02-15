@@ -24,7 +24,7 @@ export default Ember.Route.extend({
 
     return Ember.RSVP.hash({
       params: params,
-      metadata: this.store.getAgentMetadata('fence', this.store.peekRecord('fence', params.fence_id).get('agentType')),
+      metadata: this.store.getAgentMetadata('fence', 'stonith:' + this.store.peekRecord('fence', params.fence_id).get('agentType')),
       formData: this.get('modelForm'),
       cluster: this.store.peekAll('cluster'),
       selectedFence: this.store.filter('fence', (item) => { return item.id === params.fence_id; }),
