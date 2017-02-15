@@ -64,7 +64,7 @@ export default Ember.Route.extend({
         properties: form.get('changes'),
       }, ['resourceName']);
 
-      this.transitionTo('resources.listing');
+      this.transitionTo('resources.show', '');
     }
   }
 });

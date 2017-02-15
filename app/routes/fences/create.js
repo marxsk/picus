@@ -51,7 +51,7 @@ export default Ember.Route.extend({
         properties: form.get('changes'),
       }, ['fenceName']);
 
-      this.transitionTo('fences.listing');
+      this.transitionTo('fences.show', '');
     }
   }
 });

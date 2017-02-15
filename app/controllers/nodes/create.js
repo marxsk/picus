@@ -16,7 +16,7 @@ export default Ember.Controller.extend({
         nodeName: changeset.get('nodeName'),
         autoStart: changeset.get('autoStart'),
       });
-      this.transitionToRoute('nodes.listing');
+      this.transitionToRoute('nodes.show', '');
     },
     increaseRating: function(xyz) {
       console.log('to1');
