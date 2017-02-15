@@ -15,14 +15,14 @@ Router.map(function() {
     this.route('create');
   });
 
-  this.route('resource', function() {
+  this.route('resources', function() {
     this.route('listing', { path: 'show/' });
     this.route('show', { path: 'show/:resource_id' });
     this.route('create');
     this.route('createGroup', { path: 'create-group' });
   });
 
-  this.route('fence', function() {
+  this.route('fences', function() {
     this.route('listing', { path: 'show/' });
     this.route('show', { path: 'show/:fence_id' });
     this.route('create');

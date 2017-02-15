@@ -2,12 +2,12 @@
   title='Fence Devices'
   data=model.cluster.firstObject.fences
   isCollapsed=false
-  targetRoute='fence.show'
+  targetRoute='fences.show'
   onCheckAction=(route-action 'onCheck')
 }}
 
 <hr />
-  {{#link-to 'fence.create'}}Add fence devices to the cluster{{/link-to}}
+  {{#link-to 'fences.create'}}Add fence devices to the cluster{{/link-to}}
 <hr />
 
 {{#unless model.listing}}

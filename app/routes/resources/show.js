@@ -48,7 +48,7 @@ export default Ember.Route.extend({
         properties: form.get('changes'),
       });
 
-      this.transitionTo('resource.listing');
+      this.transitionTo('resources.listing');
     },
     onCheckx: function(x) {
       if (this.get('selectedResources').includes(x)) {

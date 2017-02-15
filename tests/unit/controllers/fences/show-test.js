@@ -1,6 +1,6 @@
 import { moduleFor, test } from 'ember-qunit';
 
-moduleFor('controller:resource/create-group', 'Unit | Controller | resource/create group', {
+moduleFor('controller:fences/show', 'Unit | Controller | fences/show', {
   // Specify the other units that are required for this test.
   // needs: ['controller:foo']
 });

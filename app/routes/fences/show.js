@@ -38,7 +38,7 @@ export default Ember.Route.extend({
         properties: form.get('changes'),
       });
 
-      this.transitionTo('fence.listing');
+      this.transitionTo('fences.listing');
     },
     onCheck: function() {
 
