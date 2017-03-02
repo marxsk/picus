@@ -1,6 +1,10 @@
 {{#each metadata.parameters as |p|}}
   {{#if (eq p.type 'boolean')}}
-    {{form.select-field p.name 'default true false' label=p.shortdesc}}
+    {{#if (eq p.default 'true')}}
+      {{form.select-field p.name 'true' label=p.shortdesc}}
+    {{else}}
+      {{form.select-field p.name 'default true false' label=p.shortdesc}}
+    {{/if}}
   {{/if}}
 
   {{#if (eq p.type 'string')}}
