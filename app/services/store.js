@@ -77,6 +77,8 @@ export default DS.Store.extend({
         },
       }});
 
+    // @todo: data has to be converted to the right format; send all vs changes? [+ default = null]
+    // this.get('ajax').post('/managec/' + this.get('clusterName') + '/update_cluster_settings', {data: data}).then(() => {
     this.get('ajax').patch('/properties', {data: data}).then(() => {
       this.reloadData();
     });
@@ -159,36 +161,29 @@ export default DS.Store.extend({
    *  @todo Method should return promise?
    **/
   pushUpdateAgentProperties: function(agentType, attrs) {
-    let url = '';
+    let url = '/managec/' + this.get('clusterName') + '/update_';
 
     switch (agentType) {
       case 'resource':
-        url += '/resources';
+        url += 'resource';
         break;
       case 'fence':
-        url += '/fences';
+        url += 'fence';
         break;
       default:
         url = undefined;
     }
 
     console.assert((typeof url !== 'undefined'), `Invalid agentType (${agentType}) entered`);
+    url += '_device';
 
-    let properties = {};
-    attrs.properties.forEach(function(o) { properties[o.key] = o.value; });
+    // @todo: proper encoding (URIEncode?)
+    let data = `resource_id=${attrs.name}&resource_type=${attrs.agentType}`;
+    attrs.properties.forEach(function(o) { data += `&_res_paramne_${o.key}=${o.value}` });
 
-    const data = JSON.stringify({
-      data: {
-        type: agentType,
-        attributes: {
-          id: attrs.id,
-          ...properties,
-        },
-      }});
-
-      this.get('ajax').patch(url, {data: data}).then(() => {
-        this.reloadData();
-      });
+    this.get('ajax').post(url, {data: data}).then(() => {
+      this.reloadData();
+    });
   },
 
   /**

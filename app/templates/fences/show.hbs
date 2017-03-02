@@ -17,7 +17,7 @@
 {{/unless}}
 
 {{#with model.selectedFence.firstObject as |selFence| }}
-  {{#form-for (changeset model.formData) submit=(route-action 'onSubmitAction' selFence.id) as |f|}}
+  {{#form-for (changeset model.formData) submit=(route-action 'onSubmitAction' selFence) as |f|}}
     Name: {{ selFence.name }}<br />
     Fence Agent: <select disabled="1"><option>{{selFence.agentType}}</option></select><br />
     {{model.metadata.shortdesc}}

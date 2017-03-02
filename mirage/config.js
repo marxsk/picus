@@ -83,16 +83,17 @@ export default function() {
     return resource;
   });
 
-  this.patch('/fences', (schema, request) => {
-    const params = JSON.parse(request.requestBody);
-    const fence = schema.fences.find(params.data.attributes.id);
-    const fenceId = params.data.attributes.id;
+  this.post('/managec/my/update_fence_device', function(schema, request) {
+    const attrs = this.normalizedRequestAttrs();
+    const fenceId = schema.fences.where({name: attrs.resource_id}).models[0].attrs.id;
 
-    delete params.data.attributes.id;
+    delete attrs.resource_id;
+    delete attrs.resource_type;
 
-    Object.keys(params.data.attributes).forEach((i) => {
-      const prop = schema.db.fenceProperties.firstOrCreate({fenceId: fenceId, name:i});
-      schema.db.fenceProperties.update(prop['id'], {value: params.data.attributes[i]});
+    Object.keys(attrs).forEach((i) => {
+      const cleanName = i.replace(/^_res_paramne_/,"");
+      const prop = schema.db.fenceProperties.firstOrCreate({fenceId: fenceId, name:cleanName});
+      schema.db.fenceProperties.update(prop['id'], {value: attrs[i]});
     });
   });
 

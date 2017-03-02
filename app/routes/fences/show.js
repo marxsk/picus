@@ -32,9 +32,10 @@ export default Ember.Route.extend({
   },
 
   actions: {
-    onSubmitAction: function(id, form) {
+    onSubmitAction: function(fence, form) {
       this.store.pushUpdateAgentProperties('fence', {
-        id,
+        name: fence.get('name'),
+        agentType: fence.get('agentType'),
         properties: form.get('changes'),
       });
 
