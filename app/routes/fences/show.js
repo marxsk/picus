@@ -14,7 +14,12 @@ export default Ember.Route.extend({
 
     return new RSVP.Promise((resolve, reject) => {
       this.store.reloadData().then((response) => {
-        this.store.getAgentMetadata('fence', 'stonith:' + this.store.peekRecord('fence', fenceId).get('agentType')).then((resp) => {
+        const fence = this.store.peekRecord('fence', fenceId);
+        if (fence == null) {
+          resolve();
+          return;
+        }
+        this.store.getAgentMetadata('fence', 'stonith:' + fence.get('agentType')).then((resp) => {
           this.set('metadata', resp);
           resolve();
         }, (xh) => {
@@ -87,7 +92,7 @@ export default Ember.Route.extend({
         name: fence.get('name'),
         agentType: fence.get('agentType'),
         properties: form.get('changes'),
-      });
+      }, 'update');
 
       this.transitionTo('fences.show', '');
     },

@@ -152,15 +152,16 @@ export default DS.Store.extend({
   },
 
   /**
-   * Push update of agent (dynamic) properties to pcsd
+   * Push create/update agent (dynamic) properties to pcsd
    *
    *  @param {string} agentType - Type of agent (resource|fence)
    *  @param {Object[]} attrs - Array of objects with properties ({key: FIELD, value: VALUE})
+   *  @param {string} operation - (create|update)
    *
    *  @todo Create proper error handlers
    *  @todo Method should return promise?
    **/
-  pushUpdateAgentProperties: function(agentType, attrs) {
+  pushUpdateAgentProperties: function(agentType, attrs, operation) {
     let url = '/managec/' + this.get('clusterName') + '/update_';
 
     switch (agentType) {
@@ -178,7 +179,10 @@ export default DS.Store.extend({
     url += '_device';
 
     // @todo: proper encoding (URIEncode?)
-    let data = `resource_id=${attrs.name}&resource_type=${attrs.agentType}`;
+    let data = `resource_type=${attrs.agentType}`;
+    if (operation === 'update') {
+      data += `&resource_id=${attrs.name}`;
+    }
     attrs.properties.forEach(function(o) { data += `&_res_paramne_${o.key}=${o.value}` });
 
     this.get('ajax').post(url, {data: data}).then(() => {

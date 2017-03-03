@@ -55,18 +55,6 @@ export default function() {
     });
   });
 
-  this.post('/fences', (schema, request) => {
-    const params = JSON.parse(request.requestBody);
-    const cluster = schema.clusters.find(1);
-    const fence = cluster.createFence({name: params.data.attributes.name, agentType: params.data.attributes.agentType});
-
-    Object.keys(params.data.attributes).forEach((i) => {
-        fence.createProperty({name: i, value: params.data.attributes[i]});
-    });
-
-    return fence;
-  });
-
   this.post('/resources', (schema, request) => {
     const params = JSON.parse(request.requestBody);
     const cluster = schema.clusters.find(1);
@@ -85,7 +73,18 @@ export default function() {
 
   this.post('/managec/my/update_fence_device', function(schema, request) {
     const attrs = this.normalizedRequestAttrs();
-    const fenceId = schema.fences.where({name: attrs.resource_id}).models[0].attrs.id;
+    let fenceId;
+
+    if (!('resource_id' in attrs)) {
+      // Create new fence agent
+      const cluster = schema.clusters.find(1);
+      const fence = cluster.createFence({name: attrs._res_paramne_name, agentType: attrs.resource_type});
+      fenceId = fence.id;
+
+      delete attrs._res_paramne_name;
+    } else {
+      fenceId = schema.fences.where({name: attrs.resource_id}).models[0].attrs.id;
+    }
 
     delete attrs.resource_id;
     delete attrs.resource_type;
