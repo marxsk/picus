@@ -51,7 +51,6 @@ export default Ember.Route.extend({
 
     // -> in the properties
     fence.get('properties').forEach((item) => {
-      console.log('meta');
       this.get('metadata.parameters').forEach((o) => {
         if (o.name === item.get('name')) {
           if (['1', 'on', true, 'yes'].includes(item.get('value'))) {
