@@ -74,6 +74,16 @@ export default Ember.Route.extend({
 
   actions: {
     onSubmitAction: function(fence, form) {
+      form.get('changes').forEach((item) => {
+        this.get('metadata.parameters').forEach((o) => {
+          if (o.name === item.key) {
+            if ((o.type === "boolean") && (item.value === 'default')) {
+              item.value = '';
+            }
+          }
+        });
+      });
+
       this.store.pushUpdateAgentProperties('fence', {
         name: fence.get('name'),
         agentType: fence.get('agentType'),
