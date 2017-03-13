@@ -55,22 +55,6 @@ export default function() {
     });
   });
 
-  this.post('/resources', (schema, request) => {
-    const params = JSON.parse(request.requestBody);
-    const cluster = schema.clusters.find(1);
-    const resource = cluster.createResource({
-      name: params.data.attributes.name,
-      resourceType: params.data.attributes.agentType,
-      resourceProvider: params.data.attributes.agentProvider,
-    });
-
-    Object.keys(params.data.attributes).forEach((i) => {
-        resource.createProperty({name: i, value: params.data.attributes[i]});
-    });
-
-    return resource;
-  });
-
   this.post('/managec/my/update_fence_device', function(schema, request) {
     const attrs = this.normalizedRequestAttrs();
     let fenceId;
