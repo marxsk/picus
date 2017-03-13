@@ -96,16 +96,38 @@ export default function() {
     });
   });
 
-  this.patch('/resources', (schema, request) => {
-    const params = JSON.parse(request.requestBody);
-    const resource = schema.resources.find(params.data.attributes.id);
-    const resourceId = params.data.attributes.id;
+  this.post('/managec/my/update_resource', function(schema, request) {
+    const attrs = this.normalizedRequestAttrs();
+    console.log(attrs);
+    let resourceId;
 
-    delete params.data.attributes.id;
+    if (!('resource_id' in attrs)) {
+      // Create new fence agent
+      const cluster = schema.clusters.find(1);
+      // @todo: proper fix instead of this naive solution that does not work always
+      const agentType = attrs.resource_type.split(':');
 
-    Object.keys(params.data.attributes).forEach((i) => {
-      const prop = schema.db.resourceProperties.firstOrCreate({resourceId, name:i});
-      schema.db.resourceProperties.update(prop['id'], {value: params.data.attributes[i]});
+      console.log(agentType);
+
+      const resource = cluster.createResource({
+        name: attrs._res_paramne_resourceName,
+        resourceType: agentType[agentType.length-1],
+        resourceProvider: agentType.slice(0, agentType.length-1).join(':'),
+      });
+      resourceId = resource.id;
+
+      delete attrs._res_paramne_name;
+    } else {
+      resourceId = schema.resources.where({name: attrs.resource_id}).models[0].attrs.id;
+    }
+
+    delete attrs.resource_id;
+    delete attrs.resource_type;
+
+    Object.keys(attrs).forEach((i) => {
+      const cleanName = i.replace(/^_res_paramne_/,"");
+      const prop = schema.db.resourceProperties.firstOrCreate({resourceId: resourceId, name:cleanName});
+      schema.db.resourceProperties.update(prop['id'], {value: attrs[i]});
     });
   });
 

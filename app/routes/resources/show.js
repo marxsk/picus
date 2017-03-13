@@ -42,11 +42,13 @@ export default Ember.Route.extend({
   },
 
   actions: {
-    onSubmitAction: function(id, form) {
+    onSubmitAction: function(resource, form) {
       this.store.pushUpdateAgentProperties('resource', {
-        id,
+        name: resource.get('name'),
+        agentProvider: resource.get('selectedProvider'),
+        agentType: resource.get('selectedAgent'),
         properties: form.get('changes'),
-      });
+      }, 'update');
 
       this.transitionTo('resources.show', '');
     },

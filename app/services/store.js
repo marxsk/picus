@@ -97,61 +97,6 @@ export default DS.Store.extend({
   },
 
   /**
-   * Push new agent with basic configuration to pcsd
-   * We distinguish two categories of 'properties'. There are first-class ones
-   * e.g. name of agent, that are defined in model and dynamic ones. Backend does
-   * not have to have same classification.
-   *
-   *  @param {string} agentType - Type of agent (resource|fence)
-   *  @param {Object[]} attrs - Array of objects with properties ({key: FIELD, value: VALUE})
-   *  @param {string[]} propsToDelete - Remove property names before pushing to backend
-   *
-   *  @todo Create proper error handlers
-   *  @todo Method should return promise?
-   **/
-  pushNewAgent: function(agentType, attrs, propsToDelete = []) {
-    let url = '';
-
-    switch (agentType) {
-      case 'resource':
-        url += '/resources';
-        break;
-      case 'fence':
-        url += '/fences';
-        break;
-      default:
-        url = undefined;
-    }
-
-    console.assert((typeof url !== 'undefined'), `Invalid agentType (${agentType}) entered`);
-
-    let properties = {};
-    attrs.properties.forEach(function(o) { properties[o.key] = o.value; });
-
-    const mainAttributes = Object.assign({}, attrs);
-    delete mainAttributes['properties'];
-
-    Object.keys(properties).forEach((key) => {
-      if (propsToDelete.indexOf(key) >= 0) {
-        delete properties[key];
-      }
-    });
-
-    const data = JSON.stringify({
-      data: {
-        type: agentType,
-        attributes: {
-          ...mainAttributes,
-          ...properties,
-        },
-      }});
-
-    this.get('ajax').post(url, {data: data}).then(() => {
-      this.reloadData();
-    });
-  },
-
-  /**
    * Push create/update agent (dynamic) properties to pcsd
    *
    *  @param {string} agentType - Type of agent (resource|fence)
@@ -161,25 +106,27 @@ export default DS.Store.extend({
    *  @todo Create proper error handlers
    *  @todo Method should return promise?
    **/
-  pushUpdateAgentProperties: function(agentType, attrs, operation) {
+  pushUpdateAgentProperties: function(agentType, attrs, operation = 'update') {
     let url = '/managec/' + this.get('clusterName') + '/update_';
+    let transformedAgentType;
 
     switch (agentType) {
       case 'resource':
         url += 'resource';
+        transformedAgentType = attrs.agentProvider + ':' + attrs.agentType;
         break;
       case 'fence':
-        url += 'fence';
+        url += 'fence_device';
+        transformedAgentType = attrs.agentType;
         break;
       default:
         url = undefined;
     }
 
     console.assert((typeof url !== 'undefined'), `Invalid agentType (${agentType}) entered`);
-    url += '_device';
 
     // @todo: proper encoding (URIEncode?)
-    let data = `resource_type=${attrs.agentType}`;
+    let data = `resource_type=${transformedAgentType}`;
     if (operation === 'update') {
       data += `&resource_id=${attrs.name}`;
     }

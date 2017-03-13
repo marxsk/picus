@@ -31,7 +31,7 @@
     <option>{{selResource.resourceType}}</option>
   </select>
 
-  {{#form-for (changeset model.formData) submit=(route-action 'onSubmitAction' selResource.id) as |f|}}
+  {{#form-for (changeset model.formData) submit=(route-action 'onSubmitAction' selResource) as |f|}}
     {{metadata.shortdesc}}
     <hr />
     {{agent-properties-form metadata=model.metadata form=f}}
