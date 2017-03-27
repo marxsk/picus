@@ -48,11 +48,12 @@ export default function() {
     return schema.nodes.create(params);
   });
 
-  this.patch('/properties', function(schema, request) {
-    const attrs = JSON.parse(request.requestBody);
-    Object.keys(attrs.data.attributes).forEach((i) => {
-        schema.db.properties.update({name: i}, {value: attrs.data.attributes[i]});
-    });
+  this.post('/managec/my/update_cluster_settings', function(schema, request) {
+    const attrs = this.normalizedRequestAttrs();
+
+    Object.keys(attrs).forEach((i) => {
+      schema.db.properties.update({name: i}, {value: attrs[i]});
+    })
   });
 
   this.post('/managec/my/update_fence_device', function(schema, request) {

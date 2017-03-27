@@ -34,7 +34,6 @@ export default Ember.Component.extend({
   init() {
     this.properties = this.get('data');
     this.set('filterString', this.get('presetFilter'));
-    console.log(this.get('showAdvanced'));
 
     return this._super();
   }

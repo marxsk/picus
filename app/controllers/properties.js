@@ -7,16 +7,17 @@ export default Ember.Controller.extend({
 
   actions: {
     submitProperties: function(properties, changeset) {
-      // update values locally
       for (let attrName in changeset.get('change')) {
-        properties.forEach(function(item, index) {
+        properties.forEach(function(item) {
           if (item.get('name') === attrName) {
-            item.set('value', changeset.get(attrName));
+            if (['enum', 'boolean'].contains(item.get('type')) && (changeset.get('change')[attrName] === 'default')) {
+                // default has to be translated for an empty string for enum/booleans
+                changeset.get('change')[attrName] = '';
+            }
           }
         });
       }
 
-      // save changes to remote server
       this.store.pushClusterProperties(changeset);
     },
     onSearch: function(search) {

@@ -69,17 +69,17 @@ export default DS.Store.extend({
 
   /** Push all cluster properties to server in one request **/
   pushClusterProperties: function(changeset) {
-    let data = JSON.stringify({
-      data: {
-        type: 'properties',
-        attributes: {
-          ...changeset.get('change'),
-        },
-      }});
+    function jsonToQueryString(json) {
+        return Object.keys(json).map(function(key) {
+                return encodeURIComponent(key) + '=' +
+                    encodeURIComponent(json[key]);
+            }).join('&');
+    }
+
+    let data = jsonToQueryString(changeset.get('change'));
 
     // @todo: data has to be converted to the right format; send all vs changes? [+ default = null]
-    // this.get('ajax').post('/managec/' + this.get('clusterName') + '/update_cluster_settings', {data: data}).then(() => {
-    this.get('ajax').patch('/properties', {data: data}).then(() => {
+    this.get('ajax').post('/managec/' + this.get('clusterName') + '/update_cluster_settings', {data: data}).then(() => {
       this.reloadData();
     });
   },
