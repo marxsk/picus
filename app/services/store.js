@@ -1,6 +1,13 @@
 import DS from 'ember-data';
 import Ember from 'ember';
 
+function _jsonToQueryString(json) {
+    return Object.keys(json).map(function(key) {
+            return encodeURIComponent(key) + '=' +
+                encodeURIComponent(json[key]);
+        }).join('&');
+}
+
 export default DS.Store.extend({
   ajax: Ember.inject.service(),
   clusterName: 'my',
@@ -69,14 +76,7 @@ export default DS.Store.extend({
 
   /** Push all cluster properties to server in one request **/
   pushClusterProperties: function(changeset) {
-    function jsonToQueryString(json) {
-        return Object.keys(json).map(function(key) {
-                return encodeURIComponent(key) + '=' +
-                    encodeURIComponent(json[key]);
-            }).join('&');
-    }
-
-    let data = jsonToQueryString(changeset.get('change'));
+    let data = _jsonToQueryString(changeset.get('change'));
 
     // @todo: data has to be converted to the right format; send all vs changes? [+ default = null]
     this.get('ajax').post('/managec/' + this.get('clusterName') + '/update_cluster_settings', {data: data}).then(() => {
@@ -285,16 +285,9 @@ export default DS.Store.extend({
     });
   },
   createResouceGroup(groupId, resources) {
-    function jsonToQueryString(json) {
-        return Object.keys(json).map(function(key) {
-                return encodeURIComponent(key) + '=' +
-                    encodeURIComponent(json[key]);
-            }).join('&');
-    }
-
     let url = '/managec/' + this.get('clusterName') + '/add_group';
 
-    let data = jsonToQueryString({
+    let data = _jsonToQueryString({
       resource_group: groupId,
       resources: resources.join(' '),
     });
@@ -304,13 +297,6 @@ export default DS.Store.extend({
     });
   },
   removeResources(resourceNames) {
-    function jsonToQueryString(json) {
-        return Object.keys(json).map(function(key) {
-                return encodeURIComponent(key) + '=' +
-                    encodeURIComponent(json[key]);
-            }).join('&');
-    }
-
     let url = '/managec/' + this.get('clusterName') + '/remove_resource';
 
     let jsonData = {};
@@ -318,7 +304,7 @@ export default DS.Store.extend({
       jsonData['resid_' + i] = 'true';
     });
 
-    let data = jsonToQueryString(jsonData);
+    let data = _jsonToQueryString(jsonData);
 
     // @todo: add attribute force:true if required
 
@@ -328,13 +314,6 @@ export default DS.Store.extend({
   },
 
   removeFences(fenceNames) {
-    function jsonToQueryString(json) {
-        return Object.keys(json).map(function(key) {
-                return encodeURIComponent(key) + '=' +
-                    encodeURIComponent(json[key]);
-            }).join('&');
-    }
-
     let url = '/managec/' + this.get('clusterName') + '/remove_resource';
 
     let jsonData = {};
@@ -342,7 +321,7 @@ export default DS.Store.extend({
       jsonData['resid-' + i] = 'true';
     });
 
-    let data = jsonToQueryString(jsonData);
+    let data = _jsonToQueryString(jsonData);
 
     // @todo: add attribute force:true if required
 
