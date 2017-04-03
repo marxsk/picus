@@ -4,6 +4,7 @@ const { RSVP } = Ember;
 export default Ember.Route.extend({
   modelForm: {},
   metadata: undefined,
+  selectedResources: Ember.A(),
 
   beforeModel(transition) {
     const fenceId = transition.state.params['fences.show'].fence_id;
@@ -96,9 +97,26 @@ export default Ember.Route.extend({
 
       this.transitionTo('fences.show', '');
     },
-    onCheck: function() {
-
+    onCheck: function(x) {
+      if (this.get('selectedResources').includes(x)) {
+        this.get('selectedResources').removeObject(x);
+      } else {
+        this.get('selectedResources').addObject(x);
+      }
     },
     changeSelectedAgent() {},
+    removeSelectedResources: function() {
+        let names = [];
+        this.get('selectedResources').forEach((x) => {
+          names.push(x.get('name'));
+        });
+        this.store.removeFences(names);
+        this.transitionTo('fences.show', '');
+    },
+    removeResource: function(resourceName) {
+      this.store.removeFences([resourceName]);
+      this.transitionTo('fences.show', '');
+    },
+
   }
 });

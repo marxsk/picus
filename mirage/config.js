@@ -141,9 +141,16 @@ export default function() {
     const attrs = this.normalizedRequestAttrs();
     const cluster = schema.clusters.find(1);
 
+    console.log(attrs);
+
     Object.keys(attrs).forEach((i) => {
       let name = i.substring(6,i.length);
-      schema.db.resources.remove({name: name});
+      if (i.startsWith('resid_')) {
+        schema.db.resources.remove({name: name});
+      } else if (i.startsWith('resid-')) {
+        console.log('fence');
+        schema.db.fences.remove({name: name});
+      }
     });
   });
 

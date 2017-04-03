@@ -6,6 +6,8 @@
   onCheckAction=(route-action 'onCheck')
 }}
 
+<button {{action (route-action 'removeSelectedResources')}}>Remove selected agents</button>
+
 <hr />
   {{#link-to 'fences.create'}}Add fence devices to the cluster{{/link-to}}
 <hr />
@@ -17,6 +19,9 @@
 {{/unless}}
 
 {{#with model.selectedFence.firstObject as |selFence| }}
+  <br />
+  <button {{action (route-action 'removeResource') selFence.name}}>Remove agent</button>
+
   {{#form-for (changeset model.formData) submit=(route-action 'onSubmitAction' selFence) as |f|}}
     Name: {{ selFence.name }}<br />
     Fence Agent: <select disabled="1"><option>{{selFence.agentType}}</option></select><br />

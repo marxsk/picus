@@ -29,5 +29,5 @@ export default function(server) {
     "name":"maintenance-mode","default":"false","readable_name":"maintenance-mode","source":"pengine","shortdesc":"Should the cluster monitor resources and start/stop them as required","type":"boolean","longdesc":"","advanced":true,"value":null
   });
 
-  cluster.createFence({name: 'Fence #1', agentType: 'fence_apc'});
+  cluster.createFence({name: 'Fence-01', agentType: 'fence_apc'});
 }
