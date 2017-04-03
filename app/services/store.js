@@ -302,5 +302,28 @@ export default DS.Store.extend({
     this.get('ajax').post(url, {data: data}).then(() => {
       this.reloadData();
     });
+  },
+  removeResources(resourceNames) {
+    function jsonToQueryString(json) {
+        return Object.keys(json).map(function(key) {
+                return encodeURIComponent(key) + '=' +
+                    encodeURIComponent(json[key]);
+            }).join('&');
+    }
+
+    let url = '/managec/' + this.get('clusterName') + '/remove_resource';
+
+    let jsonData = {};
+    resourceNames.forEach((i) => {
+      jsonData['resid_' + i] = 'true';
+    });
+
+    let data = jsonToQueryString(jsonData);
+
+    // @todo: add attribute force:true if required
+
+    this.get('ajax').post(url, {data: data}).then(() => {
+      this.reloadData();
+    });
   }
 });

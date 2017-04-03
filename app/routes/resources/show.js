@@ -59,6 +59,14 @@ export default Ember.Route.extend({
         this.get('selectedResources').addObject(x);
       }
     },
+    removeSelectedResources: function() {
+        let names = [];
+        this.get('selectedResources').forEach((x) => {
+          names.push(x.get('name'));
+        });
+        this.store.removeResources(names);
+        this.transitionTo('resources.show', '');
+    },
     changeSelectedAgent: function() {},
 
     appendMetaAttribute: function(attributes, attr) {
@@ -74,6 +82,11 @@ export default Ember.Route.extend({
         item.deleteRecord();
         item.save();
       });
+    },
+
+    removeResource: function(resourceName) {
+      this.store.removeResources([resourceName]);
+      this.transitionTo('resources.show', '');
     },
 
     appendLocationPreference: function(attributes, attr) {

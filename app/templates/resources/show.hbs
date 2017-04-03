@@ -6,14 +6,12 @@
   onCheckAction=(route-action 'onCheckx')
 }}
 
+<button {{action (route-action 'removeSelectedResources')}}>Remove selected resources</button>
+
 <hr />
 {{#link-to 'resources.create'}}Add resource to the cluster{{/link-to}} <br />
 {{#link-to 'resources.createGroup'}}Add resource group to the cluster{{/link-to}}
 <hr />
-
-{{#each model.otherResourcesName as |m|}}
-  <li>{{m}}</li>
-{{/each}}
 
 {{#unless model.listing}}
 {{#unless model.selectedResource}}
@@ -30,6 +28,9 @@
   Resource Agent: <select disabled="1">
     <option>{{selResource.resourceType}}</option>
   </select>
+
+  <br />
+  <button {{action (route-action 'removeResource') selResource.name}}>Remove resource</button>
 
   {{#form-for (changeset model.formData) submit=(route-action 'onSubmitAction' selResource) as |f|}}
     {{metadata.shortdesc}}

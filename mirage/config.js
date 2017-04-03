@@ -137,6 +137,16 @@ export default function() {
     });
   });
 
+  this.post('/managec/my/remove_resource', function(schema, request) {
+    const attrs = this.normalizedRequestAttrs();
+    const cluster = schema.clusters.find(1);
+
+    Object.keys(attrs).forEach((i) => {
+      let name = i.substring(6,i.length);
+      schema.db.resources.remove({name: name});
+    });
+  });
+
   this.post('/meta', (schema, request) => {
     const params = JSON.parse(request.requestBody);
     const cluster = schema.clusters.find(1);
