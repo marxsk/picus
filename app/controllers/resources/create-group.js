@@ -3,6 +3,7 @@ import Ember from 'ember';
 export default Ember.Controller.extend({
   validResources: Ember.A(),
   groupedResources: Ember.A(),
+  resourceForm: Ember.Object.create(),
 
   allResources: function() {
     // this is executed only once; cannot be in init() as model is not defined there
@@ -30,5 +31,14 @@ export default Ember.Controller.extend({
       sortEndAction: function() {
         console.log(this.get('groupedResources'));
       },
+      createGroup: function(form) {
+        let resourceIDInGroup = [];
+        this.get('groupedResources').forEach((i) => {
+          resourceIDInGroup.push(i.get('name'));
+        });
+
+        this.store.createResouceGroup(form.get('groupName'), resourceIDInGroup);
+        this.transitionToRoute('resources.show', '');
+      }
     },
 });

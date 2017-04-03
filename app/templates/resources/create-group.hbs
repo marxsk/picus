@@ -37,11 +37,8 @@ Target:
   Drag here to extend resource group
 
 {{/draggable-object-target}}
-<hr>
-<h3>Order of objects is:</h3>
 
-{{#each groupedResources as |r|}}
-  {{#draggable-object content=r}}
-    <li>{{r.name}}</li>
-  {{/draggable-object}}
-{{/each}}
+{{#form-for resourceForm submit=(action 'createGroup') as |f|}}
+  {{f.text-field 'groupName' label='Group Name' hint='small help'}}
+  {{f.submit "Create"}}
+{{/form-for}}

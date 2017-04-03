@@ -12,9 +12,12 @@ export default function(server) {
   node.createNodeAttribute({key: 'attr #2', value: 'bar'});
   node.createNodeUtilizationAttribute({key: 'util attr #99', value: 'bar bar'});
 
-  let resource = cluster.createResource({id: 333, name: 'Apache Mock Server', resourceType: 'group'});
-  resource.createResource({id: 444, name: 'Child Mock', resourceType: 'primitive'});
-  resource.createResource({id: 445, name: 'Child Mock #2', resourceType: 'primitive'});
+  let resource = cluster.createResource({id: 333, name: 'Apache-Mock-Server', resourceType: 'group'});
+  resource.createResource({id: 444, name: 'Child-Mock', resourceType: 'primitive'});
+  resource.createResource({id: 445, name: 'Child-Mock-2', resourceType: 'primitive'});
+
+  cluster.createResource({id: 446, name: 'MyMock-01', resourceType: 'primitive'});
+  cluster.createResource({id: 447, name: 'MyMock-02', resourceType: 'primitive'});
 
   cluster.createProperty({
     "name":"election-timeout","default":"2min","readable_name":"election timeout:","source":"crmd","shortdesc":"*** Advanced Use Only ***.","type":"time","longdesc":"If need to adjust this value, it probably indicates the presence of a bug.","advanced":false,"value":'2m',

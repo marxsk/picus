@@ -283,6 +283,24 @@ export default DS.Store.extend({
     }, function(error) {
 
     });
-  }
+  },
+  createResouceGroup(groupId, resources) {
+    function jsonToQueryString(json) {
+        return Object.keys(json).map(function(key) {
+                return encodeURIComponent(key) + '=' +
+                    encodeURIComponent(json[key]);
+            }).join('&');
+    }
 
+    let url = '/managec/' + this.get('clusterName') + '/add_group';
+
+    let data = jsonToQueryString({
+      resource_group: groupId,
+      resources: resources.join(' '),
+    });
+
+    this.get('ajax').post(url, {data: data}).then(() => {
+      this.reloadData();
+    });
+  }
 });

@@ -81,6 +81,27 @@ export default function() {
     });
   });
 
+  this.post('/managec/my/add_group', function(schema, request) {
+    const attrs = this.normalizedRequestAttrs();
+
+    let groupName = attrs['resource_group'];
+    let resources = attrs['resources'].split(' ');
+
+    const cluster = schema.clusters.find(1);
+
+    const resource = cluster.createResource({
+      name: groupName,
+      resourceType: 'group',
+    });
+
+    let resIDs = [];
+    resources.forEach((x) => {
+      let child = schema.resources.where({name: x}).models[0];
+      resIDs.push(child);
+    });
+    resource.resources = resIDs;
+  });
+
   this.post('/managec/my/update_resource', function(schema, request) {
     const attrs = this.normalizedRequestAttrs();
     console.log(attrs);
