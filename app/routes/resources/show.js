@@ -64,7 +64,7 @@ export default Ember.Route.extend({
         this.get('selectedResources').forEach((x) => {
           names.push(x.get('name'));
         });
-        this.store.removeResources(names);
+        this.store.removeAgents(names, 'resource');
         this.transitionTo('resources.show', '');
     },
     changeSelectedAgent: function() {},
@@ -85,7 +85,7 @@ export default Ember.Route.extend({
     },
 
     removeResource: function(resourceName) {
-      this.store.removeResources([resourceName]);
+      this.store.removeAgents([resourceName], 'resource');
       this.transitionTo('resources.show', '');
     },
 

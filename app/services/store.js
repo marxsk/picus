@@ -296,38 +296,31 @@ export default DS.Store.extend({
       this.reloadData();
     });
   },
-  removeResources(resourceNames) {
+
+  removeAgents(names, agentType) {
     let url = '/managec/' + this.get('clusterName') + '/remove_resource';
+    let separator = undefined;
+
+    switch (agentType) {
+      case 'resource':
+        separator = '_';
+        break;
+      case 'fence':
+        separator = '-';
+        break;
+    }
+    console.assert((typeof url !== 'undefined'), `Invalid agentType (${agentType}) entered`);
 
     let jsonData = {};
-    resourceNames.forEach((i) => {
-      jsonData['resid_' + i] = 'true';
+    names.forEach((i) => {
+      jsonData['resid' + separator + i] = 'true';
     });
-
-    let data = _jsonToQueryString(jsonData);
 
     // @todo: add attribute force:true if required
-
-    this.get('ajax').post(url, {data: data}).then(() => {
-      this.reloadData();
-    });
-  },
-
-  removeFences(fenceNames) {
-    let url = '/managec/' + this.get('clusterName') + '/remove_resource';
-
-    let jsonData = {};
-    fenceNames.forEach((i) => {
-      jsonData['resid-' + i] = 'true';
-    });
-
-    let data = _jsonToQueryString(jsonData);
-
-    // @todo: add attribute force:true if required
-
-    this.get('ajax').post(url, {data: data}).then(() => {
+    this.get('ajax').post(url, {
+      data: _jsonToQueryString(jsonData)
+    }).then(() => {
       this.reloadData();
     });
   }
-
 });

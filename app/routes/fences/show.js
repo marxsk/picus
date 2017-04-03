@@ -110,11 +110,11 @@ export default Ember.Route.extend({
         this.get('selectedResources').forEach((x) => {
           names.push(x.get('name'));
         });
-        this.store.removeFences(names);
+        this.store.removeAgents(names, 'fence');
         this.transitionTo('fences.show', '');
     },
     removeResource: function(resourceName) {
-      this.store.removeFences([resourceName]);
+      this.store.removeAgents([resourceName], 'fence');
       this.transitionTo('fences.show', '');
     },
 
