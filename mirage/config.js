@@ -104,7 +104,6 @@ export default function() {
 
   this.post('/managec/my/update_resource', function(schema, request) {
     const attrs = this.normalizedRequestAttrs();
-    console.log(attrs);
     let resourceId;
 
     if (!('resource_id' in attrs)) {
@@ -112,9 +111,6 @@ export default function() {
       const cluster = schema.clusters.find(1);
       // @todo: proper fix instead of this naive solution that does not work always
       const agentType = attrs.resource_type.split(':');
-
-      console.log(agentType);
-
       const resource = cluster.createResource({
         name: attrs._res_paramne_resourceName,
         resourceType: agentType[agentType.length-1],
@@ -141,14 +137,11 @@ export default function() {
     const attrs = this.normalizedRequestAttrs();
     const cluster = schema.clusters.find(1);
 
-    console.log(attrs);
-
     Object.keys(attrs).forEach((i) => {
       let name = i.substring(6,i.length);
       if (i.startsWith('resid_')) {
         schema.db.resources.remove({name: name});
       } else if (i.startsWith('resid-')) {
-        console.log('fence');
         schema.db.fences.remove({name: name});
       }
     });
@@ -185,8 +178,6 @@ export default function() {
     const params = JSON.parse(request.requestBody);
     const cluster = schema.clusters.find(1);
     const resource = schema.resources.find(params.data.attributes.resource);
-
-    console.log(request.requestBody);
 
     const attr = resource.createOrderingPreference({
       resource2: params.data.attributes.resource2,
