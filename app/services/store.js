@@ -350,5 +350,14 @@ export default DS.Store.extend({
     }).then(() => {
       this.reloadData();
     })
-  }
+  },
+  destroyGroup(name) {
+    let url = '/managec/' + this.get('clusterName') + '/resource_ungroup';
+
+    this.get('ajax').post(url, {
+      data: _jsonToQueryString({resource_id: name})
+    }).then(() => {
+      this.reloadData();
+    })
+  },
 });

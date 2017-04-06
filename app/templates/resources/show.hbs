@@ -37,6 +37,10 @@
     <button {{action (route-action 'createClone') selResource.name}}>Create clone</button>
   {{/if}}
 
+  {{#if (eq selResource.resourceType 'group')}}
+    <button {{action (route-action 'removeGroup') selResource.name}}>Un-group</button>
+  {{/if}}
+
   {{#form-for (changeset model.formData) submit=(route-action 'onSubmitAction' selResource) as |f|}}
     {{metadata.shortdesc}}
     <hr />

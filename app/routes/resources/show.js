@@ -112,6 +112,10 @@ export default Ember.Route.extend({
     removeClone: function(resourceName) {
       this.store.destroyClone(resourceName);
       this.transitionTo('resources.show', '');
-    }
+    },
+    removeGroup: function(resourceName) {
+      this.store.destroyGroup(resourceName);
+      this.transitionTo('resources.show', '');
+    },
   }
 });
