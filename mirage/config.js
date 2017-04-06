@@ -122,7 +122,8 @@ export default function() {
       const agentType = attrs.resource_type.split(':');
       const resource = cluster.createResource({
         name: attrs._res_paramne_resourceName,
-        resourceType: agentType[agentType.length-1],
+        resourceType: 'primitive',
+        agentType: agentType[agentType.length-1],
         resourceProvider: agentType.slice(0, agentType.length-1).join(':'),
       });
       resourceId = resource.id;

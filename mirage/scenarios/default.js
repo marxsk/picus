@@ -13,10 +13,10 @@ export default function(server) {
   node.createNodeUtilizationAttribute({key: 'util attr #99', value: 'bar bar'});
 
   let resource = cluster.createResource({id: 333, name: 'Apache-Mock-Server', resourceType: 'group'});
-  resource.createResource({id: 444, name: 'Child-Mock', resourceType: 'primitive'});
+  resource.createResource({id: 444, name: 'Child-Mock', agentType: 'xyz', resourceType: 'primitive'});
   resource.createResource({id: 445, name: 'Child-Mock-2', resourceType: 'primitive'});
 
-  cluster.createResource({id: 446, name: 'MyMock-01', resourceType: 'primitive'});
+  cluster.createResource({id: 446, name: 'MyMock-01', agentType: 'zzz', resourceType: 'primitive'});
   cluster.createResource({id: 447, name: 'MyMock-02', resourceType: 'primitive'});
 
   cluster.createProperty({
