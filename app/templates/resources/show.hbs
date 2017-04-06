@@ -31,7 +31,11 @@
 
   <br />
   <button {{action (route-action 'removeResource') selResource.name}}>Remove resource</button>
-  <button {{action (route-action 'createClone') selResource.name}}>Create clone</button>
+  {{#if (eq selResource.resourceType 'clone')}}
+    <button {{action (route-action 'removeClone') selResource.name}}>Un-clone</button>
+  {{else}}
+    <button {{action (route-action 'createClone') selResource.name}}>Create clone</button>
+  {{/if}}
 
   {{#form-for (changeset model.formData) submit=(route-action 'onSubmitAction' selResource) as |f|}}
     {{metadata.shortdesc}}

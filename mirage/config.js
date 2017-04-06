@@ -201,6 +201,21 @@ export default function() {
     clonedResource.resources = resIDs;
   });
 
+  this.post('/managec/my/resource_unclone', function(schema, request) {
+    const attrs = this.normalizedRequestAttrs();
+    const cluster = schema.clusters.find(1);
+
+    // move children resources to root
+    const resource = schema.resources.where({name: attrs.resource_id}).models[0];
+    let appendResources = [];
+    resource.resources.models.forEach((i) => {
+      appendResources.push(i);
+    });
+
+    cluster.resources = cluster.resources.models.concat(appendResources);
+    schema.db.resources.remove({name: attrs.resource_id});
+  });
+
   this.post('/meta', (schema, request) => {
     const params = JSON.parse(request.requestBody);
     const cluster = schema.clusters.find(1);

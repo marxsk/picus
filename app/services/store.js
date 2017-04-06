@@ -340,5 +340,15 @@ export default DS.Store.extend({
     }).then(() => {
       this.reloadData();
     })
+  },
+
+  destroyClone(name) {
+    let url = '/managec/' + this.get('clusterName') + '/resource_unclone';
+
+    this.get('ajax').post(url, {
+      data: _jsonToQueryString({resource_id: name})
+    }).then(() => {
+      this.reloadData();
+    })
   }
 });

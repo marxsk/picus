@@ -107,6 +107,11 @@ export default Ember.Route.extend({
     createClone: function(resourceName) {
       this.store.createClone(resourceName);
       this.transitionTo('resources.show', '');
+    },
+
+    removeClone: function(resourceName) {
+      this.store.destroyClone(resourceName);
+      this.transitionTo('resources.show', '');
     }
   }
 });
