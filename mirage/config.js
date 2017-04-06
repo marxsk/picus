@@ -130,6 +130,14 @@ export default function() {
       });
 
       clonedResource.resources = [schema.resources.find(resourceId)];
+
+      let ress = [];
+      cluster.resources.models.forEach((y) => {
+        if (y.attrs.id !== resourceId) {
+          ress.push(y);
+        }
+      });
+      cluster.resources = ress;
     }
 
     delete attrs.resource_id;
@@ -170,6 +178,15 @@ export default function() {
     [attrs.resource_id].forEach((x) => {
       let child = schema.resources.where({name: x}).models[0];
       resIDs.push(child);
+
+      // remove resource from parent-cluster; it will be available only via parent-resource
+      let ress = [];
+      cluster.resources.models.forEach((y) => {
+        if (y.attrs.id !== child.id) {
+          ress.push(y);
+        }
+      });
+      cluster.resources = ress;
     });
     clonedResource.resources = resIDs;
   });
