@@ -138,6 +138,13 @@ export default DS.Store.extend({
       });
     }
 
+    if (attrs.masterslave) {
+      data += '&resource_ms=on';
+      attrs.properties = attrs.properties.filter(function( obj ) {
+          return obj.key !== 'masterslave';
+      });
+    }
+
     attrs.properties.forEach(function(o) { data += `&_res_paramne_${o.key}=${o.value}` });
 
     this.get('ajax').post(url, {data: data}).then(() => {
@@ -353,6 +360,26 @@ export default DS.Store.extend({
   },
   destroyGroup(name) {
     let url = '/managec/' + this.get('clusterName') + '/resource_ungroup';
+
+    this.get('ajax').post(url, {
+      data: _jsonToQueryString({resource_id: name})
+    }).then(() => {
+      this.reloadData();
+    })
+  },
+  createMaster(name) {
+    let url = '/managec/' + this.get('clusterName') + '/resource_master';
+
+    this.get('ajax').post(url, {
+      data: _jsonToQueryString({resource_id: name})
+    }).then(() => {
+      this.reloadData();
+    })
+  },
+
+  destroyMaster(name) {
+    // absolutely same as un-clone
+    let url = '/managec/' + this.get('clusterName') + '/resource_unclone';
 
     this.get('ajax').post(url, {
       data: _jsonToQueryString({resource_id: name})

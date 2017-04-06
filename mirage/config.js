@@ -150,6 +150,23 @@ export default function() {
       cluster.resources = ress;
     }
 
+    if (attrs.resource_ms === 'on') {
+      const clonedResource = cluster.createResource({
+        name: attrs._res_paramne_resourceName + '-master',
+        resourceType: 'masterslave',
+      });
+
+      clonedResource.resources = [schema.resources.find(resourceId)];
+
+      let ress = [];
+      cluster.resources.models.forEach((y) => {
+        if (y.attrs.id !== resourceId) {
+          ress.push(y);
+        }
+      });
+      cluster.resources = ress;
+    }
+
     delete attrs.resource_id;
     delete attrs.resource_type;
     delete attrs.resource_clone;
@@ -275,4 +292,31 @@ export default function() {
     return attr;
   });
   this.del('/ordering-preferences/:id');
+
+  this.post('/managec/my/resource_master', function(schema, request) {
+    // @todo: refactor; almost same as resource_clone
+    const attrs = this.normalizedRequestAttrs();
+    const cluster = schema.clusters.find(1);
+
+    const clonedResource = cluster.createResource({
+      name: attrs.resource_id + '-master',
+      resourceType: 'masterslave',
+    });
+
+    let resIDs = [];
+    [attrs.resource_id].forEach((x) => {
+      let child = schema.resources.where({name: x}).models[0];
+      resIDs.push(child);
+
+      // remove resource from parent-cluster; it will be available only via parent-resource
+      let ress = [];
+      cluster.resources.models.forEach((y) => {
+        if (y.attrs.id !== child.id) {
+          ress.push(y);
+        }
+      });
+      cluster.resources = ress;
+    });
+    clonedResource.resources = resIDs;
+  });
 }

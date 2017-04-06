@@ -117,5 +117,14 @@ export default Ember.Route.extend({
       this.store.destroyGroup(resourceName);
       this.transitionTo('resources.show', '');
     },
+
+    createMaster: function(resourceName) {
+      this.store.createMaster(resourceName);
+      this.transitionTo('resources.show', '');
+    },
+    removeMaster: function(resourceName) {
+      this.store.destroyMaster(resourceName);
+      this.transitionTo('resources.show', '');
+    },
   }
 });

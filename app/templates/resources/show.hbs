@@ -41,6 +41,12 @@
     <button {{action (route-action 'removeGroup') selResource.name}}>Un-group</button>
   {{/if}}
 
+  {{#if (eq selResource.resourceType 'masterslave')}}
+    <button {{action (route-action 'removeMaster') selResource.name}}>Remove master/slave</button>
+  {{else}}
+    <button {{action (route-action 'createMaster') selResource.name}}>Create master/slave</button>
+  {{/if}}
+
   {{#form-for (changeset model.formData) submit=(route-action 'onSubmitAction' selResource) as |f|}}
     {{metadata.shortdesc}}
     <hr />
