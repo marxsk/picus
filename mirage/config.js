@@ -98,6 +98,15 @@ export default function() {
     resources.forEach((x) => {
       let child = schema.resources.where({name: x}).models[0];
       resIDs.push(child);
+
+      // remove resource from parent-cluster; it will be available only via parent-resource
+      let ress = [];
+      cluster.resources.models.forEach((y) => {
+        if (y.attrs.id !== child.id) {
+          ress.push(y);
+        }
+      });
+      cluster.resources = ress;
     });
     resource.resources = resIDs;
   });
