@@ -61,6 +61,7 @@ export default Ember.Route.extend({
         name: form.get('resourceName'),
         agentProvider: this.get('selectedProvider'),
         agentType: this.get('selectedAgent'),
+        clone: form.get('clone'),
         properties: form.get('changes'),
       }, 'create');
 

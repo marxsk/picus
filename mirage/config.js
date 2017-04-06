@@ -104,11 +104,11 @@ export default function() {
 
   this.post('/managec/my/update_resource', function(schema, request) {
     const attrs = this.normalizedRequestAttrs();
+    const cluster = schema.clusters.find(1);
     let resourceId;
 
     if (!('resource_id' in attrs)) {
       // Create new fence agent
-      const cluster = schema.clusters.find(1);
       // @todo: proper fix instead of this naive solution that does not work always
       const agentType = attrs.resource_type.split(':');
       const resource = cluster.createResource({
@@ -123,8 +123,18 @@ export default function() {
       resourceId = schema.resources.where({name: attrs.resource_id}).models[0].attrs.id;
     }
 
+    if (attrs.resource_clone === 'on') {
+      const clonedResource = cluster.createResource({
+        name: attrs._res_paramne_resourceName + '-clone',
+        resourceType: 'clone',
+      });
+
+      clonedResource.resources = [schema.resources.find(resourceId)];
+    }
+
     delete attrs.resource_id;
     delete attrs.resource_type;
+    delete attrs.resource_clone;
 
     Object.keys(attrs).forEach((i) => {
       const cleanName = i.replace(/^_res_paramne_/,"");
@@ -145,6 +155,23 @@ export default function() {
         schema.db.fences.remove({name: name});
       }
     });
+  });
+
+  this.post('/managec/my/resource_clone', function(schema, request) {
+    const attrs = this.normalizedRequestAttrs();
+    const cluster = schema.clusters.find(1);
+
+    const clonedResource = cluster.createResource({
+      name: attrs.resource_id + '-clone',
+      resourceType: 'clone',
+    });
+
+    let resIDs = [];
+    [attrs.resource_id].forEach((x) => {
+      let child = schema.resources.where({name: x}).models[0];
+      resIDs.push(child);
+    });
+    clonedResource.resources = resIDs;
   });
 
   this.post('/meta', (schema, request) => {

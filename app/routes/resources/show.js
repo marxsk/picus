@@ -103,5 +103,10 @@ export default Ember.Route.extend({
       console.log(JSON.stringify(attr));
       this.store.pushAppendOrderingPreference(this.get('resourceId'), attr);
     },
+
+    createClone: function(resourceName) {
+      this.store.createClone(resourceName);
+      this.transitionTo('resources.show', '');
+    }
   }
 });

@@ -130,6 +130,14 @@ export default DS.Store.extend({
     if (operation === 'update') {
       data += `&resource_id=${attrs.name}`;
     }
+
+    if (attrs.clone) {
+      data += '&resource_clone=on';
+      attrs.properties = attrs.properties.filter(function( obj ) {
+          return obj.key !== 'clone';
+      });
+    }
+
     attrs.properties.forEach(function(o) { data += `&_res_paramne_${o.key}=${o.value}` });
 
     this.get('ajax').post(url, {data: data}).then(() => {
@@ -322,5 +330,15 @@ export default DS.Store.extend({
     }).then(() => {
       this.reloadData();
     });
+  },
+
+  createClone(name) {
+    let url = '/managec/' + this.get('clusterName') + '/resource_clone';
+
+    this.get('ajax').post(url, {
+      data: _jsonToQueryString({resource_id: name})
+    }).then(() => {
+      this.reloadData();
+    })
   }
 });

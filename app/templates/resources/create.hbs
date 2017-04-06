@@ -4,6 +4,8 @@
   {{f.select-field 'resourceAgent' (get model.availableAgents model.selectedProvider) label='Resource Agent' update=(route-action 'changeSelectedAgent')}}
   {{metadata.shortdesc}}
   <hr />
+  {{f.checkbox-field 'clone' label="Clone"}}
+  <hr />
   {{agent-properties-form metadata=model.metadata form=f}}
   {{f.submit "Create"}}
 {{/form-for}}
