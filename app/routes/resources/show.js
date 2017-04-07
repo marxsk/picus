@@ -126,5 +126,9 @@ export default Ember.Route.extend({
       this.store.destroyMaster(resourceName);
       this.transitionTo('resources.show', '');
     },
+
+    reload: function() {
+      this.store.reloadData();
+    }
   }
 });

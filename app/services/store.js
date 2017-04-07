@@ -12,6 +12,85 @@ export default DS.Store.extend({
   ajax: Ember.inject.service(),
   clusterName: 'my',
 
+  /**
+    Inject current time as a property
+
+    Ticktock allows us to make computed properties based on current time.
+
+    @property ticktock
+  */
+  ticktock: Ember.inject.service(),
+
+  /**
+    Unix timestamp of time when validity of data will expire.
+
+    @property expiresAt
+    @type Integer
+    @default 0 Initial data are always invalid
+  */
+  expiresAt: 0,
+
+  /**
+    Duration (in ms) of validity of loaded data
+
+    @property validityTime
+    @type Integer
+    @default 5000 -> 5 seconds
+    @public
+  /* how long we wait until next upload in ms */
+  validityTime: 5 * 1000,
+
+  /**
+    Boolean to check if data are expired (true) or valid (false)
+
+    @property isExpired
+    @type Boolean
+    @public
+  */
+  isExpired: Ember.computed('expiresAt', 'ticktock.now', function() {
+    return this.get('expiresAt') < this.get('ticktock.now');
+  }),
+
+  /**
+    Boolean to check if we are currrently doing a query
+
+    @property isQueryInProgress
+    @type Boolean
+    @private
+  */
+  isQueryInProgress: false,
+
+  /**
+    Boolean to check if there is another request in queue that should be
+    executed after finishing current request
+  */
+  isQueryInQueue: false,
+
+  /**
+    Init function
+
+    We need to obtain computed property isExpired to start a loop
+    for _reloader(). Otherwise _reloader() will start work only after
+    first reloadData(). This is due to optimalisations for unused properties.
+
+    @method init
+  */
+  init: function() {
+    this.get('isExpired');
+    return this._super();
+  },
+
+  /**
+    Reload data if they have expired
+
+    @method _reloader
+  */
+  _reloader: function() {
+    if (this.get('isExpired')) {
+      this.reloadData();
+    }
+  }.observes('ticktock.now', 'isExpired'),
+
   /** Reload all data from backend
 
   Traditionally, Store works on more standard API so we can ask for specific
@@ -22,6 +101,16 @@ export default DS.Store.extend({
 
   **/
   reloadData: function() {
+    var time = new Date();
+    if (this.get('isQueryInProgress')) {
+      this.set('isQueryInQueue', true);
+      return;
+    }
+
+    this.set('isQueryInProgress', true);
+    this.set('isQueryInQueue', false);
+    this.set('expiresAt', this.get('ticktock.now') + this.get('validityTime'));
+
     const res = this.retrieveManagedInstance('adapter', 'application').reloadData();
     const ser = this.retrieveManagedInstance('serializer', 'application');
     const store = this;
@@ -65,9 +154,17 @@ export default DS.Store.extend({
         });
 
         store.push(normalized);
+        store.set('isQueryInProgress', false);
+        if (store.get('isQueryInQueue')) {
+          store.reloadData();
+        }
         resolve();
       }, function(error) {
         alert(error);
+        store.set('isQueryInProgress', false);
+        if (store.get('isQueryInQueue')) {
+          store.reloadData();
+        }
       });
     });
 
