@@ -339,52 +339,21 @@ export default DS.Store.extend({
     });
   },
 
-  createClone(name) {
-    let url = '/managec/' + this.get('clusterName') + '/resource_clone';
+  _sendResourceId(endpoint, resourceName) {
+    let url = '/managec/' + this.get('clusterName') + '/' + endpoint;
 
     this.get('ajax').post(url, {
-      data: _jsonToQueryString({resource_id: name})
+      data: _jsonToQueryString({resource_id: resourceName})
     }).then(() => {
       this.reloadData();
     })
   },
 
-  destroyClone(name) {
-    let url = '/managec/' + this.get('clusterName') + '/resource_unclone';
+  destroyGroup(name) { this._sendResourceId('resource_ungroup', name); },
 
-    this.get('ajax').post(url, {
-      data: _jsonToQueryString({resource_id: name})
-    }).then(() => {
-      this.reloadData();
-    })
-  },
-  destroyGroup(name) {
-    let url = '/managec/' + this.get('clusterName') + '/resource_ungroup';
+  createClone(name) { this._sendResourceId('resource_clone', name); },
+  destroyClone(name) { this._sendResourceId('resource_unclone', name); },
 
-    this.get('ajax').post(url, {
-      data: _jsonToQueryString({resource_id: name})
-    }).then(() => {
-      this.reloadData();
-    })
-  },
-  createMaster(name) {
-    let url = '/managec/' + this.get('clusterName') + '/resource_master';
-
-    this.get('ajax').post(url, {
-      data: _jsonToQueryString({resource_id: name})
-    }).then(() => {
-      this.reloadData();
-    })
-  },
-
-  destroyMaster(name) {
-    // absolutely same as un-clone
-    let url = '/managec/' + this.get('clusterName') + '/resource_unclone';
-
-    this.get('ajax').post(url, {
-      data: _jsonToQueryString({resource_id: name})
-    }).then(() => {
-      this.reloadData();
-    })
-  },
+  createMaster(name) { this._sendResourceId('resource_master', name); },
+  destroyMaster(name) { this._sendResourceId('resource_unclone', name); },
 });
