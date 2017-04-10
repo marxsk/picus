@@ -96,6 +96,8 @@ export default function() {
 
     let resIDs = [];
     resources.forEach((x) => {
+      if (x == "") { return };
+
       let child = schema.resources.where({name: x}).models[0];
       resIDs.push(child);
 
