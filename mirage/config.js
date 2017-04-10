@@ -319,4 +319,11 @@ export default function() {
     });
     clonedResource.resources = resIDs;
   });
+
+  this.post('/login', () => {
+    console.log('login');
+  });
+  this.get('/logout', () => {
+    console.log('logout');
+  })
 }

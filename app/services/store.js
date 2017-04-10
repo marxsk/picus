@@ -38,7 +38,7 @@ export default DS.Store.extend({
     @default 5000 -> 5 seconds
     @public
   /* how long we wait until next upload in ms */
-  validityTime: 5 * 1000,
+  validityTime: 500 * 1000,
 
   /**
     Boolean to check if data are expired (true) or valid (false)
