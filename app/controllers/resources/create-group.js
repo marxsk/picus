@@ -7,7 +7,7 @@ export default Ember.Controller.extend({
 
   allResources: function() {
     // this is executed only once; cannot be in init() as model is not defined there
-    // option) add everything to validResource and remove those already in grouped
+    // @todo add everything to validResource and remove those already in grouped
     this.get('model.resources').forEach((item) => {
       this.get('validResources').addObject(item);
     });
@@ -20,13 +20,13 @@ export default Ember.Controller.extend({
   }.property('model.resources.[]'),
 
     actions: {
-      increaseRating: function(xyz) {
-        this.get('groupedResources').removeObject(xyz);
-        this.get('validResources').addObject(xyz);
+      moveFromGroup: function(resource) {
+        this.get('groupedResources').removeObject(resource);
+        this.get('validResources').addObject(resource);
       },
-      increaseRating2: function(xyz) {
-        this.get('validResources').removeObject(xyz);
-        this.get('groupedResources').addObject(xyz);
+      moveToGroup: function(resource) {
+        this.get('validResources').removeObject(resource);
+        this.get('groupedResources').addObject(resource);
       },
       sortEndAction: function() {
         console.log(this.get('groupedResources'));

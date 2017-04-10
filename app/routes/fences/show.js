@@ -9,6 +9,9 @@ export default Ember.Route.extend({
   beforeModel(transition) {
     const fenceId = transition.state.params['fences.show'].fence_id;
 
+    // There is no need to download more data as we don't have agent specific parts
+    // @todo: After fixing reloadData in beforeModel() this should be merged with next
+    //  resolve() part in fence == null;
     if (fenceId == '') {
       return this.store.reloadData();
     }
@@ -44,9 +47,7 @@ export default Ember.Route.extend({
     }
 
     // normalize (1|on|true|yes) => 'true' for boolean options
-    // this should be in serialization (?) but we need agent metadata to do it
-
-    // -> in metadata
+    // @todo: this should be in serialization (?) but we need agent metadata to do it
     this.get('metadata.parameters').forEach((o) => {
       if (o.type === 'boolean') {
         if (['1', 'on', true, 'yes'].includes(o.default)) {
@@ -55,7 +56,6 @@ export default Ember.Route.extend({
       }
     });
 
-    // -> in the properties
     fence.get('properties').forEach((item) => {
       this.get('metadata.parameters').forEach((o) => {
         if (o.name === item.get('name')) {
@@ -68,6 +68,7 @@ export default Ember.Route.extend({
       this.set('modelForm.' + item.get('name'), item.get('value'));
     });
 
+    // @todo: selectedFence return LiveArray and very likely this is not required anymore
     return Ember.RSVP.hash({
       params: params,
       metadata: this.get('metadata'),
@@ -97,26 +98,24 @@ export default Ember.Route.extend({
 
       this.transitionTo('fences.show', '');
     },
-    onCheck: function(x) {
-      if (this.get('selectedResources').includes(x)) {
-        this.get('selectedResources').removeObject(x);
+    onCheck: function(item) {
+      if (this.get('selectedResources').includes(item)) {
+        this.get('selectedResources').removeObject(item);
       } else {
-        this.get('selectedResources').addObject(x);
+        this.get('selectedResources').addObject(item);
       }
     },
     changeSelectedAgent() {},
     removeSelectedResources: function() {
-        let names = [];
-        this.get('selectedResources').forEach((x) => {
-          names.push(x.get('name'));
-        });
-        this.store.removeAgents(names, 'fence');
+        this.store.removeAgents(
+          this.get('selectedResources').map((x) => {return x.get('name')}),
+          'fence'
+        );
         this.transitionTo('fences.show', '');
     },
     removeResource: function(resourceName) {
       this.store.removeAgents([resourceName], 'fence');
       this.transitionTo('fences.show', '');
-    },
-
+    }
   }
 });

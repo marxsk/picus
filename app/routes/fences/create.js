@@ -7,14 +7,12 @@ export default Ember.Route.extend({
   metadata: {},
 
   beforeModel() {
-    const _this = this;
-
-    return new RSVP.Promise(function(resolve, reject) {
-      _this.store.getAvailableAgents('fence').then(
-        function(response) {
-          _this.set('availables', response);
+    return new RSVP.Promise((resolve, reject) => {
+      this.store.getAvailableAgents('fence').then(
+        (response) => {
+          this.set('availables', response);
           resolve(response);
-        }, function(xhr) {
+        }, (xhr) => {
           reject(xhr);
         }
       );

@@ -173,15 +173,12 @@ export default DS.Store.extend({
 
   /** Push all cluster properties to server in one request **/
   pushClusterProperties: function(changeset) {
-    let data = _jsonToQueryString(changeset.get('change'));
-
     // @todo: data has to be converted to the right format; send all vs changes? [+ default = null]
-    this.get('ajax').post('/managec/' + this.get('clusterName') + '/update_cluster_settings', {data: data}).then(() => {
-      this.reloadData();
-    });
+    this._sendData('update_cluster_settings', changeset.get('change'));
   },
 
   /** Push new node into cluster **/
+  // @todo: move to standard API
   pushNewNode: function(changeset) {
     const newNode = this.createRecord('node',
     {
@@ -278,9 +275,8 @@ export default DS.Store.extend({
 
     console.assert((typeof url !== 'undefined'), `Invalid agentType (${agentType}) entered`);
 
-    const _this = this;
-    return new Ember.RSVP.Promise(function(resolve) {
-      _this.get('ajax').request(url).then((response) => {
+    return new Ember.RSVP.Promise((resolve) => {
+      this.get('ajax').request(url).then((response) => {
         const agents = {};
         agents._providers = [];
 
@@ -326,19 +322,17 @@ export default DS.Store.extend({
 
     console.assert((typeof url !== 'undefined'), `Invalid agentType (${agentType}) entered`);
 
-    const _this = this;
-    return new Ember.RSVP.Promise(function(resolve) {
-      _this.get('ajax').request(url, {data: {agent: agentName}}).then((response) => {
+    return new Ember.RSVP.Promise((resolve) => {
+      this.get('ajax').request(url, {data: {agent: agentName}}).then((response) => {
         resolve(response);
       });
-    }, function(error) {
+    }, (error) => {
       alert(error);
     });
   },
 
   pushAppendMetaAttribute(resourceId, attribute) {
-    const _this = this;
-    return new Ember.RSVP.Promise(function(resolve) {
+    return new Ember.RSVP.Promise((resolve) => {
       const data = JSON.stringify({
         data: {
           type: 'meta-attribute',
@@ -352,13 +346,12 @@ export default DS.Store.extend({
         _this.reloadData();
         resolve(response);
       })
-    }, function(error) {
+    }, (error) => {
 
     });
   },
   pushAppendLocationPreference(resourceId, attribute) {
-    const _this = this;
-    return new Ember.RSVP.Promise(function(resolve) {
+    return new Ember.RSVP.Promise((resolve) => {
       const data = JSON.stringify({
         data: {
           type: 'location-preference',
@@ -368,17 +361,16 @@ export default DS.Store.extend({
           },
         }});
 
-      _this.get('ajax').post('/location-preference/', {data: data}).then((response) => {
-        _this.reloadData();
+      this.get('ajax').post('/location-preference/', {data: data}).then((response) => {
+        this.reloadData();
         resolve(response);
       })
-    }, function(error) {
+    }, (error) => {
 
     });
   },
   pushAppendOrderingPreference(resourceId, attribute) {
-    const _this = this;
-    return new Ember.RSVP.Promise(function(resolve) {
+    return new Ember.RSVP.Promise((resolve) => {
       const data = JSON.stringify({
         data: {
           type: 'ordering-preference',
@@ -388,29 +380,23 @@ export default DS.Store.extend({
           },
         }});
 
-      _this.get('ajax').post('/ordering-preference/', {data: data}).then((response) => {
-        _this.reloadData();
+      this.get('ajax').post('/ordering-preference/', {data: data}).then((response) => {
+        this.reloadData();
         resolve(response);
       })
-    }, function(error) {
+    }, (error) => {
 
     });
   },
-  createResouceGroup(groupId, resources) {
-    let url = '/managec/' + this.get('clusterName') + '/add_group';
 
-    let data = _jsonToQueryString({
+  createResouceGroup(groupId, resources) {
+    this._sendData('add_group', {
       resource_group: groupId,
       resources: resources.join(' '),
-    });
-
-    this.get('ajax').post(url, {data: data}).then(() => {
-      this.reloadData();
     });
   },
 
   removeAgents(names, agentType) {
-    let url = '/managec/' + this.get('clusterName') + '/remove_resource';
     let separator = undefined;
 
     switch (agentType) {
@@ -429,21 +415,22 @@ export default DS.Store.extend({
     });
 
     // @todo: add attribute force:true if required
-    this.get('ajax').post(url, {
-      data: _jsonToQueryString(jsonData)
-    }).then(() => {
-      this.reloadData();
-    });
+    this._sendData('remove_resource', jsonData);
   },
 
-  _sendResourceId(endpoint, resourceName) {
+  // @todo: should it be a promise?
+  _sendData(endpoint, data) {
     let url = '/managec/' + this.get('clusterName') + '/' + endpoint;
 
     this.get('ajax').post(url, {
-      data: _jsonToQueryString({resource_id: resourceName})
+      data: _jsonToQueryString(data)
     }).then(() => {
       this.reloadData();
     })
+  },
+
+  _sendResourceId(endpoint, resourceName) {
+    this._sendData(endpoint, {resource_id: resourceName});
   },
 
   destroyGroup(name) { this._sendResourceId('resource_ungroup', name); },

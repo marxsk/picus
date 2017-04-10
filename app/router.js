@@ -7,6 +7,8 @@ const Router = Ember.Router.extend({
 });
 
 Router.map(function() {
+  this.route('login');
+
   this.route('properties');
 
   this.route('nodes', function() {
@@ -27,7 +29,6 @@ Router.map(function() {
     this.route('show', { path: 'show/:fence_id' });
     this.route('create');
   });
-  this.route('login');
 });
 
 export default Router;

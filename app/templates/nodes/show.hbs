@@ -1,7 +1,7 @@
 {{menu-header
   title='Nodes'
   data=model.cluster.firstObject.nodes
-  onCheckAction=(action 'onCheck')
+  onCheckAction=(route-action 'onCheck')
   isCollapsed=false
   targetRoute='nodes.show'
 }}
@@ -16,9 +16,9 @@
 
   Actions:
   <ul>
-    <li {{action 'nodeAction' 'start' selectedNode}}> Start Node </li>
-    <li {{action 'nodeAction' 'stop' selectedNode}}> Stop Node </li>
-    <li {{action 'nodeAction' 'reboot' selectedNode}}> Reboot Node </li>
+    <li {{action (route-action 'nodeAction' 'start' selectedNode)}}> Start Node </li>
+    <li {{action (route-action 'nodeAction' 'stop' selectedNode)}}> Stop Node </li>
+    <li {{action (route-action 'nodeAction' 'reboot' selectedNode)}}> Reboot Node </li>
   </ul>
 
   Cluster daemons:
@@ -28,7 +28,7 @@
     <li> Corosync: {{format-running selectedNode.isPcsdRunning}} ( {{format-enabled selectedNode.isPcsdEnabled}} ) </li>
   </ul>
 
-  {{#attr-list title='Node Attributes' attributes=selectedNode.nodeAttributes onDeleteAction=(action 'deleteNodeAttribute') onAppendAction=(action 'appendNodeAttribute') onDeleteMultipleAction=(action 'deleteMultipleAttributes') as |form mode attr|}}
+  {{#attr-list title='Node Attributes' attributes=selectedNode.nodeAttributes onDeleteAction=(route-action 'deleteNodeAttribute') onAppendAction=(route-action 'appendNodeAttribute') onDeleteMultipleAction=(route-action 'deleteMultipleAttributes') as |form mode attr|}}
     {{#if (eq mode 'edit')}}
       <td>{{input value=form.attr.key}}</td>
       <td>{{input value=form.attr.value}}</td>
@@ -38,7 +38,7 @@
     {{/if}}
   {{/attr-list}}
 
-  {{#attr-list title='Node Utilization Attributes' attributes=selectedNode.nodeUtilizationAttributes onDeleteAction=(action 'deleteNodeAttribute') onAppendAction=(action 'appendNodeUtilizationAttribute')  onDeleteMultipleAction=(action 'deleteMultipleAttributes') as |form mode attr|}}
+  {{#attr-list title='Node Utilization Attributes' attributes=selectedNode.nodeUtilizationAttributes onDeleteAction=(route-action 'deleteNodeAttribute') onAppendAction=(route-action 'appendNodeUtilizationAttribute')  onDeleteMultipleAction=(route-action 'deleteMultipleAttributes') as |form mode attr|}}
     {{#if (eq mode 'edit')}}
       <td>{{input value=form.attr.key}}</td>
       <td>{{input value=form.attr.value}}</td>

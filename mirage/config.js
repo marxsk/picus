@@ -325,5 +325,8 @@ export default function() {
   });
   this.get('/logout', () => {
     console.log('logout');
+  });
+  this.get('/login-status', () => {
+    console.log('login status');
   })
 }

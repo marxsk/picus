@@ -8,12 +8,12 @@ NOT-YET
 
 IN-GROUP:
 
-{{#draggable-object-target action="increaseRating" amount="5"}}
+{{#draggable-object-target action="moveFromGroup" amount="5"}}
 <ul>
 {{#sortable-objects sortableObjectList=validResources sortEndAction='sortEndAction' sortingScope='a' }}
   {{#each validResources as |r|}}
     {{#draggable-object content=r isSortable=true sortingScope='a'}}
-      {{#double-clickable action=(action "increaseRating2") content=r}}
+      {{#double-clickable action=(action "moveToGroup") content=r}}
         <li>{{r.name}}</li>
       {{/double-clickable}}
     {{/draggable-object}}
@@ -24,11 +24,11 @@ IN-GROUP:
 
 <hr>
 Target:
-{{#draggable-object-target action="increaseRating2" amount="5"}}
+{{#draggable-object-target action="moveToGroup" amount="5"}}
 {{#sortable-objects sortableObjectList=groupedResources sortEndAction='sortEndAction' enableSort=true useSwap=true sortingScope='b'}}
   {{#each groupedResources as |r|}}
     {{#draggable-object content=r sortingScope='b' isSortable=true}}
-    {{#double-clickable action=(action "increaseRating") content=r}}
+    {{#double-clickable action=(action "moveFromGroup") content=r}}
       <li>{{r.name}}</li>
     {{/double-clickable}}
     {{/draggable-object}}
