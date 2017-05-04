@@ -17,6 +17,7 @@ export default Ember.Route.extend({
       return Ember.RSVP.hash({
         listing: (params.resource_id.length === 0) ? true : false,
         cluster: this.store.peekAll('cluster'),
+        selectedResources: this.get('selectedResources'),
         params: params,
       });
     }
@@ -37,6 +38,7 @@ export default Ember.Route.extend({
       formData: this.get('modelForm'),
       cluster: this.store.peekAll('cluster'),
       selectedResource: this.store.filter('resource', (item) => { return item.id === params.resource_id; }),
+      selectedResources: this.get('selectedResources.length'),
       otherResourcesName: otherResourcesName,
     });
   },
@@ -54,14 +56,15 @@ export default Ember.Route.extend({
     },
     onCheckx: function(x) {
       if (this.get('selectedResources').includes(x)) {
-        this.get('selectedResources').removeObject(x);
+        this.get('selectedResources').popObject(x);
       } else {
-        this.get('selectedResources').addObject(x);
+        this.get('selectedResources').pushObject(x);
       }
+      console.log(this.get('selectedResources.length'));
     },
     removeSelectedResources: function() {
       this.store.removeAgents(
-        this.get('selectedResources').map((x) => {return x.get('name')}),
+        this.get('selectedResources').map((x) => {return x.get('name');}),
         'resource'
       );
       this.transitionTo('resources.show', '');

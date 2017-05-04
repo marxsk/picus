@@ -1,3 +1,23 @@
+<div style="width: 100%; text-align: right; margin-bottom: 1em">
+  {{#bs-button}}
+    {{#link-to 'resources.create'}}Add{{/link-to}}
+  {{/bs-button}}
+  {{#bs-button onClick=(route-action 'removeSelectedResources')}}
+    <a href="#">Remove <span class="badge">{{model.selectedResources.length}}</span></a>
+  {{/bs-button}}
+  {{#bs-button}}
+    {{#link-to 'resources.createGroup'}}Add Group{{/link-to}}
+  {{/bs-button}}
+</div>
+
+{{#unless model.listing}}
+{{#unless model.selectedResource}}
+  {{#bs-alert type="danger" dismissible=0}}
+  The resource device with ID '{{model.params.resource_id}}' was not found, please select a different resource.
+  {{/bs-alert}}
+{{/unless}}
+{{/unless}}
+
 {{menu-header
   title='Resources'
   data=model.cluster.firstObject.resources
@@ -7,19 +27,6 @@
 }}
 
 <button {{action (route-action 'reload')}}>Reload button</button>
-
-<button {{action (route-action 'removeSelectedResources')}}>Remove selected resources</button>
-
-<hr />
-{{#link-to 'resources.create'}}Add resource to the cluster{{/link-to}} <br />
-{{#link-to 'resources.createGroup'}}Add resource group to the cluster{{/link-to}}
-<hr />
-
-{{#unless model.listing}}
-{{#unless model.selectedResource}}
-  The resource device with ID '{{model.params.resource_id}}' was not found, please select a different resource.
-{{/unless}}
-{{/unless}}
 
 {{#with model.selectedResource.firstObject as |selResource| }}
   <h3>Editable form for Resource Agents</h3>
