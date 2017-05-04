@@ -1,9 +1,8 @@
-<div>
-  <h3>Navigation ({{selected}})</h3>
-  <ul>
-    <li>{{#main-navigation-item selected=selected link='properties'}}Cluster Properties{{/main-navigation-item}}</li>
-    <li>{{#main-navigation-item selected=selected link='nodes'}}Nodes{{/main-navigation-item}}</li>
-    <li>{{#main-navigation-item selected=selected link='resources'}}Resources{{/main-navigation-item}}</li>
-    <li>{{#main-navigation-item selected=selected link='fences'}}Fence Devices{{/main-navigation-item}}</li>
-  </ul>
+<div style="width: 15em">
+{{#bs-nav type='pills' stacked='1' as |nav|}}
+  {{#nav.item}}{{#nav.link-to "nodes"}}Nodes{{/nav.link-to}}{{/nav.item}}
+  {{#nav.item}}{{#nav.link-to "resources"}}Resources{{/nav.link-to}}{{/nav.item}}
+  {{#nav.item}}{{#nav.link-to "fences"}}Fence Devices{{/nav.link-to}}{{/nav.item}}
+  {{#nav.item}}{{#nav.link-to "properties"}}Cluster Properties{{/nav.link-to}}{{/nav.item}}
+{{/bs-nav}}
 </div>
