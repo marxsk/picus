@@ -407,7 +407,7 @@ export default DS.Store.extend({
         separator = '-';
         break;
     }
-    console.assert((typeof url !== 'undefined'), `Invalid agentType (${agentType}) entered`);
+    console.assert((typeof separator !== 'undefined'), `Invalid agentType (${agentType}) entered`);
 
     let jsonData = {};
     names.forEach((i) => {

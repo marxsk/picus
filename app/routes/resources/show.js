@@ -61,7 +61,6 @@ export default Ember.Route.extend({
       } else {
         this.get('selectedResources').pushObject(x);
       }
-      console.log(this.get('selectedResources.length'));
     },
     removeSelectedResources: function() {
       this.store.removeAgents(
