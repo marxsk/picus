@@ -67,6 +67,7 @@ export default Ember.Route.extend({
         this.get('selectedResources').map((x) => {return x.get('name');}),
         'resource'
       );
+      this.get('selectedResources').clear();
       this.transitionTo('resources.show', '');
     },
     changeSelectedAgent: function() {},
