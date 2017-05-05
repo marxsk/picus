@@ -6,6 +6,7 @@ export default Ember.Route.extend({
   selectedResources: Ember.A(),
 
   beforeModel() {
+    this.get('selectedResources').clear();
     return this.store.reloadData();
   },
 
