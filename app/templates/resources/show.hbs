@@ -3,7 +3,7 @@
     {{#link-to 'resources.create'}}Add{{/link-to}}
   {{/bs-button}}
   {{#bs-button onClick=(route-action 'removeSelectedResources')}}
-    <a href="#">Remove <span class="badge">{{model.selectedResources.length}}</span></a>
+    <a name="remove">Remove <span class="badge">{{model.selectedResources.length}}</span></a>
   {{/bs-button}}
   {{#bs-button}}
     {{#link-to 'resources.createGroup'}}Add Group{{/link-to}}
