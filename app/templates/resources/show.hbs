@@ -1,4 +1,5 @@
-<div style="width: 100%; text-align: right; margin-bottom: 1em">
+<div style="border: 0px solid #2222DD">
+<div style="width: 100%; text-align: left; margin-bottom: 1em">
   {{#bs-button}}
     {{#link-to 'resources.create'}}Add{{/link-to}}
   {{/bs-button}}
@@ -10,6 +11,15 @@
   {{/bs-button}}
 </div>
 
+{{menu-header
+  title=''
+  data=model.cluster.firstObject.resources
+  isCollapsed=false
+  targetRoute='resources.show'
+  onCheckAction=(route-action 'onCheckx')
+}}
+</div>
+
 {{#unless model.listing}}
 {{#unless model.selectedResource}}
   {{#bs-alert type="danger" dismissible=0}}
@@ -17,16 +27,6 @@
   {{/bs-alert}}
 {{/unless}}
 {{/unless}}
-
-{{menu-header
-  title='Resources'
-  data=model.cluster.firstObject.resources
-  isCollapsed=false
-  targetRoute='resources.show'
-  onCheckAction=(route-action 'onCheckx')
-}}
-
-<button {{action (route-action 'reload')}}>Reload button</button>
 
 {{#with model.selectedResource.firstObject as |selResource| }}
   <h3>Editable form for Resource Agents</h3>
