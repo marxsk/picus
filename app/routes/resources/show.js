@@ -57,7 +57,7 @@ export default Ember.Route.extend({
     },
     onCheckx: function(x) {
       if (this.get('selectedResources').includes(x)) {
-        this.get('selectedResources').popObject(x);
+        this.get('selectedResources').removeObject(x);
       } else {
         this.get('selectedResources').pushObject(x);
       }
