@@ -5,6 +5,13 @@ export default Ember.Route.extend({
   resourceId: undefined,
   selectedResources: Ember.A(),
 
+  queryParams: {
+    filterString: {
+      as: 's',
+      replace: true
+    }
+  },
+
   beforeModel() {
     this.get('selectedResources').clear();
     return this.store.reloadData();

@@ -1,17 +1,14 @@
-{{#each metadata.parameters as |p|}}
-  {{#if (eq p.type 'boolean')}}
-    {{#if (eq p.default 'true')}}
-      {{form.select-field p.name 'true' label=p.shortdesc}}
-    {{else}}
-      {{form.select-field p.name 'default true false' label=p.shortdesc}}
-    {{/if}}
-  {{/if}}
-
-  {{#if (eq p.type 'string')}}
-    {{form.text-field p.name label=p.shortdesc placeholder=p.default}}
-  {{/if}}
-
-  {{#if (eq p.type 'integer')}}
-    {{form.text-field p.name label=p.shortdesc placeholder=p.default}}
-  {{/if}}
+{{#each levels as |level|}}
+  {{#bs-accordion selected="1" as |acc|}}
+    {{#acc.item value="1" title=level}}
+      {{agent-properties-sections parameters=metadata.parameters filter=filter level=level form=form}}
+    {{/acc.item}}
+  {{/bs-accordion}}
 {{/each}}
+
+
+{{#bs-accordion selected="1" as |acc|}}
+  {{#acc.item value="1" title="undefined level"}}
+    {{agent-properties-sections parameters=metadata.parameters filter=filter form=form}}
+  {{/acc.item}}
+{{/bs-accordion}}

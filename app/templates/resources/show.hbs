@@ -59,7 +59,9 @@
   {{#form-for (changeset model.formData) submit=(route-action 'onSubmitAction' selResource) as |f|}}
     {{model.metadata.shortdesc}}
     <hr />
-    {{agent-properties-form metadata=model.metadata form=f}}
+    <!-- @todo: Update URL as in properties, only after X seconds in -->
+    Filter: {{input type="text" value=filterString}} <br />
+    {{agent-properties-form metadata=model.metadata form=f levels=(array 'basic' 'advanced' 'expert') filter=filterString}}
 
     {{f.submit "Update"}}
   {{/form-for}}

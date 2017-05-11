@@ -7,6 +7,6 @@
   {{f.checkbox-field 'clone' label="Clone"}}
   {{f.checkbox-field 'masterslave' label="Master/Slave"}}
   <hr />
-  {{agent-properties-form metadata=model.metadata form=f}}
+  {{agent-properties-form metadata=model.metadata form=f levels=(array 'basic' 'advanced' 'expert')}}
   {{f.submit "Create"}}
 {{/form-for}}

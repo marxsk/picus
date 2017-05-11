@@ -1,0 +1,19 @@
+{{#each parameters as |p|}}
+  {{#if (and (incl p.name filter) (eq p.level level))}}
+    {{#if (eq p.type 'boolean')}}
+      {{#if (eq p.default 'true')}}
+        {{form.select-field p.name 'true' label=p.shortdesc}}
+      {{else}}
+        {{form.select-field p.name 'default true false' label=p.shortdesc}}
+      {{/if}}
+    {{/if}}
+
+    {{#if (eq p.type 'string')}}
+      {{form.text-field p.name label=p.shortdesc placeholder=p.default}}
+    {{/if}}
+
+    {{#if (eq p.type 'integer')}}
+      {{form.text-field p.name label=p.shortdesc placeholder=p.default}}
+    {{/if}}
+  {{/if}}
+{{/each}}
