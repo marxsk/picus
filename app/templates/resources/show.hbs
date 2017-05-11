@@ -57,7 +57,7 @@
   {{/if}}
 
   {{#form-for (changeset model.formData) submit=(route-action 'onSubmitAction' selResource) as |f|}}
-    {{metadata.shortdesc}}
+    {{model.metadata.shortdesc}}
     <hr />
     {{agent-properties-form metadata=model.metadata form=f}}
 

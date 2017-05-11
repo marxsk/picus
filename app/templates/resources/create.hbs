@@ -2,7 +2,7 @@
   {{f.text-field 'resourceName' label='Resource Name' hint='small help'}}
   {{f.select-field 'resourceProvider' model.availableAgents._providers label='Class/Providers' update=(route-action 'changeSelectedProvider')}}
   {{f.select-field 'resourceAgent' (get model.availableAgents model.selectedProvider) label='Resource Agent' update=(route-action 'changeSelectedAgent')}}
-  {{metadata.shortdesc}}
+  {{model.metadata.shortdesc}}
   <hr />
   {{f.checkbox-field 'clone' label="Clone"}}
   {{f.checkbox-field 'masterslave' label="Master/Slave"}}

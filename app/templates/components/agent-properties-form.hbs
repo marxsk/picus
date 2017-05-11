@@ -10,4 +10,8 @@
   {{#if (eq p.type 'string')}}
     {{form.text-field p.name label=p.shortdesc placeholder=p.default}}
   {{/if}}
+
+  {{#if (eq p.type 'integer')}}
+    {{form.text-field p.name label=p.shortdesc placeholder=p.default}}
+  {{/if}}
 {{/each}}
