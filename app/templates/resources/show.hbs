@@ -39,32 +39,50 @@
   </select>
 
   <br />
-  <button {{action (route-action 'removeResource') selResource.name}}>Remove resource</button>
+  {{#bs-button onClick=(action (route-action 'removeResource') selResource.name)}}
+    Remove resource
+  {{/bs-button}}
   {{#if (eq selResource.resourceType 'clone')}}
-    <button {{action (route-action 'removeClone') selResource.name}}>Un-clone</button>
+    {{#bs-button onClick=(action (route-action 'removeClone') selResource.name)}}
+      Un-clone
+    {{/bs-button}}
   {{else}}
-    <button {{action (route-action 'createClone') selResource.name}}>Create clone</button>
+    {{#bs-button onClick=(action (route-action 'createClone') selResource.name)}}
+      Create clone
+    {{/bs-button}}
   {{/if}}
 
   {{#if (eq selResource.resourceType 'group')}}
-    <button {{action (route-action 'removeGroup') selResource.name}}>Un-group</button>
+    {{#bs-button onClick=(action (route-action 'removeGroup') selResource.name)}}
+      Un-group
+    {{/bs-button}}
   {{/if}}
 
   {{#if (eq selResource.resourceType 'masterslave')}}
-    <button {{action (route-action 'removeMaster') selResource.name}}>Remove master/slave</button>
+    {{#bs-button onClick=(action (route-action 'removeMaster') selResource.name)}}
+      Remove Master/Slave
+    {{/bs-button}}
   {{else}}
-    <button {{action (route-action 'createMaster') selResource.name}}>Create master/slave</button>
+    {{#bs-button onClick=(action (route-action 'createMaster') selResource.name)}}
+      Create Master/Slave
+    {{/bs-button}}
   {{/if}}
 
+<br /><br />
+{{#bs-tab as |tab|}}
+{{#tab.pane title="Properties"}}
   {{#form-for (changeset model.formData) submit=(route-action 'onSubmitAction' selResource) as |f|}}
     {{model.metadata.shortdesc}}
     <hr />
-    <!-- @todo: Update URL as in properties, only after X seconds in -->
     Filter: {{input type="text" value=filterString}} <br />
     {{agent-properties-form metadata=model.metadata form=f levels=(array 'basic' 'advanced' 'expert') filter=filterString}}
 
     {{f.submit "Update"}}
   {{/form-for}}
+{{/tab.pane}}
+{{#tab.pane title="Constraints"}}
+{{#bs-accordion selected="1" as |acc|}}
+  {{#acc.item value="1" title="Resource Location Preference"}}
 
   {{#attr-list
       title='Resource Location Preference'
@@ -82,7 +100,8 @@
       <td>{{attr.score}}</td>
     {{/if}}
   {{/attr-list}}
-
+  {{/acc.item}}
+  {{#acc.item value="2" title="Resource Ordering Preference"}}
   {{#attr-list
       title='Resource Ordering Preference'
       attributes=selResource.orderingPreferences
@@ -135,7 +154,8 @@
       <td>{{attr.score}}</td>
     {{/if}}
   {{/attr-list}}
-
+{{/acc.item}}
+{{#acc.item value="3" title="Resource Meta Attributes"}}
   {{#attr-list
       title='Resource Meta Attributes'
       attributes=selResource.metaAttributes
@@ -152,5 +172,10 @@
       <td>{{attr.value}}</td>
     {{/if}}
   {{/attr-list}}
+  {{/acc.item}}
+{{/bs-accordion}}
+
+  {{/tab.pane}}
+{{/bs-tab}}
 
 {{/with}}
