@@ -6,6 +6,15 @@ module.exports = function(environment) {
     environment: environment,
     rootURL: '/',
     locationType: 'auto',
+
+    'ember-form-for': {
+          fieldClasses: 'form-group',
+          fieldHasErrorClasses: 'has-error',
+          inputClasses: 'form-control',
+          hintClasses: '',
+          errorClasses: 'alert alert-danger'
+    },
+
     EmberENV: {
       FEATURES: {
         // Here you can enable experimental features on an ember canary build
