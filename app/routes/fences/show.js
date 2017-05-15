@@ -12,7 +12,7 @@ export default Ember.Route.extend({
     // There is no need to download more data as we don't have agent specific parts
     // @todo: After fixing reloadData in beforeModel() this should be merged with next
     //  resolve() part in fence == null;
-    if (fenceId == '') {
+    if (fenceId === '') {
       return this.store.reloadData();
     }
 
@@ -26,7 +26,7 @@ export default Ember.Route.extend({
         this.store.getAgentMetadata('fence', 'stonith:' + fence.get('agentType')).then((resp) => {
           this.set('metadata', resp);
           resolve();
-        }, (xh) => {
+        }, (xhr) => {
           // @todo: proper error handling
         });
       }, (xhr) => {
@@ -52,7 +52,7 @@ export default Ember.Route.extend({
       if (o.type === 'boolean') {
         if (['1', 'on', true, 'yes'].includes(o.default)) {
           o.default = 'true';
-        };
+        }
       }
     });
 
@@ -61,7 +61,7 @@ export default Ember.Route.extend({
         if (o.name === item.get('name')) {
           if (['1', 'on', true, 'yes'].includes(item.get('value'))) {
             item.set('value', 'true');
-          };
+          }
         }
       });
 
@@ -108,7 +108,7 @@ export default Ember.Route.extend({
     changeSelectedAgent() {},
     removeSelectedResources: function() {
         this.store.removeAgents(
-          this.get('selectedResources').map((x) => {return x.get('name')}),
+          this.get('selectedResources').map((x) => {return x.get('name');}),
           'fence'
         );
         this.transitionTo('fences.show', '');

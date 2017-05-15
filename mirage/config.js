@@ -53,7 +53,7 @@ export default function() {
 
     Object.keys(attrs).forEach((i) => {
       schema.db.properties.update({name: i}, {value: attrs[i]});
-    })
+    });
   });
 
   this.post('/managec/my/update_fence_device', function(schema, request) {
@@ -96,7 +96,7 @@ export default function() {
 
     let resIDs = [];
     resources.forEach((x) => {
-      if (x == "") { return };
+      if (x === "") { return; }
 
       let child = schema.resources.where({name: x}).models[0];
       resIDs.push(child);
@@ -259,7 +259,7 @@ export default function() {
     const attr = resource.createMetaAttribute({
       key: params.data.attributes.key,
       value: params.data.attributes.value
-    })
+    });
 
     return attr;
   });
@@ -272,7 +272,7 @@ export default function() {
     const attr = resource.createLocationPreference({
       node: params.data.attributes.node,
       score: params.data.attributes.score
-    })
+    });
 
     return attr;
   });
@@ -289,7 +289,7 @@ export default function() {
       before: params.data.attributes.before,
       action2: params.data.attributes.action2,
       score: params.data.attributes.score,
-    })
+    });
 
     return attr;
   });
@@ -330,5 +330,5 @@ export default function() {
   });
   this.get('/login-status', () => {
     console.log('login status');
-  })
+  });
 }

@@ -17,7 +17,7 @@ export default Ember.Route.extend({
   },
 
   actions: {
-    onClick: function(component, componentId) {
+    onClick: function(component) {
       this.set('selectedNode', component);
     },
     onCheck: function() {    },

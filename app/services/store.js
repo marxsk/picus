@@ -101,7 +101,6 @@ export default DS.Store.extend({
 
   **/
   reloadData: function() {
-    var time = new Date();
     if (this.get('isQueryInProgress')) {
       this.set('isQueryInQueue', true);
       return;
@@ -239,7 +238,7 @@ export default DS.Store.extend({
       });
     }
 
-    attrs.properties.forEach(function(o) { data += `&_res_paramne_${o.key}=${o.value}` });
+    attrs.properties.forEach(function(o) { data += `&_res_paramne_${o.key}=${o.value}`; });
 
     this.get('ajax').post(url, {data: data}).then(() => {
       this.reloadData();
@@ -342,10 +341,10 @@ export default DS.Store.extend({
           },
         }});
 
-      _this.get('ajax').post('/meta/', {data: data}).then((response) => {
-        _this.reloadData();
+      this.get('ajax').post('/meta/', {data: data}).then((response) => {
+        this.reloadData();
         resolve(response);
-      })
+      });
     }, (error) => {
 
     });
@@ -364,7 +363,7 @@ export default DS.Store.extend({
       this.get('ajax').post('/location-preference/', {data: data}).then((response) => {
         this.reloadData();
         resolve(response);
-      })
+      });
     }, (error) => {
 
     });
@@ -383,7 +382,7 @@ export default DS.Store.extend({
       this.get('ajax').post('/ordering-preference/', {data: data}).then((response) => {
         this.reloadData();
         resolve(response);
-      })
+      });
     }, (error) => {
 
     });
@@ -397,7 +396,7 @@ export default DS.Store.extend({
   },
 
   removeAgents(names, agentType) {
-    let separator = undefined;
+    let separator;
 
     switch (agentType) {
       case 'resource':
@@ -426,7 +425,7 @@ export default DS.Store.extend({
       data: _jsonToQueryString(data)
     }).then(() => {
       this.reloadData();
-    })
+    });
   },
 
   _sendResourceId(endpoint, resourceName) {

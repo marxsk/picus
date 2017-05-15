@@ -5,7 +5,7 @@ export default Ember.Route.extend({
     return this.store.reloadData();
   },
 
-  model(params) {
+  model() {
     return Ember.RSVP.hash({
       resources: this.store.peekAll('resource'),
     });
