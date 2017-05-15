@@ -1,25 +1,3 @@
-<div style="border: 0px solid #2222DD">
-<div style="width: 100%; text-align: left; margin-bottom: 1em">
-  {{#bs-button}}
-    {{#link-to 'resources.create'}}Add{{/link-to}}
-  {{/bs-button}}
-  {{#bs-button onClick=(route-action 'removeSelectedResources')}}
-    <a name="remove">Remove <span class="badge">{{model.selectedResources.length}}</span></a>
-  {{/bs-button}}
-  {{#bs-button}}
-    {{#link-to 'resources.createGroup'}}Add Group{{/link-to}}
-  {{/bs-button}}
-</div>
-
-{{menu-header
-  title=''
-  data=model.cluster.firstObject.resources
-  isCollapsed=false
-  targetRoute='resources.show'
-  onCheckAction=(route-action 'onCheckx')
-}}
-</div>
-
 {{#unless model.listing}}
 {{#unless model.selectedResource}}
   {{#bs-alert type="danger" dismissible=0}}
@@ -29,6 +7,15 @@
 {{/unless}}
 
 {{#with model.selectedResource.firstObject as |selResource| }}
+  {{#ember-wormhole to="leftmenu"}}
+      {{menu-header
+        title='Resources'
+        data=model.cluster.firstObject.resources
+        isCollapsed=false
+        targetRoute='resources.show'
+      }}
+  {{/ember-wormhole}}
+
   <h3>Editable form for Resource Agents</h3>
   Name: {{ selResource.name }}<br />
   Resource Provider: <select disabled="1">

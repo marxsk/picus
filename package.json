@@ -52,6 +52,7 @@
     "ember-tick-tock": "1.0.2",
     "ember-truth-helpers": "1.2.0",
     "ember-welcome-page": "^1.0.1",
+    "ember-wormhole": "0.5.1",
     "loader.js": "^4.0.1"
   }
 }

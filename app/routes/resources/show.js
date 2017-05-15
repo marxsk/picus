@@ -17,6 +17,12 @@ export default Ember.Route.extend({
     return this.store.reloadData();
   },
 
+  setupController(controller, model) {
+    this._super(controller, model);
+    // hide sidebar menu
+    this.controllerFor('application').set('hideMainMenu', true);
+   },
+
   model(params) {
     const resource = this.store.peekRecord('resource', params.resource_id);
     this.set('resourceId', params.resource_id);
@@ -60,7 +66,7 @@ export default Ember.Route.extend({
         properties: form.get('changes'),
       }, 'update');
 
-      this.transitionTo('resources.show', '');
+      this.transitionTo('resources.index');
     },
     onCheckx: function(x) {
       if (this.get('selectedResources').includes(x)) {
@@ -75,7 +81,7 @@ export default Ember.Route.extend({
         'resource'
       );
       this.get('selectedResources').clear();
-      this.transitionTo('resources.show', '');
+      this.transitionTo('resources.index');
     },
     changeSelectedAgent: function() {},
 
@@ -96,7 +102,7 @@ export default Ember.Route.extend({
 
     removeResource: function(resourceName) {
       this.store.removeAgents([resourceName], 'resource');
-      this.transitionTo('resources.show', '');
+      this.transitionTo('resources.index');
     },
 
     appendLocationPreference: function(attributes, attr) {
@@ -116,25 +122,25 @@ export default Ember.Route.extend({
 
     createClone: function(resourceName) {
       this.store.createClone(resourceName);
-      this.transitionTo('resources.show', '');
+      this.transitionTo('resources.index');
     },
 
     removeClone: function(resourceName) {
       this.store.destroyClone(resourceName);
-      this.transitionTo('resources.show', '');
+      this.transitionTo('resources.index');
     },
     removeGroup: function(resourceName) {
       this.store.destroyGroup(resourceName);
-      this.transitionTo('resources.show', '');
+      this.transitionTo('resources.index');
     },
 
     createMaster: function(resourceName) {
       this.store.createMaster(resourceName);
-      this.transitionTo('resources.show', '');
+      this.transitionTo('resources.index');
     },
     removeMaster: function(resourceName) {
       this.store.destroyMaster(resourceName);
-      this.transitionTo('resources.show', '');
+      this.transitionTo('resources.index');
     },
 
     reload: function() {
