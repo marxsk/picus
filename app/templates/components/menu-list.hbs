@@ -1,13 +1,27 @@
 {{#each data as |item|}}
   {{#unless item.resources}}
-    <li> {{menu-item targetRoute=targetRoute title=item.name component=item componentId=item.id status=item.status onCheckAction=(action onCheckAction)}} </li>
+    <li>
+      {{#if onCheckAction}}
+        {{menu-item targetRoute=targetRoute title=item.name component=item componentId=item.id status=item.status onCheckAction=(action onCheckAction)}}
+      {{else}}
+        {{menu-item targetRoute=targetRoute title=item.name component=item componentId=item.id status=item.status}}
+      {{/if}}
+    </li>
   {{else}}
     <li>
-      {{#menu-item targetRoute=targetRoute title=item.name isCollapsable=true component=item componentId=item.id status=item.status onCheckAction=(action onCheckAction)}}
+      {{#if onCheckAction}}
+        {{#menu-item targetRoute=targetRoute title=item.name isCollapsable=true component=item componentId=item.id status=item.status onCheckAction=(action onCheckAction)}}
         <ul>
-          {{menu-list targetRoute=targetRoute data=item.resources onCheckAction=(action onCheckAction)}}
+            {{menu-list targetRoute=targetRoute data=item.resources onCheckAction=(action onCheckAction)}}
         </ul>
-      {{/menu-item}}
+        {{/menu-item}}
+      {{else}}
+        {{#menu-item targetRoute=targetRoute title=item.name isCollapsable=true component=item componentId=item.id status=item.status}}
+        <ul>
+            {{menu-list targetRoute=targetRoute data=item.resources}}
+        </ul>
+        {{/menu-item}}
+      {{/if}}
     </li>
   {{/unless}}
 {{/each}}
