@@ -1,3 +1,12 @@
+{{#ember-wormhole to="leftmenu"}}
+    {{menu-header
+      title='Resources'
+      data=model.cluster.firstObject.resources
+      isCollapsed=false
+      targetRoute='resources.show'
+    }}
+{{/ember-wormhole}}
+
 {{#unless model.listing}}
 {{#unless model.selectedResource}}
   {{#bs-alert type="danger" dismissible=0}}
@@ -7,15 +16,6 @@
 {{/unless}}
 
 {{#with model.selectedResource.firstObject as |selResource| }}
-  {{#ember-wormhole to="leftmenu"}}
-      {{menu-header
-        title='Resources'
-        data=model.cluster.firstObject.resources
-        isCollapsed=false
-        targetRoute='resources.show'
-      }}
-  {{/ember-wormhole}}
-
   <h3>Editable form for Resource Agents</h3>
   Name: {{ selResource.name }}<br />
   Resource Provider: <select disabled="1">
