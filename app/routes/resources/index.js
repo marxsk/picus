@@ -39,5 +39,9 @@ export default Ember.Route.extend({
       this.get('selectedResources').clear();
       this.transitionTo('resources.show', '');
     },
+
+    linkTo: function(path) {
+      this.transitionTo(path);
+    }
   }
 });
