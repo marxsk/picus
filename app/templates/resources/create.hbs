@@ -1,4 +1,6 @@
-{{#form-for (changeset model.formData) submit=(route-action 'onSubmitAction' model.selectedAgent) as |f|}}
+{{#with (changeset model.formData model.ResourceValidations) as |changeset|}}
+
+{{#form-for changeset submit=(route-action 'onSubmitAction') as |f|}}
   {{f.text-field 'resourceName' label='Resource Name' hint='small help'}}
   {{f.select-field 'resourceProvider' model.availableAgents._providers label='Class/Providers' update=(route-action 'changeSelectedProvider')}}
   {{f.select-field 'resourceAgent' (get model.availableAgents model.selectedProvider) label='Resource Agent' update=(route-action 'changeSelectedAgent')}}
@@ -8,5 +10,7 @@
   {{f.checkbox-field 'masterslave' label="Master/Slave"}}
   <hr />
   {{agent-properties-form metadata=model.metadata form=f levels=(array 'basic' 'advanced' 'expert')}}
-  {{f.submit "Create"}}
+  {{f.submit "Create" disabled=changeset.isInvalid}}
 {{/form-for}}
+
+{{/with}}

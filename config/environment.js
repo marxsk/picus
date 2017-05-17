@@ -12,7 +12,8 @@ module.exports = function(environment) {
           fieldHasErrorClasses: 'has-error',
           inputClasses: 'form-control',
           hintClasses: '',
-          errorClasses: 'alert alert-danger'
+          errorClasses: 'alert alert-danger',
+          errorsPath: 'error.PROPERTY_NAME.validation',
     },
 
     EmberENV: {
