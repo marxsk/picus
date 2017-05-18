@@ -39,7 +39,8 @@ export default Ember.Route.extend({
       this.set('modelForm.resourceName', '');
     }
 
-    let validations = {...ResourceValidations}
+    let validations = {...ResourceValidations};
+    let parameters = {};
     const metadata = await this.store.getAgentMetadata('resource', this.get('selectedProvider') + ':' + this.get('selectedAgent'));
     metadata.parameters.forEach((i) => {
       validations[i.name] = [];
@@ -51,6 +52,19 @@ export default Ember.Route.extend({
       }
 
       this.set(`modelForm.${i.name}`, '');
+
+      // @todo: refactor; this will be needed also for 'edit' and fence agents
+      let level;
+      if (i.level) {
+        level = i.level;
+      } else {
+        level = 'standard';
+      }
+      if (!(level in parameters)) {
+        parameters[level] = [];
+      }
+
+      parameters[level].push(i);
     })
 
     return Ember.RSVP.hash({
@@ -59,6 +73,7 @@ export default Ember.Route.extend({
       metadata: metadata,
       selectedAgent: this.get('selectedAgent'),
       selectedProvider: this.get('selectedProvider'),
+      parameters: parameters,
       ResourceValidations: validations,
     });
   },

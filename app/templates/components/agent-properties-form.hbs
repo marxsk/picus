@@ -1,14 +1,7 @@
-{{#each levels as |level|}}
+{{#each-in parameters as |level subset|}}
   {{#bs-accordion selected="1" as |acc|}}
     {{#acc.item value="1" title=level}}
-      {{agent-properties-sections parameters=metadata.parameters filter=filter level=level form=form}}
+      {{agent-properties-sections parameters=subset filter=filter level=level form=form}}
     {{/acc.item}}
   {{/bs-accordion}}
-{{/each}}
-
-
-{{#bs-accordion selected="1" as |acc|}}
-  {{#acc.item value="1" title="undefined level"}}
-    {{agent-properties-sections parameters=metadata.parameters filter=filter form=form}}
-  {{/acc.item}}
-{{/bs-accordion}}
+{{/each-in}}
