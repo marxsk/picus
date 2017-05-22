@@ -110,8 +110,8 @@ export default DS.Store.extend({
     this.set('isQueryInQueue', false);
     this.set('expiresAt', this.get('ticktock.now') + this.get('validityTime'));
 
-    const res = this.retrieveManagedInstance('adapter', 'application').reloadData();
-    const ser = this.retrieveManagedInstance('serializer', 'application');
+    const res = this.adapterFor('application').reloadData();
+    const ser = this.serializerFor('application');
     const store = this;
 
     let prom = new Ember.RSVP.Promise(function(resolve) {
