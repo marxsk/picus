@@ -3,6 +3,13 @@ import Base from 'ember-simple-auth/authenticators/base';
 
 const { RSVP, Logger } = Ember;
 
+function _jsonToQueryString(json) {
+    return Object.keys(json).map(function(key) {
+            return encodeURIComponent(key) + '=' +
+                encodeURIComponent(json[key]);
+        }).join('&');
+}
+
 /**
   Authenticator that works with session cookies
 
@@ -61,9 +68,8 @@ export default Base.extend({
     @public
   */
   authenticate: function(data) {
-    console.log('authenticate');
     return this.makeRequest(
-      {type: 'POST', url: this.serverLoginEndpoint, data: data},
+      {type: 'POST', url: this.serverLoginEndpoint, data: _jsonToQueryString(data)},
       'Attempt to login was successful',
       'Attempt to logout was not successful'
     );
@@ -117,11 +123,12 @@ export default Base.extend({
     @param {String} debug_msg_false Message displayed after unsuccessful AJAX call
   */
   makeRequest: function(options, debug_msg_true, debug_msg_false) {
+    console.log(options);
     return new RSVP.Promise(function(resolve, reject) {
       Ember.$.ajax(options).then(
         function(response) {
           Ember.run(() => {
-            Logger.debug(debug_msg_true + ' with response: ' + response);
+            Logger.debug(debug_msg_true + ' with response: ' + JSON.stringify(response));
             resolve(response);
           });
         },

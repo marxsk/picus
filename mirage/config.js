@@ -1,6 +1,9 @@
+import Response from 'ember-cli-mirage/response';
+
 export default function() {
   this.timing = 400;      // delay for each request, automatically set to 0 during testing
   this.clusterName = "my";
+  this.authenticated = false;
 
   this.get('/managec/my/cluster_status', (schema) => {
     return schema.clusters.all();
@@ -322,13 +325,24 @@ export default function() {
     clonedResource.resources = resIDs;
   });
 
-  this.post('/login', () => {
-    console.log('login');
+  this.post('/login', function(schema, request) {
+    const attrs = this.normalizedRequestAttrs();
+
+    if ((attrs.identification === 'hacluster') && (attrs.password === 'hacluster')) {
+      return new Response(200);
+    } else {
+      return new Response(400);
+    }
   });
   this.get('/logout', () => {
+    this.authenticated = false;
     console.log('logout');
   });
   this.get('/login-status', () => {
-    console.log('login status');
+    if (this.authenticated) {
+      return new Response(200);
+    } else {
+      return new Response(400);
+    }
   });
 }

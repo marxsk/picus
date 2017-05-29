@@ -1,4 +1,4 @@
-<form {{action (route-action 'authenticate') on='submit'}}>
+<form {{action (action 'authenticate' identification password) on='submit'}}>
   <label for="identification">Login</label>
   {{input id='identification' placeholder='Enter Login' value=identification}}
   <label for="password">Password</label>
