@@ -1,0 +1,19 @@
+ember: &defaults
+  image: danlynn/ember-cli:2.13.1
+  volumes:
+    - .:/myapp
+
+npm:
+  <<: *defaults
+  command: npm
+
+bower:
+  <<: *defaults
+  command: bower --allow-root
+
+server:
+  <<: *defaults
+  command: server --watcher polling
+  ports:
+    - "4200:4200"
+    - "49153:49153"
