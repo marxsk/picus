@@ -28,15 +28,14 @@ export default Ember.Route.extend({
   },
 
   async model() {
-    if (! (this.get('selectedProvider'))) {
+    if (! (this.get('selectedProvider')) || (Object.keys(this.get('modelForm')).length === 0)) {
       const provider = Object.keys(this.get('availables'))[6];
       const agent = this.get('availables.' + provider)[0];
       this.set('selectedProvider', provider);
-      this.set('modelForm.resourceProvider', provider);
-
-      this.set('modelForm.resourceAgent', agent);
       this.set('selectedAgent', agent);
-      this.set('modelForm.resourceName', '');
+
+      this.set('modelForm.resourceProvider', provider);
+      this.set('modelForm.resourceAgent', agent);
     }
 
     let validations = {...ResourceValidations};
@@ -102,6 +101,8 @@ export default Ember.Route.extend({
             masterslave: form.get('masterslave'),
             properties: form.get('changes'),
           }, 'create');
+
+          this.set('modelForm', {});
 
           this.transitionTo('cluster.resources.index');
         } else {
