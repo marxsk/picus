@@ -3,15 +3,15 @@
       title='Resources'
       data=model.cluster.firstObject.resources
       isCollapsed=false
-      targetRoute='resources.show'
+      targetRoute='cluster.resources.show'
     }}
 {{/ember-wormhole}}
 
 {{#ember-wormhole to="breadcrumb"}}
   <!-- demo of breadcrumb; @todo: create a real component if used -->
   <ol class="breadcrumb">
-    <li class="breadcrumb-item">{{#link-to "index"}}Home{{/link-to}}</li>
-    <li class="breadcrumb-item">{{#link-to "resources"}}Resources{{/link-to}}</li>
+    <li class="breadcrumb-item">{{#link-to "cluster.properties"}}Home{{/link-to}}</li>
+    <li class="breadcrumb-item">{{#link-to "cluster.resources"}}Resources{{/link-to}}</li>
     <li class="breadcrumb-item active">{{model.params.resource_id}}</li>
   </ol>
 {{/ember-wormhole}}

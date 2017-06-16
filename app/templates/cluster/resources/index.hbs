@@ -1,19 +1,18 @@
 <div style="width: 100%; text-align: left; margin-bottom: 1em">
-  {{#bs-button onClick=(route-action 'linkTo' 'resources.create')}}
+  {{#bs-button onClick=(route-action 'linkTo' 'cluster.resources.create')}}
     Add
   {{/bs-button}}
   {{#bs-button onClick=(route-action 'removeSelectedResources')}}
     Remove <span class="badge">{{model.selectedResources.length}}</span>
   {{/bs-button}}
-  {{#bs-button onClick=(route-action 'linkTo' 'resources.createGroup')}}
+  {{#bs-button onClick=(route-action 'linkTo' 'cluster.resources.createGroup')}}
     Add Group
   {{/bs-button}}
 </div>
-
 {{menu-header
   title=''
   data=model.cluster.firstObject.resources
   isCollapsed=false
-  targetRoute='resources.show'
+  targetRoute='cluster.resources.show'
   onCheckAction=(route-action 'onCheck')
 }}

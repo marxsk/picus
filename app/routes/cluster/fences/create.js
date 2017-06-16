@@ -48,7 +48,7 @@ export default Ember.Route.extend({
         properties: form.get('changes'),
       }, 'create');
 
-      this.transitionTo('fences.show', '');
+      this.transitionTo('cluster.fences.show', '');
     }
   }
 });

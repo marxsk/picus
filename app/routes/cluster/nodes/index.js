@@ -3,8 +3,8 @@ import AuthenticatedRouteMixin from 'ember-simple-auth/mixins/authenticated-rout
 
 export default Ember.Route.extend(AuthenticatedRouteMixin, {
   redirect(model, transition) {
-    if (['nodes.index', 'nodes.listing'].indexOf(transition.targetName) >= 0) {
-      this.transitionTo('nodes.show', '');
+    if (['cluster.nodes.index', 'cluster.nodes.listing'].indexOf(transition.targetName) >= 0) {
+      this.transitionTo('cluster.nodes.show', '');
     }
   }
 });

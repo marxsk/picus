@@ -10,7 +10,7 @@ function _jsonToQueryString(json) {
 
 export default DS.Store.extend({
   ajax: Ember.inject.service(),
-  clusterName: 'my',
+  clusterName: undefined,
 
   /**
     Inject current time as a property
@@ -91,6 +91,14 @@ export default DS.Store.extend({
     }
   }.observes('ticktock.now', 'isExpired'),
 
+  /** Set name of the active cluster
+
+  Currently, it is possible to work with just one cluster at a given time.
+  **/
+  setActiveClusterName(clusterName) {
+    this.set('clusterName', clusterName);
+  },
+
   /** Reload all data from backend
 
   Traditionally, Store works on more standard API so we can ask for specific
@@ -110,7 +118,7 @@ export default DS.Store.extend({
     this.set('isQueryInQueue', false);
     this.set('expiresAt', this.get('ticktock.now') + this.get('validityTime'));
 
-    const res = this.adapterFor('application').reloadData();
+    const res = this.adapterFor('application').reloadData(this.get('clusterName'));
     const ser = this.serializerFor('application');
     const store = this;
 

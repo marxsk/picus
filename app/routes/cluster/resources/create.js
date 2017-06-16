@@ -103,7 +103,7 @@ export default Ember.Route.extend({
             properties: form.get('changes'),
           }, 'create');
 
-          this.transitionTo('resources.index');
+          this.transitionTo('cluster.resources.index');
         } else {
           alert('Fix it - @todo: Button stays on Processing');
         }

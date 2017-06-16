@@ -66,7 +66,7 @@ export default Ember.Route.extend({
         properties: form.get('changes'),
       }, 'update');
 
-      this.transitionTo('resources.index');
+      this.transitionTo('cluster.resources.index');
     },
     onCheckx: function(x) {
       if (this.get('selectedResources').includes(x)) {
@@ -81,7 +81,7 @@ export default Ember.Route.extend({
         'resource'
       );
       this.get('selectedResources').clear();
-      this.transitionTo('resources.index');
+      this.transitionTo('cluster.resources.index');
     },
     changeSelectedAgent: function() {},
 
@@ -102,7 +102,7 @@ export default Ember.Route.extend({
 
     removeResource: function(resourceName) {
       this.store.removeAgents([resourceName], 'resource');
-      this.transitionTo('resources.index');
+      this.transitionTo('cluster.resources.index');
     },
 
     appendLocationPreference: function(attributes, attr) {
@@ -122,25 +122,25 @@ export default Ember.Route.extend({
 
     createClone: function(resourceName) {
       this.store.createClone(resourceName);
-      this.transitionTo('resources.index');
+      this.transitionTo('cluster.resources.index');
     },
 
     removeClone: function(resourceName) {
       this.store.destroyClone(resourceName);
-      this.transitionTo('resources.index');
+      this.transitionTo('cluster.resources.index');
     },
     removeGroup: function(resourceName) {
       this.store.destroyGroup(resourceName);
-      this.transitionTo('resources.index');
+      this.transitionTo('cluster.resources.index');
     },
 
     createMaster: function(resourceName) {
       this.store.createMaster(resourceName);
-      this.transitionTo('resources.index');
+      this.transitionTo('cluster.resources.index');
     },
     removeMaster: function(resourceName) {
       this.store.destroyMaster(resourceName);
-      this.transitionTo('resources.index');
+      this.transitionTo('cluster.resources.index');
     },
 
     reload: function() {

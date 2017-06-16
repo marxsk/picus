@@ -2,14 +2,14 @@
   title='Fence Devices'
   data=model.cluster.firstObject.fences
   isCollapsed=false
-  targetRoute='fences.show'
+  targetRoute='cluster.fences.show'
   onCheckAction=(route-action 'onCheck')
 }}
 
 <button {{action (route-action 'removeSelectedResources')}}>Remove selected agents</button>
 
 <hr />
-  {{#link-to 'fences.create'}}Add fence devices to the cluster{{/link-to}}
+  {{#link-to 'cluster.fences.create'}}Add fence devices to the cluster{{/link-to}}
 <hr />
 
 {{#unless model.listing}}

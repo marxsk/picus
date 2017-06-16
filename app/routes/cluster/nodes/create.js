@@ -17,7 +17,7 @@ export default Ember.Route.extend({
         nodeName: changeset.get('nodeName'),
         autoStart: changeset.get('autoStart'),
       });
-      this.transitionTo('nodes.show', '');
+      this.transitionTo('cluster.nodes.show', '');
     }
   },
 });

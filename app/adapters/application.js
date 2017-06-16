@@ -4,10 +4,10 @@ import Ember from 'ember';
 const { RSVP } = Ember;
 
 export default JSONAPIAdapter.extend({
-  reloadData: function() {
+  reloadData: function(clusterName) {
     let options = {
       type: 'GET',
-      url: '/managec/my/cluster_status' // @todo
+      url: `/managec/${clusterName}/cluster_status`
     };
 
     return new RSVP.Promise(function(resolve, reject) {

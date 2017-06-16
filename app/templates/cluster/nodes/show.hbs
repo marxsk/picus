@@ -3,11 +3,11 @@
   data=model.cluster.firstObject.nodes
   onCheckAction=(route-action 'onCheck')
   isCollapsed=false
-  targetRoute='nodes.show'
+  targetRoute='cluster.nodes.show'
 }}
 
 <hr />
-{{#link-to 'nodes.create'}}Add computer node to the cluster{{/link-to}}
+{{#link-to 'cluster.nodes.create'}}Add computer node to the cluster{{/link-to}}
 <hr />
 
 {{#with model.selectedNode.firstObject as |selectedNode| }}

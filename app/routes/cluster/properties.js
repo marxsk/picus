@@ -13,6 +13,13 @@ export default Ember.Route.extend(AuthenticatedRouteMixin, {
       this.refresh();
     }
   },
+
+  setupController(controller, model) {
+    this._super(controller, model);
+    // hide sidebar menu
+    this.controllerFor('application').set('hideMainMenu', false);
+   },
+
   model({filterString, advanced}) {
     const advancedBoolean = advanced ? true : false;
     // @fix-reload

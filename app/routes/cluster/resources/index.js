@@ -37,7 +37,7 @@ export default Ember.Route.extend({
         'resource'
       );
       this.get('selectedResources').clear();
-      this.transitionTo('resources.show', '');
+      this.transitionTo('cluster.resources.show', '');
     },
 
     linkTo: function(path) {

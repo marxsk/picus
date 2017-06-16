@@ -7,7 +7,7 @@ export default Ember.Route.extend({
   selectedResources: Ember.A(),
 
   beforeModel(transition) {
-    const fenceId = transition.state.params['fences.show'].fence_id;
+    const fenceId = transition.state.params['cluster.fences.show'].fence_id;
 
     // There is no need to download more data as we don't have agent specific parts
     // @todo: After fixing reloadData in beforeModel() this should be merged with next
@@ -96,7 +96,7 @@ export default Ember.Route.extend({
         properties: form.get('changes'),
       }, 'update');
 
-      this.transitionTo('fences.show', '');
+      this.transitionTo('cluster.fences.show', '');
     },
     onCheck: function(item) {
       if (this.get('selectedResources').includes(item)) {
@@ -111,11 +111,11 @@ export default Ember.Route.extend({
           this.get('selectedResources').map((x) => {return x.get('name');}),
           'fence'
         );
-        this.transitionTo('fences.show', '');
+        this.transitionTo('cluster.fences.show', '');
     },
     removeResource: function(resourceName) {
       this.store.removeAgents([resourceName], 'fence');
-      this.transitionTo('fences.show', '');
+      this.transitionTo('cluster.fences.show', '');
     }
   }
 });
