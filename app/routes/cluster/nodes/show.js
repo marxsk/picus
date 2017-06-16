@@ -3,10 +3,6 @@ import Ember from 'ember';
 export default Ember.Route.extend({
   selectedNode: undefined,
 
-  beforeModel() {
-    return this.store.reloadData();
-  },
-
   model(params) {
     return Ember.RSVP.hash({
       listing: (params.node_id.length === 0) ? true : false,

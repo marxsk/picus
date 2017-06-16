@@ -9,29 +9,18 @@ export default Ember.Route.extend({
   beforeModel(transition) {
     const fenceId = transition.state.params['cluster.fences.show'].fence_id;
 
-    // There is no need to download more data as we don't have agent specific parts
-    // @todo: After fixing reloadData in beforeModel() this should be merged with next
-    //  resolve() part in fence == null;
-    if (fenceId === '') {
-      return this.store.reloadData();
+    const fence = this.store.peekRecord('fence', fenceId);
+    if (fence == null) {
+      return;
     }
 
     return new RSVP.Promise((resolve, reject) => {
-      this.store.reloadData().then((response) => {
-        const fence = this.store.peekRecord('fence', fenceId);
-        if (fence == null) {
-          resolve();
-          return;
-        }
         this.store.getAgentMetadata('fence', 'stonith:' + fence.get('agentType')).then((resp) => {
           this.set('metadata', resp);
           resolve();
         }, (xhr) => {
           // @todo: proper error handling
         });
-      }, (xhr) => {
-        // @todo: proper error handling
-      });
     });
   },
 

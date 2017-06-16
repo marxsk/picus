@@ -97,6 +97,7 @@ export default DS.Store.extend({
   **/
   setActiveClusterName(clusterName) {
     this.set('clusterName', clusterName);
+    return this.reloadData();
   },
 
   /** Reload all data from backend

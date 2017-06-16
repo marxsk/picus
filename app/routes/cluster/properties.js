@@ -22,8 +22,6 @@ export default Ember.Route.extend(AuthenticatedRouteMixin, {
 
   model({filterString, advanced}) {
     const advancedBoolean = advanced ? true : false;
-    // @fix-reload
-    this.store.reloadData();
 
     return Ember.RSVP.hash({
       filterProperties: filterString,

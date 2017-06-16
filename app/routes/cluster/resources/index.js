@@ -5,7 +5,6 @@ export default Ember.Route.extend({
 
   beforeModel() {
     this.get('selectedResources').clear();
-    return this.store.reloadData();
   },
 
   // @todo: replace with service
