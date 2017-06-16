@@ -1,5 +1,5 @@
 import Ember from 'ember';
-import ResourceValidations from '../../validators/resource-validations';
+import ResourceValidations from '../../../validators/resource-validations';
 const { RSVP } = Ember;
 import {
   validatePresence,
