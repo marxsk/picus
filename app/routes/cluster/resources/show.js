@@ -22,7 +22,7 @@ export default Ember.Route.extend({
     this.controllerFor('application').set('hideMainMenu', true);
    },
 
-  model(params) {
+  async model(params) {
     const resource = this.store.peekRecord('resource', params.resource_id);
     this.set('resourceId', params.resource_id);
 
@@ -39,6 +39,9 @@ export default Ember.Route.extend({
     let otherResourcesName = this.store.peekAll('resource').map((i) => { return i.get('name'); });
     otherResourcesName = otherResourcesName.filter((name) => { return name !== ourName; } );
 
+    const metadata = await this.store.getAgentMetadata('resource', this.store.peekRecord('resource', params.resource_id).get('resourceProvider') + ':' + this.store.peekRecord('resource', params.resource_id).get('agentType'));
+    let {parameters, validations} = categorizeProperties(metadata.parameters);
+
     if (resource.get('properties')) {
       resource.get('properties').forEach((item) => {
         this.set('modelForm.' + item.get('name'), item.get('value'));
@@ -48,6 +51,7 @@ export default Ember.Route.extend({
     return Ember.RSVP.hash({
       params: params,
       metadata: this.store.getAgentMetadata('resource', this.store.peekRecord('resource', params.resource_id).get('resourceProvider') + ':' + this.store.peekRecord('resource', params.resource_id).get('agentType')),
+      parameters: parameters,
       formData: this.get('modelForm'),
       cluster: this.store.peekAll('cluster'),
       selectedResource: this.store.filter('resource', (item) => { return item.id === params.resource_id; }),

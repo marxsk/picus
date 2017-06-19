@@ -71,7 +71,7 @@
     {{model.metadata.shortdesc}}
     <hr />
     Filter: {{input type="text" value=filterString}} <br />
-    {{agent-properties-form metadata=model.metadata form=f levels=(array 'basic' 'advanced' 'expert') filter=filterString}}
+    {{agent-properties-form parameters=model.parameters form=f levels=(array 'basic' 'advanced' 'expert' 'standard') filter=filterString}}
 
     {{f.submit "Update"}}
   {{/form-for}}

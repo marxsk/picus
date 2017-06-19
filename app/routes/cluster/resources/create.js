@@ -1,11 +1,6 @@
 import Ember from 'ember';
-import ResourceValidations from '../../../validators/resource-validations';
+import categorizeProperties from '../../../utils/categorize-properties';
 const { RSVP } = Ember;
-import {
-  validatePresence,
-  validateLength,
-  validateNumber,
-} from 'ember-changeset-validations/validators';
 
 export default Ember.Route.extend({
   selectedAgent: undefined,
@@ -38,33 +33,11 @@ export default Ember.Route.extend({
       this.set('modelForm.resourceAgent', agent);
     }
 
-    let validations = {...ResourceValidations};
-    let parameters = {};
     const metadata = await this.store.getAgentMetadata('resource', this.get('selectedProvider') + ':' + this.get('selectedAgent'));
     metadata.parameters.forEach((i) => {
-      validations[i.name] = [];
-      if (i.required) {
-        validations[i.name].push(validatePresence({presence: true}));
-      }
-      if (i.type === 'integer') {
-        validations[i.name].push(validateNumber({integer: true, allowBlank: true}));
-      }
-
       this.set(`modelForm.${i.name}`, '');
-
-      // @todo: refactor; this will be needed also for 'edit' and fence agents
-      let level;
-      if (i.level) {
-        level = i.level;
-      } else {
-        level = 'standard';
-      }
-      if (!(level in parameters)) {
-        parameters[level] = [];
-      }
-
-      parameters[level].push(i);
-    })
+    });
+    let {parameters, validations} = categorizeProperties(metadata.parameters);
 
     return Ember.RSVP.hash({
       availableAgents: this.get('availables'),
