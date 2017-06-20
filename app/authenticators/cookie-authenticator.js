@@ -88,7 +88,6 @@ export default Base.extend({
     @public
   */
   restore: function() {
-    console.log('restore');
     return this.makeRequest(
       {type: 'GET', url: this.serverStatusEndpoint},
       'Attempt to check if session is authenticated was successful',
@@ -107,7 +106,6 @@ export default Base.extend({
     @public
   */
   invalidate: function() {
-    console.log('invalidate');
     return this.makeRequest(
         {type: 'GET', url: this.serverLogoutEndpoint},
         'Attempt to logout session was successful',
@@ -123,7 +121,6 @@ export default Base.extend({
     @param {String} debug_msg_false Message displayed after unsuccessful AJAX call
   */
   makeRequest: function(options, debug_msg_true, debug_msg_false) {
-    console.log(options);
     return new RSVP.Promise(function(resolve, reject) {
       Ember.$.ajax(options).then(
         function(response) {
