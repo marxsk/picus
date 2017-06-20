@@ -15,5 +15,12 @@
     {{#if (eq p.type 'integer')}}
       {{form.text-field p.name label=p.shortdesc placeholder=p.default}}
     {{/if}}
+
+    {{#if (eq p.type 'secret')}}
+      {{form.password-field p.name label=p.shortdesc placeholder=p.default update=(action 'updateSecretLength')}}
+      {{#bs-button onClick=(action 'showSecret' p.name (get changeset._content p.name))}}
+        Show Password
+      {{/bs-button}}
+    {{/if}}
   {{/if}}
 {{/each}}

@@ -1,7 +1,7 @@
 {{#each-in parameters as |level subset|}}
   {{#bs-accordion selected="1" as |acc|}}
     {{#acc.item value="1" title=level}}
-      {{agent-properties-sections parameters=subset filter=filter level=level form=form}}
+      {{agent-properties-sections changeset=changeset parameters=subset filter=filter level=level form=form}}
     {{/acc.item}}
   {{/bs-accordion}}
 {{/each-in}}

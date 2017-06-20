@@ -9,7 +9,7 @@
   {{f.checkbox-field 'clone' label="Clone"}}
   {{f.checkbox-field 'masterslave' label="Master/Slave"}}
   <hr />
-  {{agent-properties-form parameters=model.parameters form=f levels=(array 'basic' 'advanced' 'expert' 'standard')}}
+  {{agent-properties-form changeset=changeset parameters=model.parameters form=f levels=(array 'basic' 'advanced' 'expert' 'standard')}}
   {{f.submit "Create" disabled=changeset.isInvalid}}
 {{/form-for}}
 
