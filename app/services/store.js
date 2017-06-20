@@ -109,7 +109,7 @@ export default DS.Store.extend({
   code.
 
   **/
-  reloadData: function() {
+  reloadData: async function() {
     if (this.get('isQueryInProgress')) {
       this.set('isQueryInQueue', true);
       return;
@@ -123,7 +123,7 @@ export default DS.Store.extend({
     const ser = this.serializerFor('application');
     const store = this;
 
-    let prom = new Ember.RSVP.Promise(function(resolve) {
+    let prom = new Ember.RSVP.Promise(function(resolve, reject) {
       res.then(function(response) {
         var modelClass = store.modelFor('cluster');
         var normalized = ser.normalizeSingleResponse(store, modelClass, response);
@@ -168,10 +168,12 @@ export default DS.Store.extend({
         }
         resolve();
       }, function(error) {
-        alert(error);
+        alert(JSON.stringify(error));
         store.set('isQueryInProgress', false);
         if (store.get('isQueryInQueue')) {
-          store.reloadData();
+          return store.reloadData();
+        } else {
+          reject(error);
         }
       });
     });

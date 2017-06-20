@@ -32,6 +32,7 @@ Router.map(function() {
       this.route('create');
     });
   });
+  this.route('error');
 });
 
 export default Router;
