@@ -67,7 +67,8 @@
 <br /><br />
 {{#bs-tab as |tab|}}
 {{#tab.pane title="Properties"}}
-  {{#form-for (changeset model.formData) submit=(route-action 'onSubmitAction' selResource) as |f|}}
+{{#with (changeset model.formData model.ResourceValidations) as |changeset|}}
+  {{#form-for changeset submit=(route-action 'onSubmitAction' selResource) as |f|}}
     {{model.metadata.shortdesc}}
     <hr />
     Filter: {{input type="text" value=filterString}} <br />
@@ -75,6 +76,7 @@
 
     {{f.submit "Update"}}
   {{/form-for}}
+{{/with}}
 {{/tab.pane}}
 {{#tab.pane title="Constraints"}}
 {{#bs-accordion selected="1" as |acc|}}

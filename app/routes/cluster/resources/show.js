@@ -1,4 +1,5 @@
 import Ember from 'ember';
+import categorizeProperties from '../../../utils/categorize-properties';
 
 export default Ember.Route.extend({
   modelForm: {},
@@ -57,6 +58,7 @@ export default Ember.Route.extend({
       selectedResource: this.store.filter('resource', (item) => { return item.id === params.resource_id; }),
       selectedResources: this.get('selectedResources.length'),
       otherResourcesName: otherResourcesName,
+      ResourceValidations: validations,
     });
   },
 
