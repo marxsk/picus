@@ -110,9 +110,13 @@ export default DS.Store.extend({
 
   **/
   reloadData: async function() {
+    if (this.get('clusterName') === undefined) {
+      return Ember.RSVP.resolve();
+    }
+
     if (this.get('isQueryInProgress')) {
       this.set('isQueryInQueue', true);
-      return;
+      return Ember.RSVP.resolve();
     }
 
     this.set('isQueryInProgress', true);
