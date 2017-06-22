@@ -56,7 +56,6 @@ export default Ember.Route.extend({
       formData: this.get('modelForm'),
       updatingCluster: this.store.peekAll('cluster'),
       selectedResource: this.store.peekRecord('resource', params.resource_id),
-      selectedResources: this.get('selectedResources.length'),
       otherResourcesName: otherResourcesName,
       ResourceValidations: validations,
     });

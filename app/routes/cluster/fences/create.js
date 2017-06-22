@@ -30,7 +30,6 @@ export default Ember.Route.extend({
       availableAgents: this.get('availables'),
       formData: this.get('modelForm'),
       metadata: this.store.getAgentMetadata('fence', 'stonith:' + this.get('selectedAgent')),
-      selectedAgent: this.get('selectedAgent'),
     });
   },
 
@@ -44,7 +43,7 @@ export default Ember.Route.extend({
       this.set('modelForm', form);
 
       this.store.pushUpdateAgentProperties('fence', {
-        agentType: this.get('selectedAgent'),
+        agentType: this.get('selectedAgent').replace(/^(stonith::)/,""),
         properties: form.get('changes'),
       }, 'create');
 

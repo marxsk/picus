@@ -5,7 +5,6 @@ export default Ember.Route.extend({
 
   model(params) {
     return Ember.RSVP.hash({
-      listing: (params.node_id.length === 0) ? true : false,
       params: params,
       updatingCluster: this.store.peekAll('cluster'),
       selectedNode: this.store.peekRecord('node', params.node_id),

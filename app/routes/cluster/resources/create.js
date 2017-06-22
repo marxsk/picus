@@ -61,7 +61,7 @@ export default Ember.Route.extend({
       this.set('selectedProvider', selectedItem);
       this.refresh();
     },
-    onSubmitAction: function(selectedAgent, form) {
+    onSubmitAction: function(form) {
       this.set('modelForm', form);
 
       form.validate().then(() => {
