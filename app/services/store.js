@@ -454,4 +454,14 @@ export default DS.Store.extend({
 
   createMaster(name) { this._sendResourceId('resource_master', name); },
   destroyMaster(name) { this._sendResourceId('resource_unclone', name); },
+
+  loadClusters() {
+    return new Ember.RSVP.Promise((resolve) => {
+      this.get('ajax').request('/clusters_overview').then((response) => {
+        resolve(response.cluster_list);
+      });
+    }, (error) => {
+      alert(error);
+    });
+  },
 });
