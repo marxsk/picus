@@ -16,7 +16,7 @@ export default Ember.Route.extend({
 
   model() {
     return Ember.RSVP.hash({
-      cluster: this.store.peekAll('cluster'),
+      updatingCluster: this.store.peekAll('cluster'),
       selectedResources: this.get('selectedResources'),
     });
   },

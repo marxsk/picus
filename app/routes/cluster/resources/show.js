@@ -54,7 +54,7 @@ export default Ember.Route.extend({
       metadata: this.store.getAgentMetadata('resource', this.store.peekRecord('resource', params.resource_id).get('resourceProvider') + ':' + this.store.peekRecord('resource', params.resource_id).get('agentType')),
       parameters: parameters,
       formData: this.get('modelForm'),
-      cluster: this.store.peekAll('cluster'),
+      updatingCluster: this.store.peekAll('cluster'),
       selectedResource: this.store.peekRecord('resource', params.resource_id),
       selectedResources: this.get('selectedResources.length'),
       otherResourcesName: otherResourcesName,

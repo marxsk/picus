@@ -26,7 +26,7 @@ export default Ember.Route.extend(AuthenticatedRouteMixin, {
     return Ember.RSVP.hash({
       filterProperties: filterString,
       showAdvanced: advancedBoolean,
-      cluster: this.store.peekAll('cluster'),
+      staticCluster: this.store.peekRecord('cluster', 1),
     });
   }
 });
