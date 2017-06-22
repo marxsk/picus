@@ -24,7 +24,7 @@
 {{/unless}}
 {{/unless}}
 
-{{#with model.selectedResource.firstObject as |selResource| }}
+{{#with model.selectedResource as |selResource| }}
   <h3>Editable form for Resource Agents</h3>
   Name: {{ selResource.name }}<br />
   Resource Provider: <select disabled="1">

@@ -18,7 +18,7 @@
   {{/unless}}
 {{/unless}}
 
-{{#with model.selectedFence.firstObject as |selFence| }}
+{{#with model.selectedFence as |selFence| }}
   <br />
   <button {{action (route-action 'removeResource') selFence.name}}>Remove agent</button>
 

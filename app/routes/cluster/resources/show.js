@@ -55,7 +55,7 @@ export default Ember.Route.extend({
       parameters: parameters,
       formData: this.get('modelForm'),
       cluster: this.store.peekAll('cluster'),
-      selectedResource: this.store.filter('resource', (item) => { return item.id === params.resource_id; }),
+      selectedResource: this.store.peekRecord('resource', params.resource_id),
       selectedResources: this.get('selectedResources.length'),
       otherResourcesName: otherResourcesName,
       ResourceValidations: validations,
