@@ -62,7 +62,7 @@ export default Ember.Route.extend({
       params: params,
       metadata: this.get('metadata'),
       formData: this.get('modelForm'),
-      cluster: this.store.peekAll('cluster'),
+      updatingCluster: this.store.peekAll('cluster'),
       selectedFence: this.store.peekRecord('fence', params.fence_id),
     });
   },

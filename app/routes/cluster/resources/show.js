@@ -30,7 +30,7 @@ export default Ember.Route.extend({
     if (resource === null) {
       return Ember.RSVP.hash({
         listing: (params.resource_id.length === 0) ? true : false,
-        cluster: this.store.peekAll('cluster'),
+        updatingCluster: this.store.peekAll('cluster'),
         selectedResources: this.get('selectedResources'),
         params: params,
       });
