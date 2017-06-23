@@ -464,4 +464,47 @@ export default DS.Store.extend({
       alert(error);
     });
   },
+
+  // @todo: refactor
+  pushAppendUser(attribute) {
+    const data = JSON.stringify({
+      data: {
+        type: 'acl-user',
+        attributes: {
+          ...attribute
+        },
+      }
+    });
+    const url = '/acl-user';
+
+    return new Ember.RSVP.Promise((resolve) => {
+      this.get('ajax').post(url, {data:data}).then((response) => {
+        resolve(response);
+        this.reloadData();
+      });
+    }, (error) => {
+      alert(error);
+    });
+  },
+  pushAppendGroup(attribute) {
+    const data = JSON.stringify({
+      data: {
+        type: 'acl-group',
+        attributes: {
+          ...attribute
+        },
+      }
+    });
+    const url = '/acl-group';
+
+    return new Ember.RSVP.Promise((resolve) => {
+      this.get('ajax').post(url, {data:data}).then((response) => {
+        resolve(response);
+        this.reloadData();
+      });
+    }, (error) => {
+      alert(error);
+    });
+  },
+
 });

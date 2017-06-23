@@ -1,0 +1,38 @@
+{{#bs-tab as |tab|}}
+{{#tab.pane title="Users & Groups"}}
+{{#attr-list
+    title='User Management'
+    attributes=model.updatingCluster.firstObject.aclUsers
+    onDeleteAction=(route-action 'delete')
+    onAppendAction=(route-action 'appendUser')
+    onDeleteMultipleAction=(route-action 'deleteMultiple')
+    as |form mode attr|
+}}
+  {{#if (eq mode 'edit')}}
+    <td>{{input value=form.attr.name}}</td>
+  {{else}}
+    <td>{{attr.name}}</td>
+  {{/if}}
+{{/attr-list}}
+
+{{#attr-list
+    title='Group Management'
+    attributes=model.updatingCluster.firstObject.aclGroups
+    onDeleteAction=(route-action 'delete')
+    onAppendAction=(route-action 'appendGroup')
+    onDeleteMultipleAction=(route-action 'deleteMultiple')
+    as |form mode attr|
+}}
+  {{#if (eq mode 'edit')}}
+    <td>{{input value=form.attr.name}}</td>
+  {{else}}
+    <td>{{attr.name}}</td>
+  {{/if}}
+{{/attr-list}}
+
+{{/tab.pane}}
+{{#tab.pane title="Roles"}}
+{{/tab.pane}}
+{{#tab.pane title="Permissions"}}
+{{/tab.pane}}
+{{/bs-tab}}

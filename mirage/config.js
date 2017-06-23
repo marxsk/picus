@@ -349,4 +349,29 @@ export default function() {
       return new Response(400);
     }
   });
+
+  this.post('/acl-user', (schema, request) => {
+    const params = JSON.parse(request.requestBody);
+    const cluster = schema.clusters.find(1);
+
+    const attr = cluster.createAclUser({
+      name: params.data.attributes.name,
+    });
+
+    return attr;
+  });
+  this.del('/acl-users/:id');
+
+  this.post('/acl-group', (schema, request) => {
+    const params = JSON.parse(request.requestBody);
+    const cluster = schema.clusters.find(1);
+
+    const attr = cluster.createAclGroup({
+      name: params.data.attributes.name,
+    });
+
+    return attr;
+  });
+  this.del('/acl-groups/:id');
+
 }

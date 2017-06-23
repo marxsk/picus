@@ -5,4 +5,6 @@ export default Model.extend({
   resources: hasMany('resource'),
   properties: hasMany('property'),
   fences: hasMany('fence'),
+  aclUsers: hasMany('aclUser'),
+  aclGroups: hasMany('aclGroup'),
 });
