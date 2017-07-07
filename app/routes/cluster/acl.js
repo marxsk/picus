@@ -11,7 +11,7 @@ export default Ember.Route.extend({
       attribute.deleteRecord();
       attribute.save();
     },
-    deleteMultiple: () => {
+    deleteMultiple: (attributes) => {
       attributes.forEach((item) => {
         item.deleteRecord();
         item.save();
