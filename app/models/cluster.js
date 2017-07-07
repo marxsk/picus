@@ -9,4 +9,5 @@ export default DS.Model.extend({
   fences: DS.hasMany('fence'),
   aclUsers: DS.hasMany('aclUser'),
   aclGroups: DS.hasMany('aclGroup'),
+  aclRoles: DS.hasMany('aclRole'),
 });

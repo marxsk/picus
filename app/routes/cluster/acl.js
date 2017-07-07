@@ -19,5 +19,9 @@ export default Ember.Route.extend({
     },
     appendUser: function(attributes, attr) { this.store.pushAppendUser(attr); },
     appendGroup: function(attributes, attr) { this.store.pushAppendGroup(attr); },
+    appendRole: function(attributes, attr) { this.store.pushAppendRole(attr); },
+    appendPermission: function(roleName, attributes, attr) {
+      this.store.pushAppendPermission(roleName, attr);
+    },
   }
 });

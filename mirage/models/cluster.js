@@ -7,4 +7,5 @@ export default Model.extend({
   fences: hasMany('fence'),
   aclUsers: hasMany('aclUser'),
   aclGroups: hasMany('aclGroup'),
+  aclRoles: hasMany('aclRole'),
 });

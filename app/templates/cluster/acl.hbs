@@ -32,7 +32,48 @@
 
 {{/tab.pane}}
 {{#tab.pane title="Roles"}}
+{{#attr-list
+    title='Roles'
+    attributes=model.updatingCluster.firstObject.aclRoles
+    onDeleteAction=(route-action 'delete')
+    onAppendAction=(route-action 'appendRole')
+    onDeleteMultipleAction=(route-action 'deleteMultiple')
+    as |form mode attr|
+}}
+  {{#if (eq mode 'edit')}}
+    <td>{{input value=form.attr.name}}</td>
+    <td>{{input value=form.attr.description}}</td>
+  {{else}}
+    <td>{{attr.name}}</td>
+    <td>{{attr.description}}</td>
+  {{/if}}
+{{/attr-list}}
+
 {{/tab.pane}}
 {{#tab.pane title="Permissions"}}
+{{#each model.updatingCluster.firstObject.aclRoles as |role|}}
+  <h3>{{role.name}}</h3>
+
+  {{#attr-list
+      title=role.name
+      attributes=role.permissions
+      onDeleteAction=(route-action 'delete')
+      onAppendAction=(route-action 'appendPermission' role.name)
+      onDeleteMultipleAction=(route-action 'deleteMultiple')
+      as |form mode attr|
+  }}
+    {{#if (eq mode 'edit')}}
+      <td>{{input value=form.attr.operation}}</td>
+      <td>{{input value=form.attr.xpath}}</td>
+    {{else}}
+      <td>{{attr.operation}}</td>
+      <td>{{attr.xpath}}</td>
+    {{/if}}
+  {{/attr-list}}
+
+{{else}}
+  No Roles defined.
+{{/each}}
+
 {{/tab.pane}}
 {{/bs-tab}}

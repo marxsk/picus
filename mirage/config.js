@@ -374,4 +374,31 @@ export default function() {
   });
   this.del('/acl-groups/:id');
 
+  this.post('/acl-role', (schema, request) => {
+    const params = JSON.parse(request.requestBody);
+    const cluster = schema.clusters.find(1);
+
+    const attr = cluster.createAclRole({
+      name: params.data.attributes.name,
+      description: params.data.attributes.description,
+    });
+
+    return attr;
+  });
+  this.del('/acl-roles/:id');
+
+  this.post('/acl-permission', (schema, request) => {
+    const params = JSON.parse(request.requestBody);
+    const cluster = schema.clusters.find(1);
+    const role = schema.aclRoles.where({name: params.data.attributes.roleName}).models[0];
+
+    const attr = role.createPermission({
+      operation: params.data.attributes.operation,
+      xpath: params.data.attributes.xpath,
+    });
+
+    return attr;
+  });
+  this.del('/acl-permissions/:id');
+
 }

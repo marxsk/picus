@@ -507,4 +507,46 @@ export default DS.Store.extend({
     });
   },
 
+  pushAppendRole(attribute) {
+    const data = JSON.stringify({
+      data: {
+        type: 'acl-role',
+        attributes: {
+          ...attribute
+        },
+      }
+    });
+    const url = '/acl-role';
+
+    return new Ember.RSVP.Promise((resolve) => {
+      this.get('ajax').post(url, {data:data}).then((response) => {
+        resolve(response);
+        this.reloadData();
+      });
+    }, (error) => {
+      alert(error);
+    });
+  },
+  pushAppendPermission(roleName, attribute) {
+    const data = JSON.stringify({
+      data: {
+        type: 'acl-permission',
+        attributes: {
+          roleName,
+          ...attribute
+        },
+      }
+    });
+    const url = '/acl-permission';
+
+    return new Ember.RSVP.Promise((resolve) => {
+      this.get('ajax').post(url, {data:data}).then((response) => {
+        resolve(response);
+        this.reloadData();
+      });
+    }, (error) => {
+      alert(error);
+    });
+  },
+
 });
