@@ -465,88 +465,37 @@ export default DS.Store.extend({
     });
   },
 
-  // @todo: refactor
-  pushAppendUser(attribute) {
-    const data = JSON.stringify({
-      data: {
-        type: 'acl-user',
-        attributes: {
-          ...attribute
-        },
-      }
+  // @note: should it return promise?
+  _sendAclData(url, data) {
+    this.get('ajax').post(url, {
+      data: JSON.stringify({data: data}),
+    }).then(() => {
+      this.reloadData();
     });
-    const url = '/acl-user';
+  },
 
-    return new Ember.RSVP.Promise((resolve) => {
-      this.get('ajax').post(url, {data:data}).then((response) => {
-        resolve(response);
-        this.reloadData();
-      });
-    }, (error) => {
-      alert(error);
+  pushAppendUser(attribute) {
+    return this._sendAclData('/acl-user', {
+        type: 'acl-user',
+        attributes: { ...attribute }
     });
   },
   pushAppendGroup(attribute) {
-    const data = JSON.stringify({
-      data: {
-        type: 'acl-group',
-        attributes: {
-          ...attribute
-        },
-      }
-    });
-    const url = '/acl-group';
-
-    return new Ember.RSVP.Promise((resolve) => {
-      this.get('ajax').post(url, {data:data}).then((response) => {
-        resolve(response);
-        this.reloadData();
-      });
-    }, (error) => {
-      alert(error);
+    return this_sendAclData('/acl-group', {
+      type: 'acl-group',
+      attributes: { ...attribute }
     });
   },
-
   pushAppendRole(attribute) {
-    const data = JSON.stringify({
-      data: {
-        type: 'acl-role',
-        attributes: {
-          ...attribute
-        },
-      }
-    });
-    const url = '/acl-role';
-
-    return new Ember.RSVP.Promise((resolve) => {
-      this.get('ajax').post(url, {data:data}).then((response) => {
-        resolve(response);
-        this.reloadData();
-      });
-    }, (error) => {
-      alert(error);
+    return this_sendAclData('/acl-role', {
+      type: 'acl-role',
+      attributes: { ...attribute }
     });
   },
   pushAppendPermission(roleName, attribute) {
-    const data = JSON.stringify({
-      data: {
-        type: 'acl-permission',
-        attributes: {
-          roleName,
-          ...attribute
-        },
-      }
-    });
-    const url = '/acl-permission';
-
-    return new Ember.RSVP.Promise((resolve) => {
-      this.get('ajax').post(url, {data:data}).then((response) => {
-        resolve(response);
-        this.reloadData();
-      });
-    }, (error) => {
-      alert(error);
+    return this._sendAclData('acl-permission', {
+      type: 'acl-permission',
+      attributes: { roleName, ...attribute },
     });
   },
-
 });
