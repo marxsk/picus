@@ -6,10 +6,10 @@
     onDeleteAction=(route-action 'delete')
     onAppendAction=(route-action 'appendUser')
     onDeleteMultipleAction=(route-action 'deleteMultiple')
-    as |form mode attr|
+    as |form mode attr f|
 }}
   {{#if (eq mode 'edit')}}
-    <td>{{input value=form.attr.name}}</td>
+    {{f.text-field 'name'}}
   {{else}}
     <td>{{attr.name}}</td>
   {{/if}}
@@ -21,10 +21,10 @@
     onDeleteAction=(route-action 'delete')
     onAppendAction=(route-action 'appendGroup')
     onDeleteMultipleAction=(route-action 'deleteMultiple')
-    as |form mode attr|
+    as |form mode attr f|
 }}
   {{#if (eq mode 'edit')}}
-    <td>{{input value=form.attr.name}}</td>
+    {{f.text-field 'name'}}
   {{else}}
     <td>{{attr.name}}</td>
   {{/if}}
@@ -38,11 +38,11 @@
     onDeleteAction=(route-action 'delete')
     onAppendAction=(route-action 'appendRole')
     onDeleteMultipleAction=(route-action 'deleteMultiple')
-    as |form mode attr|
+    as |form mode attr f|
 }}
   {{#if (eq mode 'edit')}}
-    <td>{{input value=form.attr.name}}</td>
-    <td>{{input value=form.attr.description}}</td>
+      {{f.text-field 'name'}}
+      {{f.text-field 'description'}}
   {{else}}
     <td>{{attr.name}}</td>
     <td>{{attr.description}}</td>
@@ -60,15 +60,15 @@
       onDeleteAction=(route-action 'delete')
       onAppendAction=(route-action 'appendPermission' role.name)
       onDeleteMultipleAction=(route-action 'deleteMultiple')
-      as |form mode attr|
+      as |form mode attr f|
   }}
-    {{#if (eq mode 'edit')}}
-      <td>{{input value=form.attr.operation}}</td>
-      <td>{{input value=form.attr.xpath}}</td>
-    {{else}}
+  {{#if (eq mode 'edit')}}
+      {{f.text-field 'operation'}}
+      {{f.text-field 'xpath'}}
+  {{else}}
       <td>{{attr.operation}}</td>
       <td>{{attr.xpath}}</td>
-    {{/if}}
+  {{/if}}
   {{/attr-list}}
 
 {{else}}

@@ -20,6 +20,10 @@ export default Ember.Component.extend({
     appendCleanAction: function(attributes) {
       this.attrs.onAppendAction(attributes, this.get('attr'));
       this.set('attr', {});
+
+      // @todo: ember-form-for requires a promise to re-enable Submit button
+      // it may be better to use returned promise from onAppendAction
+      return Ember.RSVP.resolve();
     },
     onCheckAction: function(attribute, isChecked) {
       if (isChecked === true) {

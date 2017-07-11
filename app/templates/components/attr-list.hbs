@@ -5,9 +5,10 @@
       {{yield this 'show' attr}}
     {{/attr-single}}
   {{/each}}
-  <tr>
-    <td>&nbsp;</td>
-    {{yield this 'edit' attr}}
-    <td class='append-attr' onClick={{action 'appendCleanAction' attributes}}>Append</td>
-  </tr>
+  <tr><td>
+    {{#form-for attr submit=(action 'appendCleanAction') as |f|}}
+      {{yield this 'edit' attr f}}
+      {{f.submit "Append"}}
+    {{/form-for}}
+  </td></tr>
 </table>
