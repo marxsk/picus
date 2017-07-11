@@ -63,7 +63,8 @@
       as |form mode attr f|
   }}
   {{#if (eq mode 'edit')}}
-      {{f.text-field 'operation'}}
+      <!-- @note: it is required to handle 'empty' value which is obtained when user does not change the option. -->
+      {{f.select-field "operation" "deny read write"}}
       {{f.text-field 'xpath'}}
   {{else}}
       <td>{{attr.operation}}</td>
