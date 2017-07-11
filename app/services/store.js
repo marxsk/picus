@@ -481,13 +481,13 @@ export default DS.Store.extend({
     });
   },
   pushAppendGroup(attribute) {
-    return this_sendAclData('/acl-group', {
+    return this._sendAclData('/acl-group', {
       type: 'acl-group',
       attributes: { ...attribute }
     });
   },
   pushAppendRole(attribute) {
-    return this_sendAclData('/acl-role', {
+    return this._sendAclData('/acl-role', {
       type: 'acl-role',
       attributes: { ...attribute }
     });
