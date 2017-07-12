@@ -1,11 +1,19 @@
 import Ember from 'ember';
 
 export default Ember.Route.extend({
+  queryParams: {
+    activeTab: {
+      as: 'tab',
+      replace: true
+    }
+  },
+
   model() {
     return Ember.RSVP.hash({
       updatingCluster: this.store.peekAll('cluster'),
     });
   },
+
   actions: {
     delete: (attribute) => {
       attribute.deleteRecord();

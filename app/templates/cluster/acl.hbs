@@ -1,5 +1,13 @@
-{{#bs-tab as |tab|}}
-{{#tab.pane title="Users & Groups"}}
+{{#bs-tab customTabs=true activeId=activeTab as |tab|}}
+
+{{#bs-nav type="tabs" as |nav|}}
+  {{#nav.item active=(eq tab.activeId "users")}}<a {{action 'setActiveTab' tab.select "users"}}>Users &amp; Groups</a>{{/nav.item}}
+  {{#nav.item active=(eq tab.activeId "roles")}}<a {{action 'setActiveTab' tab.select "roles"}}>Roles</a>{{/nav.item}}
+  {{#nav.item active=(eq tab.activeId "permissions")}}<a {{action 'setActiveTab' tab.select "permissions"}}>Permissions</a>{{/nav.item}}
+{{/bs-nav}}
+
+<div class="tab-content">
+{{#tab.pane elementId="users" title="Users & Groups"}}
 {{#attr-list
     title='User Management'
     attributes=model.updatingCluster.firstObject.aclUsers
@@ -31,7 +39,7 @@
 {{/attr-list}}
 
 {{/tab.pane}}
-{{#tab.pane title="Roles"}}
+{{#tab.pane elementId="roles" title="Roles"}}
 {{#attr-list
     title='Roles'
     attributes=model.updatingCluster.firstObject.aclRoles
@@ -50,7 +58,7 @@
 {{/attr-list}}
 
 {{/tab.pane}}
-{{#tab.pane title="Permissions"}}
+{{#tab.pane elementId="permissions" title="Permissions"}}
 {{#each model.updatingCluster.firstObject.aclRoles as |role|}}
   <h3>{{role.name}}</h3>
 
@@ -77,4 +85,5 @@
 {{/each}}
 
 {{/tab.pane}}
+</div>
 {{/bs-tab}}
