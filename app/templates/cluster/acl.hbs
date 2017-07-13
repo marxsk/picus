@@ -14,6 +14,7 @@
     onDeleteAction=(route-action 'delete')
     onAppendAction=(route-action 'appendUser')
     onDeleteMultipleAction=(route-action 'deleteMultiple')
+    validations=model.nameValidation
     as |form mode attr f|
 }}
   {{#if (eq mode 'edit')}}
@@ -29,6 +30,7 @@
     onDeleteAction=(route-action 'delete')
     onAppendAction=(route-action 'appendGroup')
     onDeleteMultipleAction=(route-action 'deleteMultiple')
+    validations=model.nameValidation
     as |form mode attr f|
 }}
   {{#if (eq mode 'edit')}}
@@ -46,6 +48,7 @@
     onDeleteAction=(route-action 'delete')
     onAppendAction=(route-action 'appendRole')
     onDeleteMultipleAction=(route-action 'deleteMultiple')
+    validations=model.nameValidation
     as |form mode attr f|
 }}
   {{#if (eq mode 'edit')}}
@@ -68,6 +71,7 @@
       onDeleteAction=(route-action 'delete')
       onAppendAction=(route-action 'appendPermission' role.name)
       onDeleteMultipleAction=(route-action 'deleteMultiple')
+      validations=model.xpathValidation
       as |form mode attr f|
   }}
   {{#if (eq mode 'edit')}}

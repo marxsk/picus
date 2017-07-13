@@ -18,7 +18,7 @@ export default Ember.Component.extend({
 
   actions: {
     appendCleanAction: function(attributes) {
-      this.attrs.onAppendAction(attributes, this.get('attr'));
+      this.attrs.onAppendAction(attributes.get('change'));
       this.set('attr', {});
 
       // @todo: ember-form-for requires a promise to re-enable Submit button

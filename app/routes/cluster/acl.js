@@ -1,4 +1,10 @@
 import Ember from 'ember';
+import ResourceValidations from '../../validators/resource-validations';
+import {
+  validatePresence,
+  validateLength,
+  validateNumber,
+} from 'ember-changeset-validations/validators';
 
 export default Ember.Route.extend({
   queryParams: {
@@ -9,8 +15,17 @@ export default Ember.Route.extend({
   },
 
   model() {
+    let nameValidation = {
+      name: [ validatePresence({presence: true}) ]
+    };
+    let xpathValidation = {
+      xpath: [ validatePresence({presence: true}) ]
+    }
+
     return Ember.RSVP.hash({
       updatingCluster: this.store.peekAll('cluster'),
+      nameValidation,
+      xpathValidation,
     });
   },
 
@@ -25,14 +40,14 @@ export default Ember.Route.extend({
         item.save();
       });
     },
-    appendUser: function(attributes, attr) { this.store.pushAppendUser(attr); },
-    appendGroup: function(attributes, attr) { this.store.pushAppendGroup(attr); },
-    appendRole: function(attributes, attr) { this.store.pushAppendRole(attr); },
-    appendPermission: function(roleName, attributes, attr) {
-      if (attr.operation === undefined) {
-        attr.operation = "deny";
+    appendUser: function(attributes) { this.store.pushAppendUser(attributes); },
+    appendGroup: function(attributes) { this.store.pushAppendGroup(attributes); },
+    appendRole: function(attributes) { this.store.pushAppendRole(attributes); },
+    appendPermission: function(roleName, attributes) {
+      if (attributes.operation === undefined) {
+        attributes.operation = "deny";
       }
-      this.store.pushAppendPermission(roleName, attr);
+      this.store.pushAppendPermission(roleName, attributes);
     },
   }
 });
