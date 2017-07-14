@@ -258,17 +258,33 @@ export default function() {
     schema.db.resources.remove({name: attrs.resource_id});
   });
 
-  this.post('/meta', (schema, request) => {
+  this.post('/managec/my/add_meta_attr_remote', function (schema, request) {
     const params = JSON.parse(request.requestBody);
     const cluster = schema.clusters.find(1);
-    const resource = schema.resources.find(params.data.attributes.resource);
+    const resource = schema.resources.find(params.res_id);
 
-    const attr = resource.createMetaAttribute({
-      key: params.data.attributes.key,
-      value: params.data.attributes.value
-    });
+    let keyAlreadyExists = false;
+    let attribute;
 
-    return attr;
+    if (resource.metaAttributeIds) {
+      resource.metaAttributeIds.some((attributeId) => {
+        attribute = schema.attributes.find(attributeId);
+        keyAlreadyExists = (attribute && (attribute.attrs.key === params.key));
+        return keyAlreadyExists;
+      });
+    }
+
+    if (keyAlreadyExists && params.value === undefined) {
+      attribute.destroy();
+      return;
+    } else if (keyAlreadyExists) {
+      attribute.update('value', params.value);
+    } else {
+      return resource.createMetaAttribute({
+        key: params.key,
+        value: params.value
+      });
+    }
   });
 
   this.post('/location-preference', (schema, request) => {

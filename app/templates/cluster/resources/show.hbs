@@ -160,11 +160,11 @@
       onDeleteAction=(route-action 'deleteAttribute')
       onAppendAction=(route-action 'appendMetaAttribute')
       onDeleteMultipleAction=(route-action 'deleteAttributes')
-      as |form mode attr|
+      as |form mode attr f|
   }}
     {{#if (eq mode 'edit')}}
-      <td>{{input value=form.attr.key}}</td>
-      <td>{{input value=form.attr.value}}</td>
+      {{f.text-field 'key'}}
+      {{f.text-field 'value'}}
     {{else}}
       <td>{{attr.key}}</td>
       <td>{{attr.value}}</td>

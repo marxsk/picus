@@ -89,8 +89,8 @@ export default Ember.Route.extend({
     },
     changeSelectedAgent: function() {},
 
-    appendMetaAttribute: function(attributes, attr) {
-      this.store.pushAppendMetaAttribute(this.get('resourceId'), attr);
+    appendMetaAttribute: function(attributes) {
+      this.store.pushAppendMetaAttribute(this.get('resourceId'), attributes);
     },
 
     deleteAttribute: function(attribute) {

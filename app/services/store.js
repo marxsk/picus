@@ -345,23 +345,24 @@ export default DS.Store.extend({
     });
   },
 
-  pushAppendMetaAttribute(resourceId, attribute) {
-    return new Ember.RSVP.Promise((resolve) => {
-      const data = JSON.stringify({
-        data: {
-          type: 'meta-attribute',
-          attributes: {
-            resource: resourceId,
-            ...attribute
-          },
-        }});
+  _sendPostData(endpoint, rawData) {
+    const url = '/managec/' + this.get('clusterName') + '/' + endpoint;
+    const data = JSON.stringify(rawData);
 
-      this.get('ajax').post('/meta/', {data: data}).then((response) => {
+    return new Ember.RSVP.Promise((resolve) => {
+      this.get('ajax').post(url, {data}).then((response) => {
         this.reloadData();
         resolve(response);
       });
     }, (error) => {
+      // @todo
+    });
+  },
 
+  pushAppendMetaAttribute(resourceId, attribute) {
+    return this._sendPostData('add_meta_attr_remote', {
+      res_id: resourceId,
+      ...attribute
     });
   },
   pushAppendLocationPreference(resourceId, attribute) {
