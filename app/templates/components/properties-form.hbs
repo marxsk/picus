@@ -16,15 +16,23 @@
   )
 }}
   {{#if (eq prop.type 'boolean')}}
-    {{f.select-field prop.name 'default true false' label=prop.readableName hint=prop.shortDesc}}
+    {{f.select-field prop.name (array
+        (hash name='default' title=(concat 'default (' prop.default ')'))
+        (hash name='true' title='true')
+        (hash name='false' title='false'))
+      optionLabelPath='title' optionValuePath='name'
+      label=prop.readableName hint=prop.shortDesc
+    }}
   {{else}}
     {{#if (eq prop.type 'enum')}}
-      {{f.select-field prop.name prop.enum label=prop.readableName hint=prop.shortDesc}}
+      {{f.select-field prop.name prop.enum2
+        optionLabelPath='title' optionValuePath='name'
+        label=prop.readableName hint=prop.shortDesc
+      }}
     {{else}}
       {{f.text-field prop.name label=prop.readableName placeholder=prop.default hint=prop.shortDesc}}
     {{/if}}
   {{/if}}
-  <!-- @todo: add support for more types: e.g. enum - problem is that we need array in model -->
 {{/if}}
   {{/each}}
 

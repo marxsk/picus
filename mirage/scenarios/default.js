@@ -23,7 +23,7 @@ export default function(server) {
     "name":"election-timeout","default":"2min","readable_name":"election timeout:","source":"crmd","shortdesc":"*** Advanced Use Only ***.","type":"time","longdesc":"If need to adjust this value, it probably indicates the presence of a bug.","advanced":false,"value":'2m',
   });
   cluster.createProperty({
-    "readable_name":"placement-strategy","name":"placement-strategy","default":"default","enum":"default utilization minimal balanced","source":"pengine","shortdesc":"The strategy to determine resource placement","type":"enum","longdesc":"","advanced":true,"value":null
+    "readable_name":"placement-strategy","name":"placement-strategy","default":"balanced","enum":"default utilization minimal balanced","source":"pengine","shortdesc":"The strategy to determine resource placement","type":"enum","longdesc":"","advanced":true,"value":null
   });
   cluster.createProperty({
     "name":"maintenance-mode","default":"false","readable_name":"maintenance-mode","source":"pengine","shortdesc":"Should the cluster monitor resources and start/stop them as required","type":"boolean","longdesc":"","advanced":true,"value":null
