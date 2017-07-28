@@ -1,10 +1,10 @@
 {{#bs-tab customTabs=true activeId=activeTab as |tab|}}
 
-{{#bs-nav type="tabs" as |nav|}}
-  {{#nav.item active=(eq tab.activeId "users")}}<a {{action 'setActiveTab' tab.select "users"}}>Users &amp; Groups</a>{{/nav.item}}
-  {{#nav.item active=(eq tab.activeId "roles")}}<a {{action 'setActiveTab' tab.select "roles"}}>Roles</a>{{/nav.item}}
-  {{#nav.item active=(eq tab.activeId "permissions")}}<a {{action 'setActiveTab' tab.select "permissions"}}>Permissions</a>{{/nav.item}}
-{{/bs-nav}}
+{{bs-nav-items tab=tab setActiveTab=(action 'setActiveTab') items=(array
+  (hash name="users" title="Users & Groups")
+  (hash name="roles" title="Roles")
+  (hash name="permissions" title="Permissions")
+)}}
 
 <div class="tab-content">
 {{#tab.pane elementId="users" title="Users & Groups"}}

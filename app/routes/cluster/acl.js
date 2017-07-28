@@ -5,15 +5,9 @@ import {
   validateLength,
   validateNumber,
 } from 'ember-changeset-validations/validators';
+import TabRoute from '../tab-route';
 
-export default Ember.Route.extend({
-  queryParams: {
-    activeTab: {
-      as: 'tab',
-      replace: true
-    }
-  },
-
+export default TabRoute.extend({
   model() {
     let nameValidation = {
       name: [ validatePresence({presence: true}) ]

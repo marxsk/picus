@@ -1,0 +1,5 @@
+{{#bs-nav type="tabs" as |nav|}}
+  {{#each items as |item|}}
+    {{#nav.item active=(eq tab.activeId item.name)}}<a {{action setActiveTab tab.select item.name}}>{{item.title}}</a>{{/nav.item}}
+  {{/each}}
+{{/bs-nav}}

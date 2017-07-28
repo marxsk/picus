@@ -65,8 +65,15 @@
   {{/if}}
 
 <br /><br />
-{{#bs-tab as |tab|}}
-{{#tab.pane title="Properties"}}
+{{#bs-tab customTabs=true activeId=activeTab as |tab|}}
+
+{{bs-nav-items tab=tab setActiveTab=(action 'setActiveTab') items=(array
+  (hash name="properties" title="Properties")
+  (hash name="constraints" title="Constraints")
+)}}
+
+<div class="tab-content">
+{{#tab.pane elementId="properties" title="Properties"}}
 {{#with (changeset model.formData model.ResourceValidations) as |changeset|}}
   {{#form-for changeset submit=(route-action 'onSubmitAction' selResource) as |f|}}
     {{model.metadata.shortdesc}}
@@ -78,7 +85,7 @@
   {{/form-for}}
 {{/with}}
 {{/tab.pane}}
-{{#tab.pane title="Constraints"}}
+{{#tab.pane elementId="constraints" title="Constraints"}}
 {{#bs-accordion selected="1" as |acc|}}
   {{#acc.item value="1" title="Resource Location Preference"}}
 
@@ -174,6 +181,7 @@
 {{/bs-accordion}}
 
   {{/tab.pane}}
+</div>
 {{/bs-tab}}
 
 {{/with}}

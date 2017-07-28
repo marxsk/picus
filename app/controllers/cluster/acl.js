@@ -1,13 +1,5 @@
-import Ember from 'ember';
+import TabController from '../tab-controller';
 
-export default Ember.Controller.extend({
-  queryParams: ['activeTab'],
+export default TabController.extend({
   activeTab: 'users',
-
-  actions: {
-    setActiveTab(tabAction, tabName) {
-      tabAction(tabName);
-      this.set('activeTab', tabName);
-    }
-  }
 });

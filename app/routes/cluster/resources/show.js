@@ -1,7 +1,8 @@
 import Ember from 'ember';
 import categorizeProperties from '../../../utils/categorize-properties';
+import TabRoute from '../../tab-route';
 
-export default Ember.Route.extend({
+export default TabRoute.extend({
   modelForm: {},
   resourceId: undefined,
   selectedResources: Ember.A(),
