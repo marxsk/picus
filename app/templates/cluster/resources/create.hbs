@@ -1,4 +1,4 @@
-{{#with (changeset model.formData model.ResourceValidations) as |changeset|}}
+{{#with (changeset model.formData model.ResourceValidations initValidation=true) as |changeset|}}
 
 {{#form-for changeset submit=(route-action 'onSubmitAction') as |f|}}
   {{f.text-field 'resourceName' label='Resource Name' hint='small help'}}
