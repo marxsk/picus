@@ -44,7 +44,7 @@
     "ember-data-filter": "1.13.0",
     "ember-drag-drop": "0.4.2",
     "ember-export-application-global": "^1.0.5",
-    "ember-form-for": "2.0.0-alpha.15",
+    "ember-form-for": "git+https://github.com/marxsk/ember-form-for.git",
     "ember-load-initializers": "^0.5.1",
     "ember-power-select": "1.4.3",
     "ember-resolver": "^2.0.3",

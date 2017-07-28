@@ -1,12 +1,17 @@
-{{input type="text" placeholder='Filter By Name' value=filterString keyUp=(action 'urlRefresh' filterString)}} <br />
-
-{{x-toggle
-  showLabels=true
-  onToggle=(action 'toggleAdvanced')
-  value=(readonly showAdvanced)
-  offLabel="Show Advanced"
-  onLabel=""
-}}
+<div class="col-sm-6">
+  <div style="float: left">
+    {{input type="text" placeholder='Filter By Name' value=filterString keyUp=(action 'urlRefresh' filterString)}} <br />
+  </div>
+  <div style="float: right">
+  {{x-toggle
+    showLabels=true
+    onToggle=(action 'toggleAdvanced')
+    value=(readonly showAdvanced)
+    offLabel="Show Advanced"
+    onLabel=""
+  }}
+  </div>
+  <br />
 
 {{#form-for (changeset simpleProperties) submit=(action onSubmitAction data) as |f|}}
   {{#each data as |prop| }}
@@ -20,17 +25,21 @@
         (hash name='default' title=(concat 'default (' prop.default ')'))
         (hash name='true' title='true')
         (hash name='false' title='false'))
+      fieldFocusIn=(action 'setHelp' prop.name)
       optionLabelPath='title' optionValuePath='name'
       label=prop.readableName hint=prop.shortDesc
     }}
   {{else}}
     {{#if (eq prop.type 'enum')}}
       {{f.select-field prop.name prop.enum2
+        fieldFocusIn=(action 'setHelp' prop.name)
         optionLabelPath='title' optionValuePath='name'
         label=prop.readableName hint=prop.shortDesc
       }}
     {{else}}
-      {{f.text-field prop.name label=prop.readableName placeholder=prop.default hint=prop.shortDesc}}
+      {{f.text-field prop.name
+          fieldFocusIn=(action 'setHelp' prop.name)
+          label=prop.readableName placeholder=prop.default hint=prop.shortDesc}}
     {{/if}}
   {{/if}}
 {{/if}}
@@ -38,3 +47,11 @@
 
   {{f.submit "Save"}}
 {{/form-for}}
+</div>
+<div class="col-sm-4">
+  {{#if helpFor}}
+    {{helpFor}}
+  {{else}}
+    Click on input box for help
+  {{/if}}
+</div>

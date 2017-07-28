@@ -3,6 +3,7 @@ import Ember from 'ember';
 export default Ember.Component.extend({
   filterString: '',
   showAdvanced: false,
+  helpFor: '',
 
   _triggerUrlRefresh(search) {
     this.attrs.onSearchRefresh(search);
@@ -15,6 +16,9 @@ export default Ember.Component.extend({
     },
     urlRefresh(search) {
       Ember.run.debounce(this, '_triggerUrlRefresh', search ,300);
+    },
+    setHelp(propertyName) {
+      this.set('helpFor', `HELP FOR: ${propertyName}`);
     }
   },
 
