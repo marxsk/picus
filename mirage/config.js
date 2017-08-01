@@ -287,19 +287,60 @@ export default function() {
     }
   });
 
-  this.post('/location-preference', (schema, request) => {
+  this.post('/managec/my/add_constraint_remote', function (schema, request) {
     const params = JSON.parse(request.requestBody);
     const cluster = schema.clusters.find(1);
-    const resource = schema.resources.find(params.data.attributes.resource);
+    const resource = schema.resources.where({name: params.res_id}).models[0];
 
-    const attr = resource.createLocationPreference({
-      node: params.data.attributes.node,
-      score: params.data.attributes.score
-    });
+    let keyAlreadyExists = false;
+    let attribute;
 
-    return attr;
+    if (resource.locationPreferenceIds) {
+      resource.locationPreferenceIds.some((attributeId) => {
+        attribute = schema.locationPreferences.find(attributeId);
+        keyAlreadyExists = (attribute && (attribute.attrs.node_id === params.node_id));
+        return keyAlreadyExists;
+      });
+    }
+
+    if (keyAlreadyExists && params.score === undefined) {
+      attribute.destroy();
+      return;
+    } else if (keyAlreadyExists) {
+      attribute.update('score', params.score);
+    } else {
+      return resource.createLocationPreference({
+        node: params.node_id,
+        ...params,
+      });
+    }
   });
-  this.del('/location-preferences/:id');
+
+  this.post('/managec/my/remove_constraint_remote', function (schema, request) {
+    const params = JSON.parse(request.requestBody);
+    const cluster = schema.clusters.find(1);
+
+    String.prototype.rsplit = function(sep, maxsplit) {
+        var split = this.split(sep);
+        return maxsplit ? [ split.slice(0, -maxsplit).join(sep) ].concat(split.slice(-maxsplit)) : split;
+    }
+
+    const [resourceName, nodeName, score] = params.constraint_id.rsplit('-', 2);
+    const resource = schema.resources.where({name: resourceName}).models[0];
+    let attribute;
+
+    if (resource && resource.locationPreferenceIds) {
+      resource.locationPreferenceIds.some((attributeId) => {
+        attribute = schema.locationPreferences.find(attributeId);
+        if (attribute && (attribute.attrs.node_id === nodeName)) {
+          attribute.destroy();
+          return true;
+        } else {
+          return false;
+        }
+      });
+    }
+  });
 
   this.post('/ordering-preference', (schema, request) => {
     const params = JSON.parse(request.requestBody);

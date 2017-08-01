@@ -93,6 +93,13 @@ export default TabRoute.extend({
     appendMetaAttribute: function(attributes) {
       this.store.pushAppendMetaAttribute(this.get('resourceId'), attributes);
     },
+    appendLocationPreference: function(resourceName, attributes) {
+      this.store.pushAppendLocationPreference(resourceName, attributes);
+    },
+
+    deleteLocationPreference: function(resourceName, attributes) {
+      this.store.deleteLocationPreference(resourceName, attributes);
+    },
 
     deleteAttribute: function(attribute) {
       attribute.deleteRecord();
@@ -108,10 +115,6 @@ export default TabRoute.extend({
     removeResource: function(resourceName) {
       this.store.removeAgents([resourceName], 'resource');
       this.transitionTo('cluster.resources.index');
-    },
-
-    appendLocationPreference: function(attributes, attr) {
-      this.store.pushAppendLocationPreference(this.get('resourceId'), attr);
     },
 
     appendOrderingPreference: function(attributes, attr) {

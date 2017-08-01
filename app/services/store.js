@@ -365,25 +365,23 @@ export default DS.Store.extend({
       ...attribute
     });
   },
-  pushAppendLocationPreference(resourceId, attribute) {
-    return new Ember.RSVP.Promise((resolve) => {
-      const data = JSON.stringify({
-        data: {
-          type: 'location-preference',
-          attributes: {
-            resource: resourceId,
-            ...attribute
-          },
-        }});
-
-      this.get('ajax').post('/location-preference/', {data: data}).then((response) => {
-        this.reloadData();
-        resolve(response);
-      });
-    }, (error) => {
-
+  pushAppendLocationPreference(resourceName, attributes) {
+    return this._sendPostData('add_constraint_remote', {
+      res_id: resourceName,
+      disable_autocorrect: 1,
+      c_type: 'loc',
+      score: attributes.score,
+      rule: attributes.node,
+      node_id: attributes.node,
     });
   },
+  deleteLocationPreference(resourceName, attributes) {
+    const constraintId = `${resourceName}-${attributes.get('node')}-${attributes.get('score')}`;
+    return this._sendPostData('remove_constraint_remote', {
+      constraint_id: constraintId,
+    });
+  },
+
   pushAppendOrderingPreference(resourceId, attribute) {
     return new Ember.RSVP.Promise((resolve) => {
       const data = JSON.stringify({
