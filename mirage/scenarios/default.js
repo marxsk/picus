@@ -30,4 +30,5 @@ export default function(server) {
   });
 
   cluster.createFence({name: 'Fence-01', agentType: 'fence_apc'});
+  cluster.createResource({name: 'resource-ping', resourceType: 'primitive', agentType: 'check_fping', resourceProvider: 'nagios'})
 }
