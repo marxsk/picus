@@ -376,7 +376,7 @@ export default DS.Store.extend({
     });
   },
   deleteLocationPreference(resourceName, attributes) {
-    const constraintId = `${resourceName}-${attributes.get('node')}-${attributes.get('score')}`;
+    const constraintId = `location-${resourceName}-${attributes.get('node')}-${attributes.get('score')}`;
     return this._sendPostData('remove_constraint_remote', {
       constraint_id: constraintId,
     });

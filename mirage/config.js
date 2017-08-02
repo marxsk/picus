@@ -325,25 +325,26 @@ export default function() {
     const params = JSON.parse(request.requestBody);
     const cluster = schema.clusters.find(1);
 
-    String.prototype.rsplit = function(sep, maxsplit) {
-        var split = this.split(sep);
-        return maxsplit ? [ split.slice(0, -maxsplit).join(sep) ].concat(split.slice(-maxsplit)) : split;
-    }
+    const parts = params.constraint_id.split('-');
+    const constraintType = parts[0];
+    const constraintId = parts.splice(1).join('-');
 
-    const [resourceName, nodeName, score] = params.constraint_id.rsplit('-', 2);
+    const [resourceName, nodeName, score] = constraintId.rsplit('-', 2);
     const resource = schema.resources.where({name: resourceName}).models[0];
     let attribute;
 
-    if (resource && resource.locationPreferenceIds) {
-      resource.locationPreferenceIds.some((attributeId) => {
-        attribute = schema.locationPreferences.find(attributeId);
-        if (attribute && (attribute.attrs.node_id === nodeName)) {
-          attribute.destroy();
-          return true;
-        } else {
-          return false;
-        }
-      });
+    if (constraintType === "location") {
+      if (resource && resource.locationPreferenceIds) {
+        resource.locationPreferenceIds.some((attributeId) => {
+          attribute = schema.locationPreferences.find(attributeId);
+          if (attribute && (attribute.attrs.node_id === nodeName)) {
+            attribute.destroy();
+            return true;
+          } else {
+            return false;
+          }
+        });
+      }
     }
   });
 
