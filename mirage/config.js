@@ -1,5 +1,10 @@
 import Response from 'ember-cli-mirage/response';
 
+String.prototype.rsplit = function(sep, maxsplit) {
+    var split = this.split(sep);
+    return maxsplit ? [ split.slice(0, -maxsplit).join(sep) ].concat(split.slice(-maxsplit)) : split;
+}
+
 export default function() {
   this.timing = 400;      // delay for each request, automatically set to 0 during testing
   this.clusterName = "my";
