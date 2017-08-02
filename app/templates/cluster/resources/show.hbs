@@ -106,6 +106,27 @@
   {{/if}}
   {{/attr-list}}
   {{/acc.item}}
+  {{#acc.item value="3" title="Resource Colocation Preference"}}
+
+  {{#attr-list
+      title='Resource Colocation Preference'
+      attributes=selResource.colocationPreferences
+      onDeleteAction=(route-action 'deleteColocationPreference' selResource.name)
+      onAppendAction=(route-action 'appendColocationPreference' selResource.name)
+      onDeleteMultipleAction=(route-action 'deleteAttributes')
+      as |form mode attr f|
+  }}
+  {{#if (eq mode 'edit')}}
+    {{f.text-field 'targetResource'}}
+    {{f.text-field 'colocationType'}}
+    {{f.text-field 'score'}}
+  {{else}}
+    <td>{{attr.targetResource}}</td>
+    <td>{{attr.colocationType}}</td>
+    <td>{{attr.score}}</td>
+  {{/if}}
+  {{/attr-list}}
+  {{/acc.item}}
   {{#acc.item value="2" title="Resource Ordering Preference"}}
   {{#attr-list
       title='Resource Ordering Preference'

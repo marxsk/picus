@@ -6,4 +6,5 @@ export default Model.extend({
   metaAttributes: hasMany('attribute', {inverse: 'unused3'}),
   locationPreferences: hasMany('locationPreference', {inverse: 'unused'}),
   orderingPreferences: hasMany('orderingPreference', {inverse: 'unused'}),
+  colocationPreferences: hasMany('colocationPreference', {inverse: 'unused'}),
 });

@@ -381,6 +381,23 @@ export default DS.Store.extend({
       constraint_id: constraintId,
     });
   },
+  pushAppendColocationPreference(resourceName, attributes) {
+    return this._sendPostData('add_constraint_remote', {
+      res_id: resourceName,
+      disable_autocorrect: 1,
+      c_type: 'col',
+      score: attributes.score,
+      target_res_id: attributes.targetResource,
+      colocation_type: attributes.colocationType,
+    });
+  },
+  deleteColocationPreference(resourceName, attributes) {
+    const constraintId = `colocation-${resourceName}-${attributes.get('targetResource')}-${attributes.get('score')}`;
+    return this._sendPostData('remove_constraint_remote', {
+      constraint_id: constraintId,
+    });
+  },
+
 
   pushAppendOrderingPreference(resourceId, attribute) {
     return new Ember.RSVP.Promise((resolve) => {

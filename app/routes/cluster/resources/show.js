@@ -96,9 +96,14 @@ export default TabRoute.extend({
     appendLocationPreference: function(resourceName, attributes) {
       this.store.pushAppendLocationPreference(resourceName, attributes);
     },
-
     deleteLocationPreference: function(resourceName, attributes) {
       this.store.deleteLocationPreference(resourceName, attributes);
+    },
+    appendColocationPreference: function(resourceName, attributes) {
+      this.store.pushAppendColocationPreference(resourceName, attributes);
+    },
+    deleteColocationPreference: function(resourceName, attributes) {
+      this.store.deleteColocationPreference(resourceName, attributes);
     },
 
     deleteAttribute: function(attribute) {

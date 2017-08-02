@@ -300,24 +300,48 @@ export default function() {
     let keyAlreadyExists = false;
     let attribute;
 
-    if (resource.locationPreferenceIds) {
-      resource.locationPreferenceIds.some((attributeId) => {
-        attribute = schema.locationPreferences.find(attributeId);
-        keyAlreadyExists = (attribute && (attribute.attrs.node_id === params.node_id));
-        return keyAlreadyExists;
-      });
-    }
+    if (params.c_type === "loc") {
+      if (resource.locationPreferenceIds) {
+        resource.locationPreferenceIds.some((attributeId) => {
+          attribute = schema.locationPreferences.find(attributeId);
+          keyAlreadyExists = (attribute && (attribute.attrs.node_id === params.node_id));
+          return keyAlreadyExists;
+        });
+      }
 
-    if (keyAlreadyExists && params.score === undefined) {
-      attribute.destroy();
-      return;
-    } else if (keyAlreadyExists) {
-      attribute.update('score', params.score);
-    } else {
-      return resource.createLocationPreference({
-        node: params.node_id,
-        ...params,
-      });
+      if (keyAlreadyExists && params.score === undefined) {
+        attribute.destroy();
+        return;
+      } else if (keyAlreadyExists) {
+        attribute.update('score', params.score);
+      } else {
+        return resource.createLocationPreference({
+          node: params.node_id,
+          ...params,
+        });
+      }
+    } else if (params.c_type === "col") {
+      if (resource.colocationPreferenceIds) {
+        resource.colocationPreferenceIds.some((attributeId) => {
+          attribute = schema.colocationPreferences.find(attributeId);
+          keyAlreadyExists = (attribute && (attribute.attrs.targetResource === params.target_res_id));
+          return keyAlreadyExists;
+        });
+      }
+
+      if (keyAlreadyExists && params.score === undefined) {
+        attribute.destroy();
+        return;
+      } else if (keyAlreadyExists) {
+        console.log('@todo');
+//        attribute.update('score', params.score);
+      } else {
+        return resource.createColocationPreference({
+          targetResource: params.target_res_id,
+          colocationType: params.colocation_type,
+          score: params.score
+        });
+      }
     }
   });
 
@@ -329,15 +353,31 @@ export default function() {
     const constraintType = parts[0];
     const constraintId = parts.splice(1).join('-');
 
-    const [resourceName, nodeName, score] = constraintId.rsplit('-', 2);
+    const [resourceName, arg1, arg2] = constraintId.rsplit('-', 2);
     const resource = schema.resources.where({name: resourceName}).models[0];
     let attribute;
 
     if (constraintType === "location") {
+      const nodeName = arg1;
+      const score = arg2;
       if (resource && resource.locationPreferenceIds) {
         resource.locationPreferenceIds.some((attributeId) => {
           attribute = schema.locationPreferences.find(attributeId);
           if (attribute && (attribute.attrs.node_id === nodeName)) {
+            attribute.destroy();
+            return true;
+          } else {
+            return false;
+          }
+        });
+      }
+    } else if (constraintType === "colocation") {
+      const targetResource = arg1;
+
+      if (resource && resource.colocationPreferenceIds) {
+        resource.colocationPreferenceIds.some((attributeId) => {
+          attribute = schema.colocationPreferences.find(attributeId);
+          if (attribute && (attribute.attrs.targetResource === targetResource)) {
             attribute.destroy();
             return true;
           } else {

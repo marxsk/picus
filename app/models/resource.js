@@ -15,4 +15,5 @@ export default DS.Model.extend({
   metaAttributes: DS.hasMany('attribute'),
   locationPreferences: DS.hasMany('locationPreference'),
   orderingPreferences: DS.hasMany('orderingPreference'),
+  colocationPreferences: DS.hasMany('colocationPreference'),
 });
