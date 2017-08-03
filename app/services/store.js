@@ -365,6 +365,9 @@ export default DS.Store.extend({
     });
   },
 
+  // @note: Difference between attributes in pushAppend vs delete
+  // pushAppend -> ordinary object
+  // delete -> Ember object
   pushAppendMetaAttribute(resourceName, attributes) {
     return this._sendPostData('add_meta_attr_remote', {
       res_id: resourceName,
