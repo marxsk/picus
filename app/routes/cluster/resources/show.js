@@ -49,7 +49,6 @@ export default TabRoute.extend({
 
     if (resource.get('resourceType') === 'primitive') {
       metadata = await this.store.getAgentMetadata('resource', this.store.peekRecord('resource', params.resource_id).get('resourceProvider') + ':' + this.store.peekRecord('resource', params.resource_id).get('agentType'));
-      // @refactor - below
       const x = categorizeProperties(metadata.parameters);
       parameters = x.parameters;
       validations = x.validations;
