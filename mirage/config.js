@@ -88,9 +88,6 @@ export default function() {
     }
   });
 
-  this.del('/attributes/:id');
-
-  this.post('/attributes');
   this.post('/nodes', (schema, request) => {
     var params = JSON.parse(request.requestBody);
     // @note: we have just one cluster with this ID
@@ -233,7 +230,6 @@ export default function() {
 
   this.post('/managec/my/remove_resource', function(schema, request) {
     const attrs = this.normalizedRequestAttrs();
-    const cluster = schema.clusters.find(1);
 
     Object.keys(attrs).forEach((i) => {
       let name = i.substring(6,i.length);
@@ -304,7 +300,6 @@ export default function() {
 
   this.post('/managec/my/add_meta_attr_remote', function (schema, request) {
     const params = JSON.parse(request.requestBody);
-    const cluster = schema.clusters.find(1);
     const resource = schema.resources.where({name: params.res_id}).models[0];
 
     return _cud_attribute(
@@ -319,7 +314,6 @@ export default function() {
 
   this.post('/managec/my/set_resource_utilization', function (schema, request) {
     const params = JSON.parse(request.requestBody);
-    const cluster = schema.clusters.find(1);
     const resource = schema.resources.where({name: params.resource_id}).models[0];
 
     return _cud_attribute(
@@ -334,7 +328,6 @@ export default function() {
 
   this.post('/managec/my/add_constraint_remote', function (schema, request) {
     const params = JSON.parse(request.requestBody);
-    const cluster = schema.clusters.find(1);
     const resource = schema.resources.where({name: params.res_id}).models[0];
 
     let keyAlreadyExists = false;
@@ -395,7 +388,6 @@ export default function() {
 
   this.post('/managec/my/remove_constraint_remote', function (schema, request) {
     const params = JSON.parse(request.requestBody);
-    const cluster = schema.clusters.find(1);
     const constraintType = params.constraint_id.split('-')[0];
 
     if (constraintType === "location") {
@@ -412,23 +404,6 @@ export default function() {
       constraint.destroy();
     }
   });
-
-  this.post('/ordering-preference', (schema, request) => {
-    const params = JSON.parse(request.requestBody);
-    const cluster = schema.clusters.find(1);
-    const resource = schema.resources.find(params.data.attributes.resource);
-
-    const attr = resource.createOrderingPreference({
-      resource2: params.data.attributes.resource2,
-      action1: params.data.attributes.action1,
-      before: params.data.attributes.before,
-      action2: params.data.attributes.action2,
-      score: params.data.attributes.score,
-    });
-
-    return attr;
-  });
-  this.del('/ordering-preferences/:id');
 
   this.post('/managec/my/resource_master', function(schema, request) {
     // @todo: refactor; almost same as resource_clone
