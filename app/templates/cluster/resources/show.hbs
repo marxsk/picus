@@ -194,27 +194,31 @@
     {{/if}}
   {{/attr-list}}
 {{/acc.item}}
-{{#acc.item value="3" title="Resource Meta Attributes"}}
-  {{#attr-list
-      title='Resource Meta Attributes'
-      attributes=selResource.metaAttributes
-      onDeleteAction=(route-action 'deleteAttribute')
-      onAppendAction=(route-action 'appendMetaAttribute')
-      onDeleteMultipleAction=(route-action 'deleteAttributes')
-      as |form mode attr f|
-  }}
-    {{#if (eq mode 'edit')}}
-      {{f.text-field 'key'}}
-      {{f.text-field 'value'}}
-    {{else}}
-      <td>{{attr.key}}</td>
-      <td>{{attr.value}}</td>
-    {{/if}}
-  {{/attr-list}}
-  {{/acc.item}}
 {{/bs-accordion}}
-
   {{/tab.pane}}
+  {{#tab.pane elementId="attributes" title="Attributes"}}
+  {{#bs-accordion selected="1" as |acc|}}
+  {{#acc.item value="1" title="Resource Meta Attributes"}}
+    {{#attr-list
+        title='Resource Meta Attributes'
+        attributes=selResource.metaAttributes
+        onDeleteAction=(route-action 'deleteAttribute')
+        onAppendAction=(route-action 'appendMetaAttribute')
+        onDeleteMultipleAction=(route-action 'deleteAttributes')
+        as |form mode attr f|
+    }}
+      {{#if (eq mode 'edit')}}
+        {{f.text-field 'key'}}
+        {{f.text-field 'value'}}
+      {{else}}
+        <td>{{attr.key}}</td>
+        <td>{{attr.value}}</td>
+      {{/if}}
+    {{/attr-list}}
+    {{/acc.item}}
+  {{/bs-accordion}}
+
+    {{/tab.pane}}
 </div>
 {{/bs-tab}}
 
