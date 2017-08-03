@@ -359,10 +359,18 @@ export default DS.Store.extend({
     });
   },
 
-  pushAppendMetaAttribute(resourceId, attribute) {
+  pushAppendMetaAttribute(resourceName, attributes) {
     return this._sendPostData('add_meta_attr_remote', {
-      res_id: resourceId,
-      ...attribute
+      res_id: resourceName,
+      key: attributes.key,
+      value: attributes.value,
+    });
+  },
+  deleteMetaAttribute(resourceName, attributes) {
+    return this._sendPostData('add_meta_attr_remote', {
+      res_id: resourceName,
+      key: attributes.get('key'),
+      value: '',
     });
   },
   pushAppendUtilizationAttribute(resourceName, attributes) {

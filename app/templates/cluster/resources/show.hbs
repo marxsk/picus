@@ -202,8 +202,8 @@
     {{#attr-list
         title='Resource Meta Attributes'
         attributes=selResource.metaAttributes
-        onDeleteAction=(route-action 'deleteAttribute')
-        onAppendAction=(route-action 'appendMetaAttribute')
+        onDeleteAction=(route-action 'deleteMetaAttribute' selResource.name)
+        onAppendAction=(route-action 'appendMetaAttribute' selResource.name)
         onDeleteMultipleAction=(route-action 'deleteAttributes')
         as |form mode attr f|
     }}

@@ -266,7 +266,7 @@ export default function() {
   this.post('/managec/my/add_meta_attr_remote', function (schema, request) {
     const params = JSON.parse(request.requestBody);
     const cluster = schema.clusters.find(1);
-    const resource = schema.resources.find(params.res_id);
+    const resource = schema.resources.where({name: params.res_id}).models[0];
 
     let keyAlreadyExists = false;
     let attribute;
@@ -279,7 +279,7 @@ export default function() {
       });
     }
 
-    if (keyAlreadyExists && params.value === undefined) {
+    if (keyAlreadyExists && ((params.value === undefined) || (params.value === ''))) {
       attribute.destroy();
       return;
     } else if (keyAlreadyExists) {

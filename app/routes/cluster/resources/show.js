@@ -93,9 +93,6 @@ export default TabRoute.extend({
     },
     changeSelectedAgent: function() {},
 
-    appendMetaAttribute: function(attributes) {
-      this.store.pushAppendMetaAttribute(this.get('resourceId'), attributes);
-    },
     appendLocationPreference: function(resourceName, attributes) {
       this.store.pushAppendLocationPreference(resourceName, attributes);
     },
@@ -113,6 +110,12 @@ export default TabRoute.extend({
     },
     deleteUtilizationAttribute: function(resourceName, attributes) {
       this.store.deleteUtilizationAttribute(resourceName, attributes);
+    },
+    appendMetaAttribute: function(resourceName, attributes) {
+      this.store.pushAppendMetaAttribute(resourceName, attributes);
+    },
+    deleteMetaAttribute: function(resourceName, attributes) {
+      this.store.deleteMetaAttribute(resourceName, attributes);
     },
 
     deleteAttribute: function(attribute) {
