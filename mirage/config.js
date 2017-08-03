@@ -5,6 +5,45 @@ String.prototype.rsplit = function(sep, maxsplit) {
     return maxsplit ? [ split.slice(0, -maxsplit).join(sep) ].concat(split.slice(-maxsplit)) : split;
 }
 
+function _getRecordByKey(params, attributeIds, schema, keyName) {
+  let keyAlreadyExists = false;
+  let attribute;
+
+  if (! attributeIds) {
+    return false;
+  }
+
+  attributeIds.some((attributeId) => {
+    attribute = schema.find(attributeId);
+    keyAlreadyExists = (attribute && (attribute.attrs[keyName] === params[keyName]));
+    return keyAlreadyExists;
+  });
+
+  if (! keyAlreadyExists) {
+    attribute = undefined;
+  }
+
+  return attribute;
+}
+
+// CUD = Create Update Delete for all resource attributes
+function _cud_attribute(resource, params, attributeIds, schema, keyName, createAttributeFn) {
+  const valueName = 'value';
+  const attribute = _getRecordByKey(params, attributeIds, schema, keyName);
+
+  if (attribute && ((params[valueName] === undefined) || (params[valueName] === ''))) {
+    attribute.destroy();
+    return;
+  } else if (attribute) {
+    attribute.update('value', params[valueName]);
+  } else {
+    return createAttributeFn({
+      [keyName]: params[keyName],
+      [valueName]: params[valueName]
+    });
+  }
+}
+
 export default function() {
   this.timing = 400;      // delay for each request, automatically set to 0 during testing
   this.clusterName = "my";
@@ -268,28 +307,14 @@ export default function() {
     const cluster = schema.clusters.find(1);
     const resource = schema.resources.where({name: params.res_id}).models[0];
 
-    let keyAlreadyExists = false;
-    let attribute;
-
-    if (resource.metaAttributeIds) {
-      resource.metaAttributeIds.some((attributeId) => {
-        attribute = schema.attributes.find(attributeId);
-        keyAlreadyExists = (attribute && (attribute.attrs.key === params.key));
-        return keyAlreadyExists;
-      });
-    }
-
-    if (keyAlreadyExists && ((params.value === undefined) || (params.value === ''))) {
-      attribute.destroy();
-      return;
-    } else if (keyAlreadyExists) {
-      attribute.update('value', params.value);
-    } else {
-      return resource.createMetaAttribute({
-        key: params.key,
-        value: params.value
-      });
-    }
+    return _cud_attribute(
+      resource,
+      params,
+      resource.metaAttributeIds,
+      schema.attributes,
+      'key',
+      (x) => { resource.createMetaAttribute(x) }
+    );
   });
 
   this.post('/managec/my/set_resource_utilization', function (schema, request) {
@@ -297,28 +322,14 @@ export default function() {
     const cluster = schema.clusters.find(1);
     const resource = schema.resources.where({name: params.resource_id}).models[0];
 
-    let keyAlreadyExists = false;
-    let attribute;
-
-    if (resource.utilizationAttributeIds) {
-      resource.utilizationAttributeIds.some((attributeId) => {
-        attribute = schema.utilizationAttributes.find(attributeId);
-        keyAlreadyExists = (attribute && (attribute.attrs.name === params.name));
-        return keyAlreadyExists;
-      });
-    }
-
-    if (keyAlreadyExists && ((params.value === undefined) || (params.value === ''))) {
-      attribute.destroy();
-      return;
-    } else if (keyAlreadyExists) {
-      attribute.update('value', params.value);
-    } else {
-      return resource.createUtilizationAttribute({
-        name: params.name,
-        value: params.value
-      });
-    }
+    return _cud_attribute(
+      resource,
+      params,
+      resource.utilizationAttributeIds,
+      schema.utilizationAttributes,
+      'name',
+      (x) => { resource.createUtilizationAttribute(x)},
+    );
   });
 
   this.post('/managec/my/add_constraint_remote', function (schema, request) {
