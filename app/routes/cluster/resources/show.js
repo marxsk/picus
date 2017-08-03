@@ -117,6 +117,12 @@ export default TabRoute.extend({
     deleteMetaAttribute: function(resourceName, attributes) {
       this.store.deleteMetaAttribute(resourceName, attributes);
     },
+    appendOrderingPreference: function(resourceName, attributes) {
+      this.store.pushAppendOrderingPreference(resourceName, attributes);
+    },
+    deleteOrderingPreference: function(resourceName, attributes) {
+      this.store.deleteOrderingPreference(resourceName, attributes);
+    },
 
     deleteAttribute: function(attribute) {
       attribute.deleteRecord();
@@ -132,17 +138,6 @@ export default TabRoute.extend({
     removeResource: function(resourceName) {
       this.store.removeAgents([resourceName], 'resource');
       this.transitionTo('cluster.resources.index');
-    },
-
-    appendOrderingPreference: function(attributes, attr) {
-      // @todo: ugly hack, we should set this value in template?
-      attr.before = ('before' in attr) ? attr.before : 'before';
-      attr.action1 = ('action1' in attr) ? attr.action1 : 'starts';
-      attr.action2 = ('action2' in attr) ? attr.action2 : 'starts';
-      //
-
-      console.log(JSON.stringify(attr));
-      this.store.pushAppendOrderingPreference(this.get('resourceId'), attr);
     },
 
     createClone: function(resourceName) {

@@ -371,6 +371,17 @@ export default function() {
           score: params.score
         });
       }
+    } else if (params.c_type === "ord") {
+      // @note: pcs_id can be same for several items when only action differs, this is not an issue in a real backend
+      // always create a new one; @todo - look at real response in case of 'duplicity'
+      return resource.createOrderingPreference({
+        pcs_id: `ordering-${params.res_id}-${params.target_res_id}-${params.score}`,
+        targetResource: params.target_res_id,
+        targetAction: params.target_action,
+        action: params.action,
+        order: params.order,
+        score: params.score,
+      })
     }
   });
 
@@ -384,6 +395,9 @@ export default function() {
       constraint.destroy();
     } else if (constraintType === "colocation") {
       const constraint = schema.colocationPreferences.where({pcs_id: params.constraint_id}).models[0];
+      constraint.destroy();
+    } else if (constraintType === "ordering") {
+      const constraint = schema.orderingPreferences.where({pcs_id: params.constraint_id}).models[0];
       constraint.destroy();
     }
   });

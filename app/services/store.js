@@ -420,26 +420,25 @@ export default DS.Store.extend({
     });
   },
 
-
-  pushAppendOrderingPreference(resourceId, attribute) {
-    return new Ember.RSVP.Promise((resolve) => {
-      const data = JSON.stringify({
-        data: {
-          type: 'ordering-preference',
-          attributes: {
-            resource: resourceId,
-            ...attribute
-          },
-        }});
-
-      this.get('ajax').post('/ordering-preference/', {data: data}).then((response) => {
-        this.reloadData();
-        resolve(response);
-      });
-    }, (error) => {
-
+  pushAppendOrderingPreference(resourceName, attributes) {
+    return this._sendPostData('add_constraint_remote', {
+        res_id: resourceName,
+        res_action: attributes.action,
+        disable_autocorrect: 1,
+        c_type: 'ord',
+        score: attributes.score,
+        order: attributes.order,
+        target_action: attributes.targetAction,
+        target_res_id: attributes.targetResource,
     });
   },
+  deleteOrderingPreference(resourceName, attributes) {
+    const constraintId = `ordering-${resourceName}-${attributes.get('targetResource')}-${attributes.get('score')}`;
+    return this._sendPostData('remove_constraint_remote', {
+      constraint_id: constraintId,
+    });
+  },
+
 
   createResouceGroup(groupId, resources) {
     this._sendData('add_group', {

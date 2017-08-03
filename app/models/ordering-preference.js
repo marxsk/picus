@@ -1,9 +1,9 @@
 import DS from 'ember-data';
 
 export default DS.Model.extend({
-  resource2: DS.attr('string'),
-  action1: DS.attr('string'),
-  before: DS.attr('string'),
-  action2: DS.attr('string'),
+  targetResource: DS.attr('string'),
+  targetAction: DS.attr('string'),
+  order: DS.attr('string'),
+  action: DS.attr('string'),
   score: DS.attr('string'),
 });

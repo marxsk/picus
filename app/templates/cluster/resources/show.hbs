@@ -144,52 +144,32 @@
   {{#attr-list
       title='Resource Ordering Preference'
       attributes=selResource.orderingPreferences
-      onDeleteAction=(route-action 'deleteAttribute')
-      onAppendAction=(route-action 'appendOrderingPreference')
+      onDeleteAction=(route-action 'deleteOrderingPreference' selResource.name)
+      onAppendAction=(route-action 'appendOrderingPreference' selResource.name)
       onDeleteMultipleAction=(route-action 'deleteAttributes')
-      as |form mode attr|
+      as |form mode attr f|
   }}
     {{#if (eq mode 'edit')}}
-      <td width="300">
-        {{#power-select
-          selected=attr.resource2
-          options=model.otherResourcesName
-          placeholder='Select a resource'
-          onchange=(action (mut attr.resource2))
-          allowClear=true
-          as |record|
-        }}
-          {{record}}
-        {{/power-select}}
-      </td>
-      <td>
-        <select onchange={{action (mut form.attr.action1) value="target.value"}}>
-            <option value="starts">starts</option>
-            <option value="promotes">promotes</option>
-            <option value="demots">demotes</option>
-            <option value="stops">stops</option>
-        </select>
-      </td>
-      <td>
-        <select onchange={{action (mut form.attr.before) value="target.value"}}>
-            <option value="before">before</option>
-            <option value="after">after</option>
-        </select>
-      </td>
-      <td>
-        <select onchange={{action (mut form.attr.action2) value="target.value"}}>
-            <option value="starts">starts</option>
-            <option value="promotes">promotes</option>
-            <option value="demots">demotes</option>
-            <option value="stops">stops</option>
-        </select>
-      </td>
-      <td>{{input value=form.attr.score}}</td>
+      {{#power-select
+        selected=attr.targetResource
+        options=model.otherResourcesName
+        placeholder='Select a resource'
+        onchange=(action (mut attr.targetResource))
+        allowClear=true
+        as |record|
+      }}
+        {{record}}
+      {{/power-select}}
+
+      {{f.select-field 'targetAction' 'starts promotes demotes stops'}}
+      {{f.select-field 'order' 'before after'}}
+      {{f.select-field 'action' 'starts promotes demotes stops'}}
+      {{f.text-field 'score'}}
     {{else}}
-      <td>{{attr.resource2}}</td>
-      <td>{{attr.action1}}</td>
-      <td>{{attr.before}}</td>
-      <td>{{attr.action2}}</td>
+      <td>{{attr.targetResource}}</td>
+      <td>{{attr.targetAction}}</td>
+      <td>{{attr.order}}</td>
+      <td>{{attr.action}}</td>
       <td>{{attr.score}}</td>
     {{/if}}
   {{/attr-list}}
