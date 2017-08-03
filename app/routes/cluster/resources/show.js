@@ -43,8 +43,17 @@ export default TabRoute.extend({
     let otherResourcesName = this.store.peekAll('resource').map((i) => { return i.get('name'); });
     otherResourcesName = otherResourcesName.filter((name) => { return name !== ourName; } );
 
-    const metadata = await this.store.getAgentMetadata('resource', this.store.peekRecord('resource', params.resource_id).get('resourceProvider') + ':' + this.store.peekRecord('resource', params.resource_id).get('agentType'));
-    let {parameters, validations} = categorizeProperties(metadata.parameters);
+    let metadata;
+    let parameters;
+    let validations;
+
+    if (resource.get('resourceType') === 'primitive') {
+      metadata = await this.store.getAgentMetadata('resource', this.store.peekRecord('resource', params.resource_id).get('resourceProvider') + ':' + this.store.peekRecord('resource', params.resource_id).get('agentType'));
+      // @refactor - below
+      const x = categorizeProperties(metadata.parameters);
+      parameters = x.parameters;
+      validations = x.validations;
+    }
 
     if (resource.get('properties')) {
       resource.get('properties').forEach((item) => {

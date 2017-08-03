@@ -67,11 +67,18 @@
 <br /><br />
 {{#bs-tab customTabs=true activeId=activeTab as |tab|}}
 
+{{#if (eq selResource.resourceType 'primitive')}}
 {{bs-nav-items tab=tab setActiveTab=(action 'setActiveTab') items=(array
   (hash name="properties" title="Properties")
   (hash name="constraints" title="Constraints")
   (hash name="attributes" title="Attributes")
 )}}
+{{else}}
+{{bs-nav-items tab=tab setActiveTab=(action 'setActiveTab') items=(array
+  (hash name="constraints" title="Constraints")
+  (hash name="attributes" title="Attributes")
+)}}
+{{/if}}
 
 <div class="tab-content">
 {{#tab.pane elementId="properties" title="Properties"}}
