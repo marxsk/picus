@@ -384,20 +384,15 @@ export default function() {
   this.post('/managec/my/remove_constraint_remote', function (schema, request) {
     const params = JSON.parse(request.requestBody);
     const constraintType = params.constraint_id.split('-')[0];
-
-    if (constraintType === "location") {
-      const constraint = schema.locationPreferences.where({pcs_id: params.constraint_id}).models[0];
-      constraint.destroy();
-    } else if (constraintType === "colocation") {
-      const constraint = schema.colocationPreferences.where({pcs_id: params.constraint_id}).models[0];
-      constraint.destroy();
-    } else if (constraintType === "ordering") {
-      const constraint = schema.orderingPreferences.where({pcs_id: params.constraint_id}).models[0];
-      constraint.destroy();
-    } else if (constraintType === "ticket") {
-      const constraint = schema.ticketPreferences.where({pcs_id: params.constraint_id}).models[0];
-      constraint.destroy();
+    const schemaMapping = {
+      location: schema.locationPreferences,
+      colocation: schema.colocationPreferences,
+      ordering: schema.orderingPreferences,
+      ticket: schema.ticketPreferences,
     }
+    const constraint = schemaMapping[constraintType].where({pcs_id: params.constraint_id}).models[0];
+
+    constraint.destroy();
   });
 
   this.post('/managec/my/resource_master', function(schema, request) {
