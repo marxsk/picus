@@ -35,7 +35,7 @@ function _cud_attribute(resource, params, attributeIds, schema, keyName, createA
     attribute.destroy();
     return;
   } else if (attribute) {
-    attribute.update('value', params[valueName]);
+    attribute.update(valueName, params[valueName]);
   } else {
     return createAttributeFn({
       [keyName]: params[keyName],
