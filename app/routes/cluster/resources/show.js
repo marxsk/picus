@@ -108,6 +108,12 @@ export default TabRoute.extend({
     deleteColocationPreference: function(resourceName, attributes) {
       this.store.deleteColocationPreference(resourceName, attributes);
     },
+    appendUtilizationAttribute: function(resourceName, attributes) {
+      this.store.pushAppendUtilizationAttribute(resourceName, attributes);
+    },
+    deleteUtilizationAttribute: function(resourceName, attributes) {
+      this.store.deleteUtilizationAttribute(resourceName, attributes);
+    },
 
     deleteAttribute: function(attribute) {
       attribute.deleteRecord();

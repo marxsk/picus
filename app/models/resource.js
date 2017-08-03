@@ -13,6 +13,7 @@ export default DS.Model.extend({
   properties: DS.hasMany('resourceProperty'),
 
   metaAttributes: DS.hasMany('attribute'),
+  utilizationAttributes: DS.hasMany('utilizationAttributes'),
   locationPreferences: DS.hasMany('locationPreference'),
   orderingPreferences: DS.hasMany('orderingPreference'),
   colocationPreferences: DS.hasMany('colocationPreference'),

@@ -216,6 +216,24 @@
       {{/if}}
     {{/attr-list}}
     {{/acc.item}}
+    {{#acc.item value="2" title="Resource Utilization Attributes"}}
+      {{#attr-list
+          title='Resource Utilization Attributes'
+          attributes=selResource.utilizationAttributes
+          onDeleteAction=(route-action 'deleteUtilizationAttribute' selResource.name)
+          onAppendAction=(route-action 'appendUtilizationAttribute' selResource.name)
+          onDeleteMultipleAction=(route-action 'deleteAttributes')
+          as |form mode attr f|
+      }}
+        {{#if (eq mode 'edit')}}
+          {{f.text-field 'name'}}
+          {{f.text-field 'value'}}
+        {{else}}
+          <td>{{attr.name}}</td>
+          <td>{{attr.value}}</td>
+        {{/if}}
+      {{/attr-list}}
+      {{/acc.item}}
   {{/bs-accordion}}
 
     {{/tab.pane}}

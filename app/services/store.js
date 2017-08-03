@@ -365,6 +365,20 @@ export default DS.Store.extend({
       ...attribute
     });
   },
+  pushAppendUtilizationAttribute(resourceName, attributes) {
+    return this._sendPostData('set_resource_utilization', {
+      resource_id: resourceName,
+      name: attributes.name,
+      value: attributes.value,
+    });
+  },
+  deleteUtilizationAttribute(resourceName, attributes) {
+    return this._sendPostData('set_resource_utilization', {
+      resource_id: resourceName,
+      name: attributes.get('name'),
+      value: '',
+    });
+  },
   pushAppendLocationPreference(resourceName, attributes) {
     return this._sendPostData('add_constraint_remote', {
       res_id: resourceName,

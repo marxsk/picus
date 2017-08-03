@@ -292,6 +292,35 @@ export default function() {
     }
   });
 
+  this.post('/managec/my/set_resource_utilization', function (schema, request) {
+    const params = JSON.parse(request.requestBody);
+    const cluster = schema.clusters.find(1);
+    const resource = schema.resources.where({name: params.resource_id}).models[0];
+
+    let keyAlreadyExists = false;
+    let attribute;
+
+    if (resource.utilizationAttributeIds) {
+      resource.utilizationAttributeIds.some((attributeId) => {
+        attribute = schema.utilizationAttributes.find(attributeId);
+        keyAlreadyExists = (attribute && (attribute.attrs.name === params.name));
+        return keyAlreadyExists;
+      });
+    }
+
+    if (keyAlreadyExists && ((params.value === undefined) || (params.value === ''))) {
+      attribute.destroy();
+      return;
+    } else if (keyAlreadyExists) {
+      attribute.update('value', params.value);
+    } else {
+      return resource.createUtilizationAttribute({
+        name: params.name,
+        value: params.value
+      });
+    }
+  });
+
   this.post('/managec/my/add_constraint_remote', function (schema, request) {
     const params = JSON.parse(request.requestBody);
     const cluster = schema.clusters.find(1);
