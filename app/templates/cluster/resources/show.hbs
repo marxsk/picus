@@ -95,6 +95,7 @@
       onDeleteAction=(route-action 'deleteLocationPreference' selResource.name)
       onAppendAction=(route-action 'appendLocationPreference' selResource.name)
       onDeleteMultipleAction=(route-action 'deleteAttributes')
+      validations=model.ScoreValidations
       as |form mode attr f|
   }}
   {{#if (eq mode 'edit')}}
@@ -114,6 +115,7 @@
       onDeleteAction=(route-action 'deleteColocationPreference' selResource.name)
       onAppendAction=(route-action 'appendColocationPreference' selResource.name)
       onDeleteMultipleAction=(route-action 'deleteAttributes')
+      validations=model.ScoreValidations
       as |form mode attr f|
   }}
   {{#if (eq mode 'edit')}}

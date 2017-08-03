@@ -1,6 +1,7 @@
 import Ember from 'ember';
 import categorizeProperties from '../../../utils/categorize-properties';
 import TabRoute from '../../tab-route';
+import ScoreValidations from '../../../validators/constraint-validations';
 
 export default TabRoute.extend({
   modelForm: {},
@@ -34,6 +35,7 @@ export default TabRoute.extend({
         updatingCluster: this.store.peekAll('cluster'),
         selectedResources: this.get('selectedResources'),
         params: params,
+        ScoreValidations,
       });
     }
 
@@ -59,6 +61,7 @@ export default TabRoute.extend({
       selectedResource: this.store.peekRecord('resource', params.resource_id),
       otherResourcesName: otherResourcesName,
       ResourceValidations: validations,
+      ScoreValidations,
     });
   },
 

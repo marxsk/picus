@@ -5,7 +5,6 @@ import {
 
 export default function validateScore() {
   return (key, newValue) => {
-
     if (
       (validateNumber({integer: true})('_', newValue) === true) ||
       (validateInclusion({list: ['INFINITY', '+INFINITY', '-INFINITY']})('_', newValue) === true)
