@@ -338,45 +338,34 @@ export default function() {
     const resource = schema.resources.where({name: params.res_id}).models[0];
 
     let keyAlreadyExists = false;
-    let attribute;
 
     if (params.c_type === "loc") {
-      if (resource.locationPreferenceIds) {
-        resource.locationPreferenceIds.some((attributeId) => {
-          attribute = schema.locationPreferences.find(attributeId);
-          keyAlreadyExists = (attribute && (attribute.attrs.node_id === params.node_id));
-          return keyAlreadyExists;
-        });
-      }
+      const attribute = _getRecordByKey(params, resource.locationPreferenceIds, schema.locationPreferences, 'node_id');
 
-      if (keyAlreadyExists && params.score === undefined) {
+      if (attribute && params.score === undefined) {
         attribute.destroy();
         return;
-      } else if (keyAlreadyExists) {
+      } else if (attribute) {
         attribute.update('score', params.score);
       } else {
         return resource.createLocationPreference({
+          pcs_id: `location-${params.res_id}-${params.node_id}-${params.score}`,
           node: params.node_id,
           ...params,
         });
       }
     } else if (params.c_type === "col") {
-      if (resource.colocationPreferenceIds) {
-        resource.colocationPreferenceIds.some((attributeId) => {
-          attribute = schema.colocationPreferences.find(attributeId);
-          keyAlreadyExists = (attribute && (attribute.attrs.targetResource === params.target_res_id));
-          return keyAlreadyExists;
-        });
-      }
+      const attribute = _getRecordByKey(params, resource.colocationPreferenceIds, schema.colocationPreferences, 'target_res_id');
 
-      if (keyAlreadyExists && params.score === undefined) {
+      if (attribute && (params.score === undefined || params.score === "")) {
         attribute.destroy();
         return;
-      } else if (keyAlreadyExists) {
+      } else if (attribute) {
         console.log('@todo');
 //        attribute.update('score', params.score);
       } else {
         return resource.createColocationPreference({
+          pcs_id: `colocation-${params.res_id}-${params.target_res_id}-${params.score}`,
           targetResource: params.target_res_id,
           colocationType: params.colocation_type,
           score: params.score
@@ -388,43 +377,14 @@ export default function() {
   this.post('/managec/my/remove_constraint_remote', function (schema, request) {
     const params = JSON.parse(request.requestBody);
     const cluster = schema.clusters.find(1);
-
-    const parts = params.constraint_id.split('-');
-    const constraintType = parts[0];
-    const constraintId = parts.splice(1).join('-');
-
-    const [resourceName, arg1, arg2] = constraintId.rsplit('-', 2);
-    const resource = schema.resources.where({name: resourceName}).models[0];
-    let attribute;
+    const constraintType = params.constraint_id.split('-')[0];
 
     if (constraintType === "location") {
-      const nodeName = arg1;
-      const score = arg2;
-      if (resource && resource.locationPreferenceIds) {
-        resource.locationPreferenceIds.some((attributeId) => {
-          attribute = schema.locationPreferences.find(attributeId);
-          if (attribute && (attribute.attrs.node_id === nodeName)) {
-            attribute.destroy();
-            return true;
-          } else {
-            return false;
-          }
-        });
-      }
+      const constraint = schema.locationPreferences.where({pcs_id: params.constraint_id}).models[0];
+      constraint.destroy();
     } else if (constraintType === "colocation") {
-      const targetResource = arg1;
-
-      if (resource && resource.colocationPreferenceIds) {
-        resource.colocationPreferenceIds.some((attributeId) => {
-          attribute = schema.colocationPreferences.find(attributeId);
-          if (attribute && (attribute.attrs.targetResource === targetResource)) {
-            attribute.destroy();
-            return true;
-          } else {
-            return false;
-          }
-        });
-      }
+      const constraint = schema.colocationPreferences.where({pcs_id: params.constraint_id}).models[0];
+      constraint.destroy();
     }
   });
 
