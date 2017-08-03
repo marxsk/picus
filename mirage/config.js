@@ -55,12 +55,12 @@ function _releaseResource(schema, attrs) {
 }
 
 // create an "envelope" resource that contains original resource e.g. when cloning resource
-function _createEnvelopeResource(schema, attrs, resources, resourceAttributes) {
+function _createEnvelopeResource(schema, attrs, resourceNames, resourceAttributes) {
   const cluster = schema.clusters.find(1);
   const envelopeResource = cluster.createResource(resourceAttributes);
 
   let resIDs = [];
-  resources.forEach((x) => {
+  resourceNames.forEach((x) => {
     if (x === "") { return; }
 
     let child = schema.resources.where({name: x}).models[0];
@@ -168,7 +168,7 @@ export default function() {
       name: attrs.resource_group,
       resourceType: 'group',
     });
-  );
+  });
 
   this.post('/managec/my/update_resource', function(schema, request) {
     const attrs = this.normalizedRequestAttrs();
@@ -193,37 +193,17 @@ export default function() {
     }
 
     if (attrs.resource_clone === 'on') {
-      const clonedResource = cluster.createResource({
+      _createEnvelopeResource(schema, attrs, [schema.resources.find(resourceId).attrs.name], {
         name: attrs._res_paramne_resourceName + '-clone',
         resourceType: 'clone',
       });
-
-      clonedResource.resources = [schema.resources.find(resourceId)];
-
-      let ress = [];
-      cluster.resources.models.forEach((y) => {
-        if (y.attrs.id !== resourceId) {
-          ress.push(y);
-        }
-      });
-      cluster.resources = ress;
     }
 
     if (attrs.resource_ms === 'on') {
-      const clonedResource = cluster.createResource({
+      _createEnvelopeResource(schema, attrs, [schema.resources.find(resourceId).attrs.name], {
         name: attrs._res_paramne_resourceName + '-master',
         resourceType: 'masterslave',
       });
-
-      clonedResource.resources = [schema.resources.find(resourceId)];
-
-      let ress = [];
-      cluster.resources.models.forEach((y) => {
-        if (y.attrs.id !== resourceId) {
-          ress.push(y);
-        }
-      });
-      cluster.resources = ress;
     }
 
     delete attrs.resource_id;
