@@ -55,12 +55,14 @@ function _releaseResource(schema, attrs) {
 }
 
 // create an "envelope" resource that contains original resource e.g. when cloning resource
-function _createEnvelopeResource(schema, attrs, resourceAttributes) {
+function _createEnvelopeResource(schema, attrs, resources, resourceAttributes) {
   const cluster = schema.clusters.find(1);
   const envelopeResource = cluster.createResource(resourceAttributes);
 
   let resIDs = [];
-  [attrs.resource_id].forEach((x) => {
+  resources.forEach((x) => {
+    if (x === "") { return; }
+
     let child = schema.resources.where({name: x}).models[0];
     resIDs.push(child);
 
@@ -162,35 +164,11 @@ export default function() {
 
   this.post('/managec/my/add_group', function(schema, request) {
     const attrs = this.normalizedRequestAttrs();
-
-    let groupName = attrs['resource_group'];
-    let resources = attrs['resources'].split(' ');
-
-    const cluster = schema.clusters.find(1);
-
-    const resource = cluster.createResource({
-      name: groupName,
+    _createEnvelopeResource(schema, attrs, attrs.resources.split(' '), {
+      name: attrs.resource_group,
       resourceType: 'group',
     });
-
-    let resIDs = [];
-    resources.forEach((x) => {
-      if (x === "") { return; }
-
-      let child = schema.resources.where({name: x}).models[0];
-      resIDs.push(child);
-
-      // remove resource from parent-cluster; it will be available only via parent-resource
-      let ress = [];
-      cluster.resources.models.forEach((y) => {
-        if (y.attrs.id !== child.id) {
-          ress.push(y);
-        }
-      });
-      cluster.resources = ress;
-    });
-    resource.resources = resIDs;
-  });
+  );
 
   this.post('/managec/my/update_resource', function(schema, request) {
     const attrs = this.normalizedRequestAttrs();
@@ -274,7 +252,7 @@ export default function() {
 
   this.post('/managec/my/resource_clone', function(schema, request) {
     const attrs = this.normalizedRequestAttrs();
-    _createEnvelopeResource(schema, attrs, {
+    _createEnvelopeResource(schema, attrs, [attrs.resource_id], {
       name: attrs.resource_id + '-clone',
       resourceType: 'clone',
     });
@@ -392,7 +370,7 @@ export default function() {
 
   this.post('/managec/my/resource_master', function(schema, request) {
     const attrs = this.normalizedRequestAttrs();
-    _createEnvelopeResource(schema, attrs, {
+    _createEnvelopeResource(schema, attrs, [attrs.resource_id], {
       name: attrs.resource_id + '-master',
       resourceType: 'masterslave',
     });
