@@ -438,7 +438,22 @@ export default DS.Store.extend({
       constraint_id: constraintId,
     });
   },
-
+  pushAppendTicketPreference(resourceName, attributes) {
+    return this._sendPostData('add_constraint_remote', {
+      res_id: resourceName,
+      disable_autocorrect: 1,
+      c_type: 'ticket',
+      ticket: attributes.ticket,
+      role: attributes.role,
+      'loss-policy': attributes.lossPolicy,
+    });
+  },
+  deleteTicketPreference(resourceName, attributes) {
+    const constraintId = `ticket-${attributes.get('ticket')}-${resourceName}-${attributes.get('role')}`;
+    return this._sendPostData('remove_constraint_remote', {
+      constraint_id: constraintId,
+    });
+  },
 
   createResouceGroup(groupId, resources) {
     this._sendData('add_group', {

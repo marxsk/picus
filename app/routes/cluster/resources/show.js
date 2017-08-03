@@ -123,6 +123,12 @@ export default TabRoute.extend({
     deleteOrderingPreference: function(resourceName, attributes) {
       this.store.deleteOrderingPreference(resourceName, attributes);
     },
+    appendTicketPreference: function(resourceName, attributes) {
+      this.store.pushAppendTicketPreference(resourceName, attributes);
+    },
+    deleteTicketPreference: function(resourceName, attributes) {
+      this.store.deleteTicketPreference(resourceName, attributes);
+    },
 
     deleteAttribute: function(attribute) {
       attribute.deleteRecord();

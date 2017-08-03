@@ -17,4 +17,5 @@ export default DS.Model.extend({
   locationPreferences: DS.hasMany('locationPreference'),
   orderingPreferences: DS.hasMany('orderingPreference'),
   colocationPreferences: DS.hasMany('colocationPreference'),
+  ticketPreferences: DS.hasMany('ticketPreference'),
 });

@@ -382,6 +382,14 @@ export default function() {
         order: params.order,
         score: params.score,
       })
+    } else if (params.c_type === 'ticket') {
+      // always create - as for 'ord'
+      return resource.createTicketPreference({
+        pcs_id: `ticket-${params.ticket}-${params.res_id}-${params.role}`,
+        ticket: params.ticket,
+        role: params.role,
+        lossPolicy: params['loss-policy'],
+      })
     }
   });
 
@@ -398,6 +406,9 @@ export default function() {
       constraint.destroy();
     } else if (constraintType === "ordering") {
       const constraint = schema.orderingPreferences.where({pcs_id: params.constraint_id}).models[0];
+      constraint.destroy();
+    } else if (constraintType === "ticket") {
+      const constraint = schema.ticketPreferences.where({pcs_id: params.constraint_id}).models[0];
       constraint.destroy();
     }
   });
