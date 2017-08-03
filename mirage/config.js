@@ -39,6 +39,42 @@ function _cud_attribute(resource, params, attributeIds, schema, keyName, createA
   }
 }
 
+// remove resource but do not destroy children resources
+function _releaseResource(schema, attrs) {
+  const cluster = schema.clusters.find(1);
+
+  // move children resources to root
+  const resource = schema.resources.where({name: attrs.resource_id}).models[0];
+  let appendResources = [];
+  resource.resources.models.forEach((i) => {
+    appendResources.push(i);
+  });
+
+  cluster.resources = cluster.resources.models.concat(appendResources);
+  schema.db.resources.remove({name: attrs.resource_id});
+}
+
+// create an "envelope" resource that contains original resource e.g. when cloning resource
+function _createEnvelopeResource(schema, attrs, resourceAttributes) {
+  const cluster = schema.clusters.find(1);
+  const envelopeResource = cluster.createResource(resourceAttributes);
+
+  let resIDs = [];
+  [attrs.resource_id].forEach((x) => {
+    let child = schema.resources.where({name: x}).models[0];
+    resIDs.push(child);
+
+    // remove resource from parent-cluster; it will be available only via parent-resource
+    let ress = [];
+    cluster.resources.models.forEach((y) => {
+      if (y.attrs.id !== child.id) {
+        ress.push(y);
+      }
+    });
+    cluster.resources = ress;
+  });
+  envelopeResource.resources = resIDs;
+}
 export default function() {
   this.timing = 400;      // delay for each request, automatically set to 0 during testing
   this.clusterName = "my";
@@ -238,59 +274,18 @@ export default function() {
 
   this.post('/managec/my/resource_clone', function(schema, request) {
     const attrs = this.normalizedRequestAttrs();
-    const cluster = schema.clusters.find(1);
-
-    const clonedResource = cluster.createResource({
+    _createEnvelopeResource(schema, attrs, {
       name: attrs.resource_id + '-clone',
       resourceType: 'clone',
     });
-
-    let resIDs = [];
-    [attrs.resource_id].forEach((x) => {
-      let child = schema.resources.where({name: x}).models[0];
-      resIDs.push(child);
-
-      // remove resource from parent-cluster; it will be available only via parent-resource
-      let ress = [];
-      cluster.resources.models.forEach((y) => {
-        if (y.attrs.id !== child.id) {
-          ress.push(y);
-        }
-      });
-      cluster.resources = ress;
-    });
-    clonedResource.resources = resIDs;
   });
 
   this.post('/managec/my/resource_unclone', function(schema, request) {
-    const attrs = this.normalizedRequestAttrs();
-    const cluster = schema.clusters.find(1);
-
-    // move children resources to root
-    const resource = schema.resources.where({name: attrs.resource_id}).models[0];
-    let appendResources = [];
-    resource.resources.models.forEach((i) => {
-      appendResources.push(i);
-    });
-
-    cluster.resources = cluster.resources.models.concat(appendResources);
-    schema.db.resources.remove({name: attrs.resource_id});
+    _releaseResource(schema, this.normalizedRequestAttrs());
   });
 
   this.post('/managec/my/resource_ungroup', function(schema, request) {
-    // same code as for resource_unclone - @refactor
-    const attrs = this.normalizedRequestAttrs();
-    const cluster = schema.clusters.find(1);
-
-    // move children resources to root
-    const resource = schema.resources.where({name: attrs.resource_id}).models[0];
-    let appendResources = [];
-    resource.resources.models.forEach((i) => {
-      appendResources.push(i);
-    });
-
-    cluster.resources = cluster.resources.models.concat(appendResources);
-    schema.db.resources.remove({name: attrs.resource_id});
+    _releaseResource(schema, this.normalizedRequestAttrs());
   });
 
   this.post('/managec/my/add_meta_attr_remote', function (schema, request) {
@@ -396,30 +391,11 @@ export default function() {
   });
 
   this.post('/managec/my/resource_master', function(schema, request) {
-    // @todo: refactor; almost same as resource_clone
     const attrs = this.normalizedRequestAttrs();
-    const cluster = schema.clusters.find(1);
-
-    const clonedResource = cluster.createResource({
+    _createEnvelopeResource(schema, attrs, {
       name: attrs.resource_id + '-master',
       resourceType: 'masterslave',
     });
-
-    let resIDs = [];
-    [attrs.resource_id].forEach((x) => {
-      let child = schema.resources.where({name: x}).models[0];
-      resIDs.push(child);
-
-      // remove resource from parent-cluster; it will be available only via parent-resource
-      let ress = [];
-      cluster.resources.models.forEach((y) => {
-        if (y.attrs.id !== child.id) {
-          ress.push(y);
-        }
-      });
-      cluster.resources = ress;
-    });
-    clonedResource.resources = resIDs;
   });
 
   this.post('/login', function(schema, request) {
