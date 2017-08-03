@@ -118,7 +118,7 @@
   }}
   {{#if (eq mode 'edit')}}
     {{f.text-field 'targetResource'}}
-    {{f.text-field 'colocationType'}}
+    {{f.select-field 'colocationType' 'Together Apart'}}
     {{f.text-field 'score'}}
   {{else}}
     <td>{{attr.targetResource}}</td>
