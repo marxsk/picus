@@ -70,6 +70,7 @@
 {{bs-nav-items tab=tab setActiveTab=(action 'setActiveTab') items=(array
   (hash name="properties" title="Properties")
   (hash name="constraints" title="Constraints")
+  (hash name="attributes" title="Attributes")
 )}}
 
 <div class="tab-content">
@@ -119,7 +120,17 @@
       as |form mode attr f|
   }}
   {{#if (eq mode 'edit')}}
-    {{f.text-field 'targetResource'}}
+    {{#power-select
+      selected=attr.targetResource
+      options=model.otherResourcesName
+      placeholder='Select a resource'
+      onchange=(action (mut attr.targetResource))
+      allowClear=false
+      as |record|
+    }}
+      {{record}}
+    {{/power-select}}
+
     {{f.select-field 'colocationType' 'Together Apart'}}
     {{f.text-field 'score'}}
   {{else}}
