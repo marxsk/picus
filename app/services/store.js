@@ -359,6 +359,12 @@ export default DS.Store.extend({
     });
   },
 
+  _deletePreference(constraintId) {
+    return this._sendPostData('remove_constraint_remote', {
+      constraint_id: constraintId,
+    });
+  },
+
   pushAppendMetaAttribute(resourceName, attributes) {
     return this._sendPostData('add_meta_attr_remote', {
       res_id: resourceName,
@@ -397,12 +403,6 @@ export default DS.Store.extend({
       node_id: attributes.node,
     });
   },
-  deleteLocationPreference(resourceName, attributes) {
-    const constraintId = `location-${resourceName}-${attributes.get('node')}-${attributes.get('score')}`;
-    return this._sendPostData('remove_constraint_remote', {
-      constraint_id: constraintId,
-    });
-  },
   pushAppendColocationPreference(resourceName, attributes) {
     return this._sendPostData('add_constraint_remote', {
       res_id: resourceName,
@@ -413,13 +413,6 @@ export default DS.Store.extend({
       colocation_type: attributes.colocationType,
     });
   },
-  deleteColocationPreference(resourceName, attributes) {
-    const constraintId = `colocation-${resourceName}-${attributes.get('targetResource')}-${attributes.get('score')}`;
-    return this._sendPostData('remove_constraint_remote', {
-      constraint_id: constraintId,
-    });
-  },
-
   pushAppendOrderingPreference(resourceName, attributes) {
     return this._sendPostData('add_constraint_remote', {
         res_id: resourceName,
@@ -432,12 +425,6 @@ export default DS.Store.extend({
         target_res_id: attributes.targetResource,
     });
   },
-  deleteOrderingPreference(resourceName, attributes) {
-    const constraintId = `ordering-${resourceName}-${attributes.get('targetResource')}-${attributes.get('score')}`;
-    return this._sendPostData('remove_constraint_remote', {
-      constraint_id: constraintId,
-    });
-  },
   pushAppendTicketPreference(resourceName, attributes) {
     return this._sendPostData('add_constraint_remote', {
       res_id: resourceName,
@@ -448,11 +435,18 @@ export default DS.Store.extend({
       'loss-policy': attributes.lossPolicy,
     });
   },
+
+  deleteLocationPreference(resourceName, attributes) {
+    return this._deletePreference(`location-${resourceName}-${attributes.get('node')}-${attributes.get('score')}`);
+  },
+  deleteColocationPreference(resourceName, attributes) {
+    return this._deletePreference(`colocation-${resourceName}-${attributes.get('targetResource')}-${attributes.get('score')}`);
+  },
+  deleteOrderingPreference(resourceName, attributes) {
+    return this._deletePreference(`ordering-${resourceName}-${attributes.get('targetResource')}-${attributes.get('score')}`);
+  },
   deleteTicketPreference(resourceName, attributes) {
-    const constraintId = `ticket-${attributes.get('ticket')}-${resourceName}-${attributes.get('role')}`;
-    return this._sendPostData('remove_constraint_remote', {
-      constraint_id: constraintId,
-    });
+    return this._deletePreference(`ticket-${attributes.get('ticket')}-${resourceName}-${attributes.get('role')}`);
   },
 
   createResouceGroup(groupId, resources) {
