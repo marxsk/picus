@@ -101,11 +101,10 @@ export default TabRoute.extend({
     },
     changeSelectedAgent: function() {},
 
+    deletePreference: (constraint) => { constraint.destroyRecord(); },
+
     appendLocationPreference: function(resourceName, attributes) {
       this.store.pushAppendLocationPreference(resourceName, attributes);
-    },
-    deleteLocationPreference: function(resourceName, attributes) {
-      this.store.deleteLocationPreference(resourceName, attributes);
     },
     appendColocationPreference: function(resourceName, attributes) {
       this.store.pushAppendColocationPreference(resourceName, attributes);

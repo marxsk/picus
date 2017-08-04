@@ -335,7 +335,7 @@ export default function() {
   });
 
   this.post('/managec/my/remove_constraint_remote', function (schema, request) {
-    const params = JSON.parse(request.requestBody);
+    const params = this.normalizedRequestAttrs();
     const constraintType = params.constraint_id.split('-')[0];
     const schemaMapping = {
       location: schema.locationPreferences,

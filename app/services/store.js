@@ -439,9 +439,6 @@ export default DS.Store.extend({
     });
   },
 
-  deleteLocationPreference(resourceName, attributes) {
-    return this._deletePreference(`location-${resourceName}-${attributes.get('node')}-${attributes.get('score')}`);
-  },
   deleteColocationPreference(resourceName, attributes) {
     return this._deletePreference(`colocation-${resourceName}-${attributes.get('targetResource')}-${attributes.get('score')}`);
   },
