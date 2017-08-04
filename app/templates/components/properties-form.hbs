@@ -1,7 +1,10 @@
 <div class="col-sm-6">
-  <div style="float: left">
-    {{input type="text" placeholder='Filter By Name' value=filterString keyUp=(action 'urlRefresh' filterString)}} <br />
-  </div>
+  {{input-filter
+    placeholder="Filter By Name"
+    value=filterString
+    keyUp=(action 'urlRefresh' filterString)
+  }}
+
   <div style="float: right">
   {{x-toggle
     showLabels=true
