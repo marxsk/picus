@@ -138,17 +138,6 @@ export default TabRoute.extend({
       this.store.deleteTicketPreference(resourceName, attributes);
     },
 
-    deleteAttribute: function(attribute) {
-      attribute.deleteRecord();
-      attribute.save();
-    },
-    deleteAttributes: function(attributes) {
-      attributes.forEach((item) => {
-        item.deleteRecord();
-        item.save();
-      });
-    },
-
     removeResource: function(resourceName) {
       this.store.removeAgents([resourceName], 'resource');
       this.transitionTo('cluster.resources.index');
