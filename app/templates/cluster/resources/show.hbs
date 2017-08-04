@@ -107,7 +107,6 @@
       attributes=selResource.locationPreferences
       onDeleteAction=(route-action 'deleteLocationPreference' selResource.name)
       onAppendAction=(route-action 'appendLocationPreference' selResource.name)
-      onDeleteMultipleAction=(route-action 'deleteAttributes')
       validations=model.ScoreValidations
       as |form mode attr f|
   }}
@@ -127,7 +126,6 @@
       attributes=selResource.colocationPreferences
       onDeleteAction=(route-action 'deleteColocationPreference' selResource.name)
       onAppendAction=(route-action 'appendColocationPreference' selResource.name)
-      onDeleteMultipleAction=(route-action 'deleteAttributes')
       validations=model.ScoreValidations
       as |form mode attr f|
   }}
@@ -158,7 +156,6 @@
       attributes=selResource.orderingPreferences
       onDeleteAction=(route-action 'deleteOrderingPreference' selResource.name)
       onAppendAction=(route-action 'appendOrderingPreference' selResource.name)
-      onDeleteMultipleAction=(route-action 'deleteAttributes')
       as |form mode attr f|
   }}
     {{#if (eq mode 'edit')}}
@@ -192,7 +189,6 @@
     attributes=selResource.ticketPreferences
     onDeleteAction=(route-action 'deleteTicketPreference' selResource.name)
     onAppendAction=(route-action 'appendTicketPreference' selResource.name)
-    onDeleteMultipleAction=(route-action 'deleteAttributes')
     as |form mode attr f|
 }}
 {{#if (eq mode 'edit')}}
@@ -216,7 +212,6 @@
         attributes=selResource.metaAttributes
         onDeleteAction=(route-action 'deleteMetaAttribute' selResource.name)
         onAppendAction=(route-action 'appendMetaAttribute' selResource.name)
-        onDeleteMultipleAction=(route-action 'deleteAttributes')
         as |form mode attr f|
     }}
       {{#if (eq mode 'edit')}}
@@ -234,7 +229,6 @@
           attributes=selResource.utilizationAttributes
           onDeleteAction=(route-action 'deleteUtilizationAttribute' selResource.name)
           onAppendAction=(route-action 'appendUtilizationAttribute' selResource.name)
-          onDeleteMultipleAction=(route-action 'deleteAttributes')
           as |form mode attr f|
       }}
         {{#if (eq mode 'edit')}}

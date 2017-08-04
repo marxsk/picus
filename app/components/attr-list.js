@@ -32,5 +32,11 @@ export default Ember.Component.extend({
         this.get('selectedAttributes').removeObject(attribute);
       }
     },
+    // delete items sequentally if we don't have better option
+    naiveDeleteMultipleAction: function(attributes) {
+      attributes.forEach((attr) => {
+        this.attrs.onDeleteAction(attr);
+      });
+    }
   }
 });
