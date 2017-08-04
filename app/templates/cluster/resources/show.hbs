@@ -124,7 +124,7 @@
   {{#attr-list
       title='Resource Colocation Preference'
       attributes=selResource.colocationPreferences
-      onDeleteAction=(route-action 'deleteColocationPreference' selResource.name)
+      onDeleteAction=(route-action 'deletePreference')
       onAppendAction=(route-action 'appendColocationPreference' selResource.name)
       validations=model.ScoreValidations
       as |form mode attr f|
@@ -154,7 +154,7 @@
   {{#attr-list
       title='Resource Ordering Preference'
       attributes=selResource.orderingPreferences
-      onDeleteAction=(route-action 'deleteOrderingPreference' selResource.name)
+      onDeleteAction=(route-action 'deletePreference')
       onAppendAction=(route-action 'appendOrderingPreference' selResource.name)
       as |form mode attr f|
   }}
@@ -187,7 +187,7 @@
 {{#attr-list
     title='Resource Ticket Preferences'
     attributes=selResource.ticketPreferences
-    onDeleteAction=(route-action 'deleteTicketPreference' selResource.name)
+    onDeleteAction=(route-action 'deletePreference')
     onAppendAction=(route-action 'appendTicketPreference' selResource.name)
     as |form mode attr f|
 }}

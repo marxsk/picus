@@ -109,9 +109,6 @@ export default TabRoute.extend({
     appendColocationPreference: function(resourceName, attributes) {
       this.store.pushAppendColocationPreference(resourceName, attributes);
     },
-    deleteColocationPreference: function(resourceName, attributes) {
-      this.store.deleteColocationPreference(resourceName, attributes);
-    },
     appendUtilizationAttribute: function(resourceName, attributes) {
       this.store.pushAppendUtilizationAttribute(resourceName, attributes);
     },
@@ -127,14 +124,8 @@ export default TabRoute.extend({
     appendOrderingPreference: function(resourceName, attributes) {
       this.store.pushAppendOrderingPreference(resourceName, attributes);
     },
-    deleteOrderingPreference: function(resourceName, attributes) {
-      this.store.deleteOrderingPreference(resourceName, attributes);
-    },
     appendTicketPreference: function(resourceName, attributes) {
       this.store.pushAppendTicketPreference(resourceName, attributes);
-    },
-    deleteTicketPreference: function(resourceName, attributes) {
-      this.store.deleteTicketPreference(resourceName, attributes);
     },
 
     removeResource: function(resourceName) {

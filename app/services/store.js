@@ -359,12 +359,6 @@ export default DS.Store.extend({
     });
   },
 
-  _deletePreference(constraintId) {
-    return this._sendPostData('remove_constraint_remote', {
-      constraint_id: constraintId,
-    });
-  },
-
   // @note: Difference between attributes in pushAppend vs delete
   // pushAppend -> ordinary object
   // delete -> Ember object
@@ -437,16 +431,6 @@ export default DS.Store.extend({
       role: attributes.role,
       'loss-policy': attributes.lossPolicy,
     });
-  },
-
-  deleteColocationPreference(resourceName, attributes) {
-    return this._deletePreference(`colocation-${resourceName}-${attributes.get('targetResource')}-${attributes.get('score')}`);
-  },
-  deleteOrderingPreference(resourceName, attributes) {
-    return this._deletePreference(`ordering-${resourceName}-${attributes.get('targetResource')}-${attributes.get('score')}`);
-  },
-  deleteTicketPreference(resourceName, attributes) {
-    return this._deletePreference(`ticket-${attributes.get('ticket')}-${resourceName}-${attributes.get('role')}`);
   },
 
   createResouceGroup(groupId, resources) {

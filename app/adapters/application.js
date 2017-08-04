@@ -8,7 +8,10 @@ export default DS.Adapter.extend({
 
   pathForType: function(modelName) {
     return {
-      'location-preference': 'remove_constraint_remote'
+      'location-preference': 'remove_constraint_remote',
+      'colocation-preference': 'remove_constraint_remote',
+      'ordering-preference': 'remove_constraint_remote',
+      'ticket-preference': 'remove_constraint_remote',
     }[modelName];
   },
 
