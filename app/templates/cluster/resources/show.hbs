@@ -191,10 +191,9 @@
     as |form mode attr f|
 }}
 {{#if (eq mode 'edit')}}
-  --add empty fields to select-field @todo--
   {{f.text-field 'ticket'}}
-  {{f.select-field 'role' 'Stopped Started Master Slave'}}
-  {{f.select-field 'lossPolicy' 'fence stop freeze demote'}}
+  {{f.select-field 'role' prompt=' ' promptIsSelectable=true options='Stopped Started Master Slave'}}
+  {{f.select-field 'lossPolicy' prompt=' ' promptIsSelectable=true options='fence stop freeze demote'}}
 {{else}}
   <td>{{attr.ticket}}</td>
   <td>{{attr.role}}</td>
