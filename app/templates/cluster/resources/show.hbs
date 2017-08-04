@@ -94,8 +94,8 @@
 {{/with}}
 {{/tab.pane}}
 {{#tab.pane elementId="constraints" title="Constraints"}}
-{{#bs-accordion selected="1" as |acc|}}
-  {{#acc.item value="1" title="Resource Location Preference"}}
+{{#bs-accordion selected="location" as |acc|}}
+  {{#acc.item value="location" title="Resource Location Preference"}}
 
   {{#attr-list
       title='Resource Location Preference'
@@ -115,7 +115,7 @@
   {{/if}}
   {{/attr-list}}
   {{/acc.item}}
-  {{#acc.item value="3" title="Resource Colocation Preference"}}
+  {{#acc.item value="colocation" title="Resource Colocation Preference"}}
 
   {{#attr-list
       title='Resource Colocation Preference'
@@ -147,7 +147,7 @@
   {{/if}}
   {{/attr-list}}
   {{/acc.item}}
-  {{#acc.item value="2" title="Resource Ordering Preference"}}
+  {{#acc.item value="ordering" title="Resource Ordering Preference"}}
   {{#attr-list
       title='Resource Ordering Preference'
       attributes=selResource.orderingPreferences
@@ -181,7 +181,7 @@
     {{/if}}
   {{/attr-list}}
 {{/acc.item}}
-{{#acc.item value="4" title="Resource Ticket Preferences"}}
+{{#acc.item value="ticket" title="Resource Ticket Preferences"}}
 {{#attr-list
     title='Resource Ticket Preferences'
     attributes=selResource.ticketPreferences
@@ -204,8 +204,8 @@
 {{/bs-accordion}}
   {{/tab.pane}}
   {{#tab.pane elementId="attributes" title="Attributes"}}
-  {{#bs-accordion selected="1" as |acc|}}
-  {{#acc.item value="1" title="Resource Meta Attributes"}}
+  {{#bs-accordion selected="meta" as |acc|}}
+  {{#acc.item value="meta" title="Resource Meta Attributes"}}
     {{#attr-list
         title='Resource Meta Attributes'
         attributes=selResource.metaAttributes
@@ -223,7 +223,7 @@
       {{/if}}
     {{/attr-list}}
     {{/acc.item}}
-    {{#acc.item value="4" title="Resource Utilization Attributes"}}
+    {{#acc.item value="utilization" title="Resource Utilization Attributes"}}
       {{#attr-list
           title='Resource Utilization Attributes'
           attributes=selResource.utilizationAttributes
