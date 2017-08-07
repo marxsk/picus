@@ -74,6 +74,18 @@ export default DS.JSONAPISerializer.extend({
             role: record.get('role'),
             'loss-policy': record.get('lossPolicy'),
           });
+      } else if (snapshot.modelName === 'attribute') {
+        return this._postTextSerializer({
+          res_id: record.get('resource.name'),
+          key: record.get('key'),
+          value: record.get('value'),
+        });
+      } else if (snapshot.modelName === 'utilization-attribute') {
+        return this._postTextSerializer({
+          resource_id: record.get('resource.name'),
+          name: record.get('name'),
+          value: record.get('value'),
+        });
       } else {
         console.error(`[serializer] model ${snapshot.modelName} for CREATE can not be serialized`);
       }

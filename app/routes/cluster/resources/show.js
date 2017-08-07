@@ -141,11 +141,21 @@ export default TabRoute.extend({
       preference.save();
     },
 
-    appendUtilizationAttribute: function(resourceName, attributes) {
-      this.store.pushAppendUtilizationAttribute(resourceName, attributes);
+    appendMetaAttribute: function(resource, attributes) {
+      const attribute = this.get('store').createRecord('attribute', {
+        resource: resource,
+        key: attributes.key,
+        value: attributes.key,
+      });
+      attribute.save();
     },
-    appendMetaAttribute: function(resourceName, attributes) {
-      this.store.pushAppendMetaAttribute(resourceName, attributes);
+    appendUtilizationAttribute: function(resource, attributes) {
+      const attribute = this.get('store').createRecord('utilization-attribute', {
+        resource: resource,
+        name: attributes.name,
+        value: attributes.key,
+      });
+      attribute.save();
     },
 
     removeResource: function(resourceName) {

@@ -359,24 +359,6 @@ export default DS.Store.extend({
     });
   },
 
-  // @note: Difference between attributes in pushAppend vs delete
-  // pushAppend -> ordinary object
-  // delete -> Ember object
-  pushAppendMetaAttribute(resourceName, attributes) {
-    return this._sendPostData('add_meta_attr_remote', {
-      res_id: resourceName,
-      key: attributes.key,
-      value: attributes.value,
-    });
-  },
-  pushAppendUtilizationAttribute(resourceName, attributes) {
-    return this._sendPostData('set_resource_utilization', {
-      resource_id: resourceName,
-      name: attributes.name,
-      value: attributes.value,
-    });
-  },
-
   createResouceGroup(groupId, resources) {
     this._sendData('add_group', {
       resource_group: groupId,
