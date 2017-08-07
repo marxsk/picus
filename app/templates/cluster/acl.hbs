@@ -1,6 +1,6 @@
 {{#bs-tab customTabs=true activeId=activeTab as |tab|}}
 
-{{bs-nav-items tab=tab setActiveTab=(action 'setActiveTab') items=(array
+{{bs-nav-items tab=tab onSetActiveTab=(action 'setActiveTab') items=(array
   (hash name="users" title="Users & Groups")
   (hash name="roles" title="Roles")
   (hash name="permissions" title="Permissions")

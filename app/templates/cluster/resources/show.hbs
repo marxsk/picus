@@ -68,14 +68,14 @@
 {{#bs-tab customTabs=true activeId=activeTab as |tab|}}
 
 {{#if (eq selResource.resourceType 'primitive')}}
-{{bs-nav-items tab=tab setActiveTab=(action 'setActiveTab') items=(array
+{{bs-nav-items tab=tab onSetActiveTab=(action 'setActiveTab') items=(array
   (hash name="status" title="Status")
   (hash name="properties" title="Properties")
   (hash name="constraints" title="Constraints")
   (hash name="attributes" title="Attributes")
 )}}
 {{else}}
-{{bs-nav-items tab=tab setActiveTab=(action 'setActiveTab') items=(array
+{{bs-nav-items tab=tab onSetActiveTab=(action 'setActiveTab') items=(array
   (hash name="status" title="Status")
   (hash name="constraints" title="Constraints")
   (hash name="attributes" title="Attributes")

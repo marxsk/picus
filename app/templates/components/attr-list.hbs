@@ -11,7 +11,7 @@
     {{/attr-single}}
   {{/each}}
   <tr><td>
-    {{#with (changeset attr validations) as |changeset|}}
+    {{#with (changeset formEntry validations) as |changeset|}}
       {{#form-for changeset submit=(action 'appendCleanAction') as |f|}}
         {{yield this 'edit' changeset f}}
         {{f.submit "Append" disabled=changeset.isInvalid}}

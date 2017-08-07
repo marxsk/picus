@@ -1,4 +1,4 @@
-<td>{{input type='checkbox' checked=isChecked}}</td>
+<td>{{one-way-checkbox isChecked update=(action toggleCheck)}}</td>
 {{yield attribute}}
 <td>
   {{#if attribute.isDeleted}}
