@@ -247,14 +247,7 @@ export default function() {
   });
 
   this.post('/managec/my/add_meta_attr_remote', function (schema, request) {
-    let params;
-
-    // @todo: Handler until we use non-JSON also for creating
-    if (request.requestBody && (request.requestBody[0] === '{')) {
-      params = JSON.parse(request.requestBody);
-    } else {
-      params = this.normalizedRequestAttrs();
-    }
+    const params = this.normalizedRequestAttrs();
     const resource = schema.resources.where({name: params.res_id}).models[0];
 
     return _cud_attribute(
@@ -268,14 +261,7 @@ export default function() {
   });
 
   this.post('/managec/my/set_resource_utilization', function (schema, request) {
-    let params;
-
-    // @todo: Handler until we use non-JSON also for creating
-    if (request.requestBody && (request.requestBody[0] === '{')) {
-      params = JSON.parse(request.requestBody);
-    } else {
-      params = this.normalizedRequestAttrs();
-    }
+    const params = this.normalizedRequestAttrs();
     const resource = schema.resources.where({name: params.resource_id}).models[0];
 
     return _cud_attribute(
@@ -289,15 +275,7 @@ export default function() {
   });
 
   this.post('/managec/my/add_constraint_remote', function (schema, request) {
-    let params;
-
-    // @todo: Handler until we use non-JSON also for creating
-    if (request.requestBody && (request.requestBody[0] === '{')) {
-      params = JSON.parse(request.requestBody);
-    } else {
-      params = this.normalizedRequestAttrs();
-    }
-
+    const params = this.normalizedRequestAttrs();
     const resource = schema.resources.where({name: params.res_id}).models[0];
 
     let keyAlreadyExists = false;
