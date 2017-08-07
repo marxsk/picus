@@ -369,25 +369,11 @@ export default DS.Store.extend({
       value: attributes.value,
     });
   },
-  deleteMetaAttribute(resourceName, attributes) {
-    return this._sendPostData('add_meta_attr_remote', {
-      res_id: resourceName,
-      key: attributes.get('key'),
-      value: '',
-    });
-  },
   pushAppendUtilizationAttribute(resourceName, attributes) {
     return this._sendPostData('set_resource_utilization', {
       resource_id: resourceName,
       name: attributes.name,
       value: attributes.value,
-    });
-  },
-  deleteUtilizationAttribute(resourceName, attributes) {
-    return this._sendPostData('set_resource_utilization', {
-      resource_id: resourceName,
-      name: attributes.get('name'),
-      value: '',
     });
   },
   pushAppendLocationPreference(resourceName, attributes) {

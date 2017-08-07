@@ -210,7 +210,7 @@
     {{#attr-list
         title='Resource Meta Attributes'
         attributes=selResource.metaAttributes
-        onDeleteAction=(route-action 'deleteMetaAttribute' selResource.name)
+        onDeleteAction=(route-action 'deletePreference')
         onAppendAction=(route-action 'appendMetaAttribute' selResource.name)
         as |form mode attr f|
     }}
@@ -227,7 +227,7 @@
       {{#attr-list
           title='Resource Utilization Attributes'
           attributes=selResource.utilizationAttributes
-          onDeleteAction=(route-action 'deleteUtilizationAttribute' selResource.name)
+          onDeleteAction=(route-action 'deletePreference')
           onAppendAction=(route-action 'appendUtilizationAttribute' selResource.name)
           as |form mode attr f|
       }}

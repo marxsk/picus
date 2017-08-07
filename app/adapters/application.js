@@ -12,6 +12,8 @@ export default DS.Adapter.extend({
       'colocation-preference': 'remove_constraint_remote',
       'ordering-preference': 'remove_constraint_remote',
       'ticket-preference': 'remove_constraint_remote',
+      'attribute': 'add_meta_attr_remote',
+      'utilization-attribute': 'set_resource_utilization',
     }[modelName];
   },
 

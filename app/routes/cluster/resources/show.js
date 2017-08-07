@@ -112,14 +112,8 @@ export default TabRoute.extend({
     appendUtilizationAttribute: function(resourceName, attributes) {
       this.store.pushAppendUtilizationAttribute(resourceName, attributes);
     },
-    deleteUtilizationAttribute: function(resourceName, attributes) {
-      this.store.deleteUtilizationAttribute(resourceName, attributes);
-    },
     appendMetaAttribute: function(resourceName, attributes) {
       this.store.pushAppendMetaAttribute(resourceName, attributes);
-    },
-    deleteMetaAttribute: function(resourceName, attributes) {
-      this.store.deleteMetaAttribute(resourceName, attributes);
     },
     appendOrderingPreference: function(resourceName, attributes) {
       this.store.pushAppendOrderingPreference(resourceName, attributes);
