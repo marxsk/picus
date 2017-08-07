@@ -106,7 +106,7 @@
       title='Resource Location Preference'
       attributes=selResource.locationPreferences
       onDeleteAction=(route-action 'deletePreference')
-      onAppendAction=(route-action 'appendLocationPreference' selResource.name)
+      onAppendAction=(route-action 'appendLocationPreference' selResource)
       validations=model.ScoreValidations
       as |form mode attr f|
   }}

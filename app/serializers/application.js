@@ -33,7 +33,20 @@ export default DS.JSONAPISerializer.extend({
           value: '',
         });
       } else {
-        console.error(`[serializer] model ${snapshot.modelName} can not be serialized`);
+        console.error(`[serializer] model ${snapshot.modelName} for DELETE can not be serialized`);
+      }
+    } else if (options.action === 'create') {
+      if (snapshot.modelName === 'location-preference') {
+        return this._postTextSerializer({
+          res_id: record.get('resource.name'),
+          disable_autocorrect: 1,
+          c_type: 'loc',
+          score: record.get('score'),
+          rule: record.get('node'),
+          node_id: record.get('node'),
+        });
+      } else {
+        console.error(`[serializer] model ${snapshot.modelName} for CREATE can not be serialized`);
       }
     }
   }

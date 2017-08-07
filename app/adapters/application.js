@@ -6,20 +6,51 @@ const { RSVP } = Ember;
 export default DS.Adapter.extend({
   namespace: undefined,
 
-  pathForType: function(modelName) {
-    return {
-      'location-preference': 'remove_constraint_remote',
-      'colocation-preference': 'remove_constraint_remote',
-      'ordering-preference': 'remove_constraint_remote',
-      'ticket-preference': 'remove_constraint_remote',
-      'attribute': 'add_meta_attr_remote',
-      'utilization-attribute': 'set_resource_utilization',
-    }[modelName];
+  pathForType: function(modelName, action) {
+    if (action === 'delete') {
+      return {
+        'location-preference': 'remove_constraint_remote',
+        'colocation-preference': 'remove_constraint_remote',
+        'ordering-preference': 'remove_constraint_remote',
+        'ticket-preference': 'remove_constraint_remote',
+        'attribute': 'add_meta_attr_remote',
+        'utilization-attribute': 'set_resource_utilization',
+      }[modelName];
+    } else if (action === 'create') {
+      return {
+        'location-preference': 'add_constraint_remote',
+        'attribute': 'add_meta_attr_remote',
+        'utilization-attribute': 'set_resource_utilization',
+      }[modelName];
+    }
+  },
+
+  createRecord(store, type, snapshot) {
+    const data = this.serialize(snapshot, {action: 'create'});
+    const url = this.get('namespace') + '/' + this.pathForType(snapshot.modelName, 'create');
+
+    return new Ember.RSVP.Promise((resolve, reject) => {
+      Ember.$.ajax({
+        type: 'POST',
+        url,
+        dataType: 'text',
+        data: data,
+      }).then((response) => {
+        // @todo: start handling of response from cluster
+        // @todo: perhaps await store.reloadData()
+        store.reloadData();
+        Ember.run(null, resolve, { errors: [ { status: 202, }, ] });
+      }, (jqXHR) => {
+        // @todo: this is completely broken
+        jqXHR.then = null; // copied from official documentation
+        Ember.run(null, reject, jqXHR);
+      });
+    });
   },
 
   deleteRecord(store, type, snapshot) {
     const data = this.serialize(snapshot, {action: 'delete'});
-    const url = this.get('namespace') + '/' + this.pathForType(snapshot.modelName);
+    const url = this.get('namespace') + '/' + this.pathForType(snapshot.modelName, 'delete');
 
     return new Ember.RSVP.Promise((resolve, reject) => {
       Ember.$.ajax({

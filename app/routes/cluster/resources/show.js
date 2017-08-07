@@ -103,8 +103,13 @@ export default TabRoute.extend({
 
     deletePreference: (constraint) => { constraint.destroyRecord(); },
 
-    appendLocationPreference: function(resourceName, attributes) {
-      this.store.pushAppendLocationPreference(resourceName, attributes);
+    appendLocationPreference: function(resource, attributes) {
+      const preference = this.get('store').createRecord('location-preference', {
+        resource: resource,
+        node: attributes.node,
+        score: attributes.score,
+      });
+      preference.save();
     },
     appendColocationPreference: function(resourceName, attributes) {
       this.store.pushAppendColocationPreference(resourceName, attributes);

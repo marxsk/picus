@@ -376,16 +376,6 @@ export default DS.Store.extend({
       value: attributes.value,
     });
   },
-  pushAppendLocationPreference(resourceName, attributes) {
-    return this._sendPostData('add_constraint_remote', {
-      res_id: resourceName,
-      disable_autocorrect: 1,
-      c_type: 'loc',
-      score: attributes.score,
-      rule: attributes.node,
-      node_id: attributes.node,
-    });
-  },
   pushAppendColocationPreference(resourceName, attributes) {
     return this._sendPostData('add_constraint_remote', {
       res_id: resourceName,
