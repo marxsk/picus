@@ -1,7 +1,45 @@
 import Ember from 'ember';
 
+/**
+ * Component that generates single section (e.g. basic) of properties for fence/resource agents.
+ *
+ * It also generates all form fields that are required. Their types and values are obtained
+ * from the metadata information.
+ **/
 export default Ember.Component.extend({
-  formObject: undefined,
+  /**
+   * form is ember-form-for component to which we include generated form-fields
+   *
+   * @public
+   */
+  form: undefined,
+  /**
+   * filter is used for generating only fields which name contains 'filter' string
+   *
+   * @public
+   */
+  filter: undefined,
+  /**
+   * relevant part of agent's metadata
+   *
+   * @public
+   **/
+  parameters: undefined,
+  /**
+   * information about already filled changes in the form
+   *
+   * These information are not affected by filtering.
+   *
+   * @public
+   */
+  changeset: undefined,
+
+  /**
+   * This object is used only for showSecret() method
+   *
+   * @private
+   */
+  _formObject: undefined,
 
   actions: {
     showSecret(property, oldValue) {
@@ -12,8 +50,8 @@ export default Ember.Component.extend({
         // obtained from the form property.
 
         let secret = '';
-        if (this.get('formObject') && (this.get('formObject').get(property) !== undefined)) {
-          secret = this.get('formObject').get(property);
+        if (this.get('_formObject') && (this.get('_formObject').get(property) !== undefined)) {
+          secret = this.get('_formObject').get(property);
         } else {
           secret = oldValue;
         }
@@ -21,7 +59,7 @@ export default Ember.Component.extend({
         alert(`The secret is '${secret}'`);
     },
     updateSecretLength(object, property, value) {
-      this.formObject = object;
+      this._formObject = object;
       Ember.set(object, property, value);
     }
   }
