@@ -11,7 +11,7 @@ export default DS.JSONAPISerializer.extend({
     const record = snapshot.record;
 
     if (options.action === "delete") {
-      // @todo: IDs should not be generated as there might be additional suffixes
+      // @todo: IDs for preferences should not be generated as there might be additional suffixes
       if (snapshot.modelName === "location-preference") {
         return `constraint_id=location-${record.get('resource.name')}-${record.get('node')}-${record.get('score')}`;
       } else if (snapshot.modelName === 'colocation-preference') {
