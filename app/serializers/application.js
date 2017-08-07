@@ -45,6 +45,35 @@ export default DS.JSONAPISerializer.extend({
           rule: record.get('node'),
           node_id: record.get('node'),
         });
+      } else if (snapshot.modelName === 'colocation-preference') {
+        return this._postTextSerializer({
+          res_id: record.get('resource.name'),
+          disable_autocorrect: 1,
+          c_type: 'col',
+          score: record.get('score'),
+          target_res_id: record.get('targetResource'),
+          colocation_type: record.get('colocationType'),
+        });
+      } else if (snapshot.modelName === 'ordering-preference') {
+        return this._postTextSerializer({
+            res_id: record.get('resource.name'),
+            disable_autocorrect: 1,
+            c_type: 'ord',
+            res_action: record.get('action'),
+            score: record.get('score'),
+            order: record.get('order'),
+            target_action: record.get('targetAction'),
+            target_res_id: record.get('targetResource'),
+        });
+      } else if (snapshot.modelName === 'ticket-preference') {
+          return this._postTextSerializer({
+            res_id: record.get('resource.name'),
+            disable_autocorrect: 1,
+            c_type: 'ticket',
+            ticket: record.get('ticket'),
+            role: record.get('role'),
+            'loss-policy': record.get('lossPolicy'),
+          });
       } else {
         console.error(`[serializer] model ${snapshot.modelName} for CREATE can not be serialized`);
       }

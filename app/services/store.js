@@ -376,38 +376,6 @@ export default DS.Store.extend({
       value: attributes.value,
     });
   },
-  pushAppendColocationPreference(resourceName, attributes) {
-    return this._sendPostData('add_constraint_remote', {
-      res_id: resourceName,
-      disable_autocorrect: 1,
-      c_type: 'col',
-      score: attributes.score,
-      target_res_id: attributes.targetResource,
-      colocation_type: attributes.colocationType,
-    });
-  },
-  pushAppendOrderingPreference(resourceName, attributes) {
-    return this._sendPostData('add_constraint_remote', {
-        res_id: resourceName,
-        res_action: attributes.action,
-        disable_autocorrect: 1,
-        c_type: 'ord',
-        score: attributes.score,
-        order: attributes.order,
-        target_action: attributes.targetAction,
-        target_res_id: attributes.targetResource,
-    });
-  },
-  pushAppendTicketPreference(resourceName, attributes) {
-    return this._sendPostData('add_constraint_remote', {
-      res_id: resourceName,
-      disable_autocorrect: 1,
-      c_type: 'ticket',
-      ticket: attributes.ticket,
-      role: attributes.role,
-      'loss-policy': attributes.lossPolicy,
-    });
-  },
 
   createResouceGroup(groupId, resources) {
     this._sendData('add_group', {

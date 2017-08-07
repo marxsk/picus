@@ -19,6 +19,9 @@ export default DS.Adapter.extend({
     } else if (action === 'create') {
       return {
         'location-preference': 'add_constraint_remote',
+        'colocation-preference': 'add_constraint_remote',
+        'ordering-preference': 'add_constraint_remote',
+        'ticket-preference': 'add_constraint_remote',
         'attribute': 'add_meta_attr_remote',
         'utilization-attribute': 'set_resource_utilization',
       }[modelName];

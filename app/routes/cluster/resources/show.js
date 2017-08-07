@@ -111,20 +111,41 @@ export default TabRoute.extend({
       });
       preference.save();
     },
-    appendColocationPreference: function(resourceName, attributes) {
-      this.store.pushAppendColocationPreference(resourceName, attributes);
+    appendColocationPreference: function(resource, attributes) {
+      const preference = this.get('store').createRecord('colocation-preference', {
+        resource: resource,
+        targetResource: attributes.targetResource,
+        colocationType: attributes.colocationType,
+        score: attributes.score,
+      });
+      preference.save();
     },
+    appendOrderingPreference: function(resource, attributes) {
+      const preference = this.get('store').createRecord('ordering-preference', {
+          resource: resource,
+          targetResource: attributes.targetResource,
+          targetAction: attributes.targetAction,
+          score: attributes.score,
+          order: attributes.order,
+          action: attributes.action,
+      });
+      preference.save();
+    },
+    appendTicketPreference: function(resource, attributes) {
+      const preference = this.get('store').createRecord('ticket-preference', {
+          resource: resource,
+          ticket: attributes.ticket,
+          role: attributes.role,
+          lossPolicy: attributes.lossPolicy,
+      });
+      preference.save();
+    },
+
     appendUtilizationAttribute: function(resourceName, attributes) {
       this.store.pushAppendUtilizationAttribute(resourceName, attributes);
     },
     appendMetaAttribute: function(resourceName, attributes) {
       this.store.pushAppendMetaAttribute(resourceName, attributes);
-    },
-    appendOrderingPreference: function(resourceName, attributes) {
-      this.store.pushAppendOrderingPreference(resourceName, attributes);
-    },
-    appendTicketPreference: function(resourceName, attributes) {
-      this.store.pushAppendTicketPreference(resourceName, attributes);
     },
 
     removeResource: function(resourceName) {
