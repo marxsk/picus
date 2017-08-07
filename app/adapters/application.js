@@ -29,8 +29,8 @@ export default DS.Adapter.extend({
         data: data,
       }).then((response) => {
         // @todo: start handling of response from cluster
-        // @todo: perhaps await this.reloadData()
-        this.reloadData();
+        // @todo: perhaps await store.reloadData()
+        store.reloadData();
         Ember.run(null, resolve, { errors: [ { status: 202, }, ] });
       }, (jqXHR) => {
         // @todo: this is completely broken
