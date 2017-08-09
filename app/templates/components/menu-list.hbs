@@ -2,21 +2,21 @@
   {{#unless item.resources}}
     <li>
       {{#if onCheckAction}}
-        {{menu-item targetRoute=targetRoute title=item.name component=item componentId=item.id status=item.status onCheckAction=(action onCheckAction)}}
+        {{menu-item targetRoute=targetRoute title=item.name component=item componentId=item.name status=item.status onCheckAction=(action onCheckAction)}}
       {{else}}
-        {{menu-item targetRoute=targetRoute title=item.name component=item componentId=item.id status=item.status}}
+        {{menu-item targetRoute=targetRoute title=item.name component=item componentId=item.name status=item.status}}
       {{/if}}
     </li>
   {{else}}
     <li>
       {{#if onCheckAction}}
-        {{#menu-item targetRoute=targetRoute title=item.name isCollapsable=true component=item componentId=item.id status=item.status onCheckAction=(action onCheckAction)}}
+        {{#menu-item targetRoute=targetRoute title=item.name isCollapsable=true component=item componentId=item.name status=item.status onCheckAction=(action onCheckAction)}}
         <ul>
             {{menu-list targetRoute=targetRoute data=item.resources onCheckAction=(action onCheckAction)}}
         </ul>
         {{/menu-item}}
       {{else}}
-        {{#menu-item targetRoute=targetRoute title=item.name isCollapsable=true component=item componentId=item.id status=item.status}}
+        {{#menu-item targetRoute=targetRoute title=item.name isCollapsable=true component=item componentId=item.name status=item.status}}
         <ul>
             {{menu-list targetRoute=targetRoute data=item.resources}}
         </ul>

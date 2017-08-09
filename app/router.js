@@ -21,7 +21,7 @@ Router.map(function() {
 
     this.route('resources', function() {
       this.route('listing', { path: 'show/' });
-      this.route('show', { path: 'show/:resource_id' });
+      this.route('show', { path: 'show/:resource_name' });
       this.route('create');
       this.route('createGroup', { path: 'create-group' });
     });

@@ -12,14 +12,14 @@
   <ol class="breadcrumb">
     <li class="breadcrumb-item">{{#link-to "cluster.properties"}}Home{{/link-to}}</li>
     <li class="breadcrumb-item">{{#link-to "cluster.resources"}}Resources{{/link-to}}</li>
-    <li class="breadcrumb-item active">{{model.params.resource_id}}</li>
+    <li class="breadcrumb-item active">{{model.params.resource_name}}</li>
   </ol>
 {{/ember-wormhole}}
 
 {{#unless model.listing}}
 {{#unless model.selectedResource}}
   {{#bs-alert type="danger" dismissible=0}}
-  The resource device with ID '{{model.params.resource_id}}' was not found, please select a different resource.
+  The resource device with ID '{{model.params.resource_name}}' was not found, please select a different resource.
   {{/bs-alert}}
 {{/unless}}
 {{/unless}}

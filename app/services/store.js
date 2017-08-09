@@ -454,4 +454,11 @@ export default DS.Store.extend({
       attributes: { roleName, ...attribute },
     });
   },
+
+  /**
+   * Query for single record on top of the already loaded data
+   **/
+  peekRecordQueryName(modelName, name) {
+    return this.peekAll(modelName).filterBy('name', name).get('firstObject');
+  },
 });

@@ -5,7 +5,6 @@ import ScoreValidations from '../../../validators/constraint-validations';
 
 export default TabRoute.extend({
   modelForm: {},
-  resourceId: undefined,
   selectedResources: Ember.A(),
 
   queryParams: {
@@ -26,8 +25,7 @@ export default TabRoute.extend({
    },
 
   async model(params) {
-    const resource = this.store.peekRecord('resource', params.resource_id);
-    this.set('resourceId', params.resource_id);
+    const resource = this.store.peekRecordQueryName('resource', params.resource_name);
 
     if (resource === null) {
       return Ember.RSVP.hash({
@@ -48,7 +46,7 @@ export default TabRoute.extend({
     let validations;
 
     if (resource.get('resourceType') === 'primitive') {
-      metadata = await this.store.getAgentMetadata('resource', this.store.peekRecord('resource', params.resource_id).get('resourceProvider') + ':' + this.store.peekRecord('resource', params.resource_id).get('agentType'));
+      metadata = await this.store.getAgentMetadata('resource', resource.get('resourceProvider') + ':' + resource.get('agentType'));
       const x = categorizeProperties(metadata.parameters);
       parameters = x.parameters;
       validations = x.validations;
@@ -62,11 +60,11 @@ export default TabRoute.extend({
 
     return Ember.RSVP.hash({
       params: params,
-      metadata: this.store.getAgentMetadata('resource', this.store.peekRecord('resource', params.resource_id).get('resourceProvider') + ':' + this.store.peekRecord('resource', params.resource_id).get('agentType')),
+      metadata: metadata,
       parameters: parameters,
       formData: this.get('modelForm'),
       updatingCluster: this.store.peekAll('cluster'),
-      selectedResource: this.store.peekRecord('resource', params.resource_id),
+      selectedResource: resource,
       otherResourcesName: otherResourcesName,
       ResourceValidations: validations,
       ScoreValidations,
