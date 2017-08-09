@@ -5,7 +5,7 @@
 {{/if}}
 
 {{#if onCheckAction}}
-  {{input type='checkbox' checked=isChecked}}
+  {{one-way-checkbox isChecked update=(action toggleCheck)}}
 {{/if}}
 {{#link-to targetRoute componentId}}{{title}}
   {{#if status}}

@@ -21,7 +21,8 @@ export default Ember.Component.extend({
   isCollapsed: true,
   isChecked: false,
 
-  watchChecked: function() {
+  toggleCheck: function(value) {
+    this.set('isChecked', value);
     this.attrs.onCheckAction(this.get('component'), this.get('componentId'), this.get('isChecked'));
-  }.observes('isChecked'),
+  },
 });
