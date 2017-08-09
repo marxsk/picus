@@ -1,5 +1,13 @@
 import Ember from 'ember';
 
+/**
+ * Component that display complete treeview for resources including header
+ *
+ * On top of the standard functionality, it also support displaying count of
+ * resource with error state.
+ *
+ * @todo: rename to better name as this component is not header anymore
+ */
 export default Ember.Component.extend({
   title: undefined,
   isCollapsed: true,
