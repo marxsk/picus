@@ -8,7 +8,7 @@ import Ember from 'ember';
 export default Ember.Component.extend({
   title: undefined,
   /**
-   * (???) Very likely defined to handle filtering based on the status of resource 
+   * (???) Very likely defined to handle filtering based on the status of resource
    *
    * @property
    */
@@ -24,5 +24,11 @@ export default Ember.Component.extend({
   toggleCheck: function(value) {
     this.set('isChecked', value);
     this.attrs.onCheckAction(this.get('component'), this.get('componentId'), this.get('isChecked'));
+  },
+
+  actions: {
+    onSelectCollapse() {
+      this.toggleProperty('isCollapsed');
+    }
   },
 });

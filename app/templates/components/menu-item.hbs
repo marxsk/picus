@@ -1,9 +1,8 @@
 {{#if isCollapsable}}
-  <span class='menu-item-collapse' {{action (toggle 'isCollapsed' this)}}>
+  <span class='menu-item-collapse' {{action 'onSelectCollapse'}}>
     {{#if isCollapsed}}+{{else}}-{{/if}}
   </span>
 {{/if}}
-
 {{#if onCheckAction}}
   {{one-way-checkbox isChecked update=(action toggleCheck)}}
 {{/if}}
