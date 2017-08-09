@@ -5,6 +5,7 @@ import Ember from 'ember';
  *
  * On top of the standard functionality, it also support displaying count of
  * resource with error state.
+ * If onCheckAction is defined then checkbox is displayed on front of every record.
  *
  * @todo: rename to better name as this component is not header anymore
  */
