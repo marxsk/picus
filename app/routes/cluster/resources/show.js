@@ -5,6 +5,7 @@ import ScoreValidations from '../../../validators/constraint-validations';
 
 export default TabRoute.extend({
   modelForm: {},
+  resource: undefined,
   selectedResources: Ember.A(),
 
   queryParams: {
@@ -26,6 +27,7 @@ export default TabRoute.extend({
 
   async model(params) {
     const resource = this.store.peekRecordQueryName('resource', params.resource_name);
+    this.set('resource', resource);
 
     if (resource === null) {
       return Ember.RSVP.hash({
@@ -101,26 +103,26 @@ export default TabRoute.extend({
 
     deletePreference: (constraint) => { constraint.destroyRecord(); },
 
-    appendLocationPreference: function(resource, attributes) {
+    appendLocationPreference: function(attributes) {
       const preference = this.get('store').createRecord('location-preference', {
-        resource: resource,
+        resource: this.get('resource'),
         node: attributes.node,
         score: attributes.score,
       });
       preference.save();
     },
-    appendColocationPreference: function(resource, attributes) {
+    appendColocationPreference: function(attributes) {
       const preference = this.get('store').createRecord('colocation-preference', {
-        resource: resource,
+        resource: this.get('resource'),
         targetResource: attributes.targetResource,
         colocationType: attributes.colocationType,
         score: attributes.score,
       });
       preference.save();
     },
-    appendOrderingPreference: function(resource, attributes) {
+    appendOrderingPreference: function(attributes) {
       const preference = this.get('store').createRecord('ordering-preference', {
-          resource: resource,
+          resource: this.get('resource'),
           targetResource: attributes.targetResource,
           targetAction: attributes.targetAction,
           score: attributes.score,
@@ -129,9 +131,9 @@ export default TabRoute.extend({
       });
       preference.save();
     },
-    appendTicketPreference: function(resource, attributes) {
+    appendTicketPreference: function(attributes) {
       const preference = this.get('store').createRecord('ticket-preference', {
-          resource: resource,
+          resource: this.get('resource'),
           ticket: attributes.ticket,
           role: attributes.role,
           lossPolicy: attributes.lossPolicy,
@@ -139,17 +141,17 @@ export default TabRoute.extend({
       preference.save();
     },
 
-    appendMetaAttribute: function(resource, attributes) {
+    appendMetaAttribute: function(attributes) {
       const attribute = this.get('store').createRecord('attribute', {
-        resource: resource,
+        resource: this.get('resource'),
         key: attributes.key,
         value: attributes.key,
       });
       attribute.save();
     },
-    appendUtilizationAttribute: function(resource, attributes) {
+    appendUtilizationAttribute: function(attributes) {
       const attribute = this.get('store').createRecord('utilization-attribute', {
-        resource: resource,
+        resource: this.get('resource'),
         name: attributes.name,
         value: attributes.key,
       });

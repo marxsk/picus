@@ -106,7 +106,7 @@
       title='Resource Location Preference'
       attributes=selResource.locationPreferences
       onDeleteAction=(route-action 'deletePreference')
-      onAppendAction=(route-action 'appendLocationPreference' selResource)
+      onAppendAction=(route-action 'appendLocationPreference')
       validations=model.ScoreValidations
       as |form mode attr f|
   }}
@@ -125,7 +125,7 @@
       title='Resource Colocation Preference'
       attributes=selResource.colocationPreferences
       onDeleteAction=(route-action 'deletePreference')
-      onAppendAction=(route-action 'appendColocationPreference' selResource)
+      onAppendAction=(route-action 'appendColocationPreference')
       validations=model.ScoreValidations
       as |form mode attr f|
   }}
@@ -155,7 +155,7 @@
       title='Resource Ordering Preference'
       attributes=selResource.orderingPreferences
       onDeleteAction=(route-action 'deletePreference')
-      onAppendAction=(route-action 'appendOrderingPreference' selResource)
+      onAppendAction=(route-action 'appendOrderingPreference')
       as |form mode attr f|
   }}
     {{#if (eq mode 'edit')}}
@@ -188,7 +188,7 @@
     title='Resource Ticket Preferences'
     attributes=selResource.ticketPreferences
     onDeleteAction=(route-action 'deletePreference')
-    onAppendAction=(route-action 'appendTicketPreference' selResource)
+    onAppendAction=(route-action 'appendTicketPreference')
     as |form mode attr f|
 }}
 {{#if (eq mode 'edit')}}
@@ -211,7 +211,7 @@
         title='Resource Meta Attributes'
         attributes=selResource.metaAttributes
         onDeleteAction=(route-action 'deletePreference')
-        onAppendAction=(route-action 'appendMetaAttribute' selResource)
+        onAppendAction=(route-action 'appendMetaAttribute')
         as |form mode attr f|
     }}
       {{#if (eq mode 'edit')}}
@@ -228,7 +228,7 @@
           title='Resource Utilization Attributes'
           attributes=selResource.utilizationAttributes
           onDeleteAction=(route-action 'deletePreference')
-          onAppendAction=(route-action 'appendUtilizationAttribute' selResource)
+          onAppendAction=(route-action 'appendUtilizationAttribute')
           as |form mode attr f|
       }}
         {{#if (eq mode 'edit')}}
