@@ -12,17 +12,9 @@
   {{else}}
     <ul>
     {{#if onlyErrors}}
-      {{#if onCheckAction}}
-        {{menu-list data=errorList targetRoute=targetRoute onCheckAction=(action onCheckAction)}}
-      {{else}}
-        {{menu-list data=errorList targetRoute=targetRoute}}
-      {{/if}}
+      {{menu-list data=errorList targetRoute=targetRoute onCheckAction=(action onCheckAction)}}
     {{else}}
-      {{#if onCheckAction}}
-        {{menu-list data=data targetRoute=targetRoute onCheckAction=(action onCheckAction)}}
-      {{else}}
-        {{menu-list data=data targetRoute=targetRoute}}
-      {{/if}}
+      {{menu-list data=data targetRoute=targetRoute onCheckAction=(action onCheckAction)}}
     {{/if}}
     </ul>
   {{/unless}}

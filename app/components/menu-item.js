@@ -24,10 +24,4 @@ export default Ember.Component.extend({
   watchChecked: function() {
     this.attrs.onCheckAction(this.get('component'), this.get('componentId'), this.get('isChecked'));
   }.observes('isChecked'),
-
-  actions: {
-    onSelectCollapse() {
-      this.toggleProperty('isCollapsed');
-    }
-  },
 });
