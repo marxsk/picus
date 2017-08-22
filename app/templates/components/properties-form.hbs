@@ -1,54 +1,104 @@
 <div class="col-sm-6">
-  {{input-filter
-    placeholder="Filter By Name"
-    value=filterString
-    keyUp=(action 'urlRefresh' filterString)
-  }}
-
-  <div style="float: right">
-  {{x-toggle
-    showLabels=true
-    onToggle=(action 'toggleAdvanced')
-    value=(readonly showAdvanced)
-    offLabel="Show Advanced"
-    onLabel=""
-  }}
+  <div>
+    {{x-toggle
+      showLabels=true
+      onToggle=(action 'toggleAdvanced')
+      value=(readonly showAdvanced)
+      offLabel="Advanced Properties "
+      onLabel=""
+    }}
+    <br />
+    {{x-toggle
+      showLabels=true
+      onToggle=(action 'toggleInternalNames')
+      value=(readonly showInternalName)
+      offLabel="Internal names "
+      onLabel=""
+    }}
   </div>
+  <div>
+    {{input-filter
+      placeholder="Filter By Name"
+      value=filterString
+      keyUp=(action 'urlRefresh' filterString)
+    }}
+  </div>
+
+  <div style="width: 100%; height: 20px; border-bottom: 1px dashed black; text-align: center; padding-top: 2.5em">
+    <span style="font-size: 15px; font-weight: 500; background-color: #E7E7E7; padding: 0 10px">
+      Generic Properties
+    </span>
+  </div>
+
+  <br />
   <br />
 
+<!-- @todo: In order to handle empty set, it is required to do parsing in a model -->
 {{#form-for (changeset simpleProperties) submit=(action onSubmitAction data) as |f|}}
   {{#each data as |prop| }}
-{{#if (and
-  (incl prop.readableName filterString)
-  (or (eq prop.advanced false) (and (eq prop.advanced true) (eq showAdvanced true)))
-  )
-}}
-  {{#if (eq prop.type 'boolean')}}
-    {{f.select-field prop.name (array
-        (hash name='default' title=(concat 'default (' prop.default ')'))
-        (hash name='true' title='true')
-        (hash name='false' title='false'))
-      fieldFocusIn=(action 'setHelp' prop.name)
-      optionLabelPath='title' optionValuePath='name'
-      label=prop.readableName hint=prop.shortDesc
+    {{#if (and
+        (incl prop.readableName filterString)
+        (or (eq prop.advanced false) (and (eq prop.advanced true) (eq showAdvanced true)))
+        )
     }}
-  {{else}}
-    {{#if (eq prop.type 'enum')}}
-      {{f.select-field prop.name prop.enum2
-        fieldFocusIn=(action 'setHelp' prop.name)
-        optionLabelPath='title' optionValuePath='name'
-        label=prop.readableName hint=prop.shortDesc
-      }}
-    {{else}}
-      {{f.text-field prop.name
-          fieldFocusIn=(action 'setHelp' prop.name)
-          label=prop.readableName placeholder=prop.default hint=prop.shortDesc}}
+      <div class={{if (eq selectedInput prop.name) "selected-line" ""}}>
+      {{#if (eq prop.type 'boolean')}}
+        {{#if showInternalNames}}
+          {{f.select-field prop.name (array
+              (hash name='default' title=(concat 'default (' prop.default ')'))
+              (hash name='true' title='true')
+              (hash name='false' title='false'))
+            fieldFocusIn=(action 'setHelp' prop.name)
+            optionLabelPath='title' optionValuePath='name'
+            label=prop.name hint=prop.shortDesc
+          }}
+        {{else}}
+          {{f.select-field prop.name (array
+              (hash name='default' title=(concat 'default (' prop.default ')'))
+              (hash name='true' title='true')
+              (hash name='false' title='false'))
+            fieldFocusIn=(action 'setHelp' prop.name)
+            optionLabelPath='title' optionValuePath='name'
+            label=prop.readableName hint=prop.shortDesc
+          }}
+        {{/if}}
+      {{else}}
+        {{#if (eq prop.type 'enum')}}
+          {{#if showInternalNames}}
+            {{f.select-field prop.name prop.enum2
+              fieldFocusIn=(action 'setHelp' prop.name)
+              optionLabelPath='title' optionValuePath='name'
+              label=prop.name hint=prop.shortDesc
+            }}
+          {{else}}
+            {{f.select-field prop.name prop.enum2
+              fieldFocusIn=(action 'setHelp' prop.name)
+              optionLabelPath='title' optionValuePath='name'
+              label=prop.readableName hint=prop.shortDesc
+            }}
+          {{/if}}
+        {{else}}
+          {{#if showInternalNames}}
+            {{f.text-field prop.name
+              fieldFocusIn=(action 'setHelp' prop.name)
+              size=10
+              label=prop.name placeholder=prop.default hint=prop.shortDesc}}
+          {{else}}
+            {{f.text-field prop.name
+              fieldFocusIn=(action 'setHelp' prop.name)
+              size=10
+              label=prop.readableName placeholder=prop.default hint=prop.shortDesc}}
+          {{/if}}
+        {{/if}}
+      {{/if}}
+      </div>
     {{/if}}
-  {{/if}}
-{{/if}}
   {{/each}}
 
-  {{f.submit "Save"}}
+  <div class="save-button">
+    <!-- @todo: Add btn, btn-default class to submit button -->
+    {{f.submit "Save changes"}}
+  </div>
 {{/form-for}}
 </div>
 <div class="col-sm-4">

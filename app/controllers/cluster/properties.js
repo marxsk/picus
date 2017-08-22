@@ -1,9 +1,10 @@
 import Ember from 'ember';
 
 export default Ember.Controller.extend({
-  queryParams: ['filterString', 'advanced'],
+  queryParams: ['filterString', 'advanced', 'internal'],
   filterString: '',
   advanced: false,
+  internal: false,
 
   actions: {
     submitProperties: function(properties, changeset) {
@@ -28,5 +29,9 @@ export default Ember.Controller.extend({
       this.set('advanced', value);
       this.send('pageRefresh');
     },
+    onInternal: function(value) {
+      this.set('internal', value);
+      this.send('pageRefresh');
+    }
   }
 });

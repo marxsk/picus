@@ -1,0 +1,21 @@
+.x-toggle-component, .save-button {
+  display: flex;
+  justify-content: flex-end;
+}
+
+/* Label and form on the same line */
+.form-control {
+  min-width: 10em;
+  width: unset;
+  display: unset;
+}
+
+.form-group label {
+  width: 10em;
+  text-align: right;
+}
+
+.selected-line {
+  background-color: #F7F7F7;
+  color: blue;
+}

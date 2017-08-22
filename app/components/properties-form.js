@@ -3,6 +3,8 @@ import Ember from 'ember';
 export default Ember.Component.extend({
   filterString: '',
   showAdvanced: false,
+  showInternalNames: false,
+  selectedInput: undefined,
   helpFor: '',
 
   _triggerUrlRefresh(search) {
@@ -14,11 +16,16 @@ export default Ember.Component.extend({
       const result = this.toggleProperty('showAdvanced');
       this.attrs.onAdvancedAction(result);
     },
+    toggleInternalNames() {
+      const result = this.toggleProperty('showInternalNames');
+      this.attrs.onInternalAction(result);
+    },
     urlRefresh(search) {
       Ember.run.debounce(this, '_triggerUrlRefresh', search ,300);
     },
     setHelp(propertyName) {
       this.set('helpFor', `HELP FOR: ${propertyName}`);
+      this.set('selectedInput', propertyName);
     }
   },
 
