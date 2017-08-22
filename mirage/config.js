@@ -359,7 +359,7 @@ export default function() {
   this.post('/login', function(schema, request) {
     const attrs = this.normalizedRequestAttrs();
 
-    if ((attrs.identification === 'hacluster') && (attrs.password === 'hacluster')) {
+    if ((attrs.username === 'hacluster') && (attrs.password === 'hacluster')) {
       return new Response(200);
     } else {
       return new Response(400);

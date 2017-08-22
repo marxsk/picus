@@ -68,8 +68,14 @@ export default Base.extend({
     @public
   */
   authenticate: function(data) {
+    const modData = {
+      username: data.identification,
+      password: data.password,
+      Login: 'login',
+    };
+
     return this.makeRequest(
-      {type: 'POST', url: this.serverLoginEndpoint, data: _jsonToQueryString(data)},
+      {type: 'POST', url: this.serverLoginEndpoint, data: _jsonToQueryString(modData)},
       'Attempt to login was successful',
       'Attempt to logout was not successful'
     );
