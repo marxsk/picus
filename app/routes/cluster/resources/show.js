@@ -145,7 +145,7 @@ export default TabRoute.extend({
       const attribute = this.get('store').createRecord('attribute', {
         resource: this.get('resource'),
         key: attributes.key,
-        value: attributes.key,
+        value: attributes.value,
       });
       attribute.save();
     },
