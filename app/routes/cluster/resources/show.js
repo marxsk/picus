@@ -7,6 +7,7 @@ export default TabRoute.extend({
   modelForm: {},
   resource: undefined,
   selectedResources: Ember.A(),
+  notifications: Ember.inject.service('notifications'),
 
   queryParams: {
     filterString: {
@@ -23,7 +24,7 @@ export default TabRoute.extend({
     this._super(controller, model);
     // hide sidebar menu
     this.controllerFor('application').set('hideMainMenu', true);
-   },
+  },
 
   async model(params) {
     const resource = this.store.peekRecordQueryName('resource', params.resource_name);
@@ -40,8 +41,12 @@ export default TabRoute.extend({
     }
 
     let ourName = resource.get('name');
-    let otherResourcesName = this.store.peekAll('resource').map((i) => { return i.get('name'); });
-    otherResourcesName = otherResourcesName.filter((name) => { return name !== ourName; } );
+    let otherResourcesName = this.store.peekAll('resource').map((i) => {
+      return i.get('name');
+    });
+    otherResourcesName = otherResourcesName.filter((name) => {
+      return name !== ourName;
+    });
 
     let metadata;
     let parameters;
@@ -93,7 +98,9 @@ export default TabRoute.extend({
     },
     removeSelectedResources: function() {
       this.store.removeAgents(
-        this.get('selectedResources').map((x) => {return x.get('name');}),
+        this.get('selectedResources').map((x) => {
+          return x.get('name');
+        }),
         'resource'
       );
       this.get('selectedResources').clear();
@@ -101,7 +108,38 @@ export default TabRoute.extend({
     },
     changeSelectedAgent: function() {},
 
-    deletePreference: (constraint) => { constraint.destroyRecord(); },
+    deletePreference: function(actionName, constraint) {
+      const progressNotification = this.get('notifications').progress('delete');
+      console.log(actionName);
+      constraint.destroyRecord().then(() => {
+        this.get('notifications').changeNotification(progressNotification, {
+          message: 'Attribute ' + constraint.get('key') + ' was deleted',
+          type: 'info',
+          autoClear: true,
+          clearDuration: 2400,
+          onClick: (notification) => {
+            this.get('notifications').removeNotification(notification);
+          }
+        });
+      }, (xhr) => {
+        this.get('notifications').changeNotification(progressNotification, {
+          text: this.get('resource.name') + '::' + xhr.responseText,
+          type: 'error',
+          htmlContent: true,
+          onClick: (notification) => {
+            this.get('controller').set('modalInformation', {
+              action: actionName,
+              notification,
+              resource: this.get('resource'),
+              constraint,
+              formData,
+              response: xhr,
+            });
+            this.get('controller').send('toggleModal');
+          }
+        })
+      })
+    },
 
     appendLocationPreference: function(attributes) {
       const preference = this.get('store').createRecord('location-preference', {
@@ -122,40 +160,48 @@ export default TabRoute.extend({
     },
     appendOrderingPreference: function(attributes) {
       const preference = this.get('store').createRecord('ordering-preference', {
-          resource: this.get('resource'),
-          targetResource: attributes.targetResource,
-          targetAction: attributes.targetAction,
-          score: attributes.score,
-          order: attributes.order,
-          action: attributes.action,
+        resource: this.get('resource'),
+        targetResource: attributes.targetResource,
+        targetAction: attributes.targetAction,
+        score: attributes.score,
+        order: attributes.order,
+        action: attributes.action,
       });
       preference.save();
     },
     appendTicketPreference: function(attributes) {
       const preference = this.get('store').createRecord('ticket-preference', {
-          resource: this.get('resource'),
-          ticket: attributes.ticket,
-          role: attributes.role,
-          lossPolicy: attributes.lossPolicy,
+        resource: this.get('resource'),
+        ticket: attributes.ticket,
+        role: attributes.role,
+        lossPolicy: attributes.lossPolicy,
       });
       preference.save();
     },
 
-    appendMetaAttribute: function(attributes) {
+    forceAddAttribute: function(action, modalInformation) {
+      this.get('notifications').removeNotification(modalInformation.notification);
+      action(modalInformation.formData, true);
+      this.get('controller').send('toggleModal');
+    },
+
+    appendMetaAttribute: function(attributes, force=false) {
       const attribute = this.get('store').createRecord('attribute', {
         resource: this.get('resource'),
         key: attributes.key,
         value: attributes.value,
-      });
-      attribute.save();
+      })
+
+      return this.notificationSaveAttribute(attribute, attributes, force, 'ADD_META_ATTRIBUTE');
     },
-    appendUtilizationAttribute: function(attributes) {
+    appendUtilizationAttribute: function(attributes, force=false) {
       const attribute = this.get('store').createRecord('utilization-attribute', {
         resource: this.get('resource'),
         name: attributes.name,
         value: attributes.key,
       });
-      attribute.save();
+
+      return this.notificationSaveAttribute(attribute, attributes, force, 'ADD_UTILIZATION_ATTRIBUTE');
     },
 
     removeResource: function(resourceName) {
@@ -188,6 +234,42 @@ export default TabRoute.extend({
 
     reload: function() {
       this.store.reloadData();
-    }
+    },
+  },
+  notificationSaveAttribute(attribute, formData, force, actionName) {
+    const progressNotification = this.get('notifications').progress('XYZ');
+    attribute.save({
+      adapterOptions: {
+        force
+      }
+    }).then(() => {
+      this.get('notifications').changeNotification(progressNotification, {
+        message: 'Meta Attribute ' + formData.key + ' for resource ' + this.get('resource.name') + ' was added',
+        type: 'info',
+        autoClear: true,
+        clearDuration: 2400,
+        onClick: (notification) => {
+          this.get('notifications').removeNotification(notification);
+        }
+      });
+    }, (xhr) => {
+      this.get('notifications').changeNotification(progressNotification, {
+        text: this.get('resource.name') + '::' + xhr.responseText,
+        type: 'error',
+        htmlContent: true,
+        onClick: (notification) => {
+          this.get('controller').set('modalInformation', {
+            action: actionName,
+            notification,
+            resource: this.get('resource'),
+            attribute,
+            formData,
+            response: xhr,
+          });
+          this.get('controller').send('toggleModal');
+        }
+      });
+      attribute.unloadRecord();
+    })
   }
 });

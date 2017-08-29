@@ -16,6 +16,49 @@
   </ol>
 {{/ember-wormhole}}
 
+{{notification-container position="top-right"}}
+
+{{#if isModalActive}}
+
+{{#modal-dialog translucentOverlay=true onClose='toggleModal'}}
+  {{#if (eq modalInformation.action 'ADD_META_ATTRIBUTE')}}
+    Key -- {{modalInformation.attribute.key}} <br />
+    Value -- {{modalInformation.attribute.value}} <br />
+    for resource {{modalInformation.resource.name}} <br />
+
+    {{#if (eq modalInformation.response.status 400)}}
+      {{#if (contains (w modalInformation.response.responseText) 'duplicate')}}
+        Duplicate attribute already exists. <br />
+
+        {{#bs-button onClick=(route-action 'forceAddAttribute' (route-action 'appendMetaAttribute') modalInformation)}} Force {{/bs-button}}
+        {{#bs-button onClick=(action 'removeNotification' modalInformation)}} Cancel {{/bs-button}}
+      {{else}}
+        {{modalInformation.response.status}} {{modalInformation.response.responseText}} <br />
+        {{#bs-button onClick=(action 'removeNotification' modalInformation)}} Ack {{/bs-button}}
+      {{/if}}
+    {{/if}}
+  {{/if}}
+
+  {{#if (eq modalInformation.action 'ADD_UTILIZATION_ATTRIBUTE')}}
+    Key -- {{modalInformation.attribute.name}} <br />
+    Value -- {{modalInformation.attribute.value}} <br />
+    for resource {{modalInformation.resource.name}} <br />
+
+    {{#if (eq modalInformation.response.status 400)}}
+      {{#if (contains (w modalInformation.response.responseText) 'duplicate')}}
+        Duplicate attribute already exists. <br />
+
+        {{#bs-button onClick=(route-action 'forceAddAttribute' (route-action 'appendUtilizationAttribute') modalInformation)}} Force {{/bs-button}}
+        {{#bs-button onClick=(action 'removeNotification' modalInformation)}} Cancel {{/bs-button}}
+      {{else}}
+        {{modalInformation.response.status}} {{modalInformation.response.responseText}} <br />
+        {{#bs-button onClick=(action 'removeNotification' modalInformation)}} Ack {{/bs-button}}
+      {{/if}}
+    {{/if}}
+  {{/if}}
+
+{{/modal-dialog}}{{/if}}
+
 {{#unless model.listing}}
 {{#unless model.selectedResource}}
   {{#bs-alert type="danger" dismissible=0}}
@@ -210,7 +253,7 @@
     {{#attr-list
         title='Resource Meta Attributes'
         attributes=selResource.metaAttributes
-        onDeleteAction=(route-action 'deletePreference')
+        onDeleteAction=(route-action 'deletePreference' 'delete-meta')
         onAppendAction=(route-action 'appendMetaAttribute')
         as |form mode attr f|
     }}

@@ -7,6 +7,10 @@ module.exports = function(environment) {
     rootURL: '/',
     locationType: 'auto',
 
+    'ember-cli-notifications': {
+      includeFontAwesome: true
+    },
+
     'ember-form-for': {
           fieldClasses: 'form-group',
           fieldHasErrorClasses: 'has-error',
