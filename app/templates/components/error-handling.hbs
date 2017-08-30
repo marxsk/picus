@@ -1,0 +1,67 @@
+{{#if activeNotification}}{{#modal-dialog translucentOverlay=true onClose='unsetActiveNotification'}}
+  {{#if (eq activeNotification.data.action 'ADD_META_ATTRIBUTE')}}
+    Key -- {{activeNotification.data.record.key}} <br />
+    Value -- {{activeNotification.data.record.value}} <br />
+    for resource {{activeNotification.data.record.resource.name}} <br />
+
+    {{#if (eq activeNotification.data.response.status 400)}}
+      {{#if (contains (w activeNotification.data.response.responseText) 'duplicate')}}
+        Duplicate attribute already exists. <br />
+
+        {{#bs-button onClick=(action 'forceRecordSave' activeNotification)}} Force {{/bs-button}}
+        {{#bs-button onClick=(action 'removeNotification' activeNotification)}} Ignore {{/bs-button}}
+      {{else}}
+        <!-- @todo: refactor to have default Error Message -->
+        {{activeNotification.data.response.status}} {{activeNotification.data.response.responseText}} <br />
+        {{#bs-button onClick=(action 'removeNotification' activeNotification)}} Ignore {{/bs-button}}
+        <!-- -->
+      {{/if}}
+    {{/if}}
+  {{/if}}
+
+  {{#if (eq activeNotification.data.action 'ADD_UTILIZATION_ATTRIBUTE')}}
+    Name -- {{activeNotification.data.record.name}} <br />
+    Value -- {{activeNotification.data.record.value}} <br />
+    for resource {{activeNotification.data.record.resource.name}} <br />
+
+    {{#if (eq activeNotification.data.response.status 400)}}
+      {{#if (contains (w activeNotification.data.response.responseText) 'duplicate')}}
+        Duplicate attribute already exists. <br />
+
+        {{#bs-button onClick=(action 'forceRecordSave' activeNotification)}} Force {{/bs-button}}
+        {{#bs-button onClick=(action 'removeNotification' activeNotification)}} Ignore {{/bs-button}}
+      {{else}}
+        {{activeNotification.data.response.status}} {{activeNotification.data.response.responseText}} <br />
+        {{#bs-button onClick=(action 'removeNotification' activeNotification)}} Ignore {{/bs-button}}
+      {{/if}}
+    {{/if}}
+  {{/if}}
+
+  {{#if (eq activeNotification.data.action 'DELETE_META_ATTRIBUTE')}}
+    Key -- {{activeNotification.data.record.key}} <br />
+    Value -- {{activeNotification.data.record.value}} <br />
+    for resource {{activeNotification.data.record.resource.name}} <br />
+
+    {{#if (eq activeNotification.data.response.status 400)}}
+        <!-- @todo: refactor to have default Error Message -->
+        {{activeNotification.data.response.status}} {{activeNotification.data.response.responseText}} <br />
+        {{#bs-button onClick=(action 'removeNotification' activeNotification)}} Ignore {{/bs-button}}
+        <!-- -->
+    {{/if}}
+  {{/if}}
+
+  {{#if (eq activeNotification.data.action 'DELETE_UTILIZATION_ATTRIBUTE')}}
+    Name -- {{activeNotification.data.record.name}} <br />
+    Value -- {{activeNotification.data.record.value}} <br />
+    for resource {{activeNotification.data.record.resource.name}} <br />
+
+    {{#if (eq activeNotification.data.response.status 400)}}
+        <!-- @todo: refactor to have default Error Message -->
+        {{activeNotification.data.response.status}} {{activeNotification.data.response.responseText}} <br />
+        {{#bs-button onClick=(action 'removeNotification' activeNotification)}} Ignore {{/bs-button}}
+        <!-- -->
+    {{/if}}
+  {{/if}}
+
+
+{{/modal-dialog}}{{/if}}

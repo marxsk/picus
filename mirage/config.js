@@ -78,7 +78,7 @@ function _createEnvelopeResource(schema, attrs, resourceNames, resourceAttribute
   envelopeResource.resources = resIDs;
 }
 export default function() {
-  this.timing = 400;      // delay for each request, automatically set to 0 during testing
+  this.timing = 2000;      // delay for each request, automatically set to 0 during testing
   this.clusterName = "my";
   this.authenticated = false;
 
@@ -257,6 +257,8 @@ export default function() {
       }
     } else if (params.key === "error") {
       return new Response(400, { 'Content-Type': 'text/text' }, 'Error Error Error');
+    } else if ((params.key === "delete") && (params.value === "")) {
+      return new Response(400, { 'Content-Type': 'text/text' }, 'Unable to delete');
     }
 
     return _cud_attribute(

@@ -8,4 +8,36 @@ export default NotificationsService.extend({
         type: 'success'
       }, options));
     },
+
+    success(message, options) {
+      return this.addNotification(Ember.assign({
+        message: message,
+        type: 'info',
+      }))
+    },
+
+    updateNotification(notification, type, message, data={}) {
+      if (type === 'SUCCESS') {
+        this.changeNotification(notification, {
+          message,
+          htmlContent: true,
+          type: 'info',
+          autoClear: true,
+          clearDuration: 2400,
+          onClick: (notification) => {
+            this.removeNotification(notification);
+          }
+        });
+      } else if (type === 'ERROR') {
+        this.changeNotification(notification, {
+          message,
+          htmlContent: true,
+          type: 'error',
+          data,
+          onClick: (notification) => {
+            Ember.getOwner(this).lookup('route:application').send('setActiveNotification', notification);
+          }
+        });
+      }
+    }
 })

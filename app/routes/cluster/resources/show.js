@@ -109,35 +109,25 @@ export default TabRoute.extend({
     changeSelectedAgent: function() {},
 
     deletePreference: function(actionName, constraint) {
+      constraint.deleteRecord();
       const progressNotification = this.get('notifications').progress('delete');
-      console.log(actionName);
-      constraint.destroyRecord().then(() => {
-        this.get('notifications').changeNotification(progressNotification, {
-          message: 'Attribute ' + constraint.get('key') + ' was deleted',
-          type: 'info',
-          autoClear: true,
-          clearDuration: 2400,
-          onClick: (notification) => {
-            this.get('notifications').removeNotification(notification);
-          }
-        });
+      constraint.save().then(() => {
+        this.get('notifications').updateNotification(
+          progressNotification,
+          'SUCCESS',
+          'Attribute ' + constraint.get('key') + ' was deleted',
+        );
       }, (xhr) => {
-        this.get('notifications').changeNotification(progressNotification, {
-          text: this.get('resource.name') + '::' + xhr.responseText,
-          type: 'error',
-          htmlContent: true,
-          onClick: (notification) => {
-            this.get('controller').set('modalInformation', {
-              action: actionName,
-              notification,
-              resource: this.get('resource'),
-              constraint,
-              formData,
-              response: xhr,
-            });
-            this.get('controller').send('toggleModal');
+        this.get('notifications').updateNotification(
+          progressNotification,
+          'ERROR',
+          this.get('resource.name') + '::' + xhr.responseText,
+          {
+            action: actionName,
+            record: constraint,
+            response: xhr,
           }
-        })
+        )
       })
     },
 
@@ -179,12 +169,6 @@ export default TabRoute.extend({
       preference.save();
     },
 
-    forceAddAttribute: function(action, modalInformation) {
-      this.get('notifications').removeNotification(modalInformation.notification);
-      action(modalInformation.formData, true);
-      this.get('controller').send('toggleModal');
-    },
-
     appendMetaAttribute: function(attributes, force=false) {
       const attribute = this.get('store').createRecord('attribute', {
         resource: this.get('resource'),
@@ -192,16 +176,16 @@ export default TabRoute.extend({
         value: attributes.value,
       })
 
-      return this.notificationSaveAttribute(attribute, attributes, force, 'ADD_META_ATTRIBUTE');
+      return this.notificationSaveAttribute(attribute, force, 'ADD_META_ATTRIBUTE');
     },
     appendUtilizationAttribute: function(attributes, force=false) {
       const attribute = this.get('store').createRecord('utilization-attribute', {
         resource: this.get('resource'),
         name: attributes.name,
-        value: attributes.key,
+        value: attributes.value,
       });
 
-      return this.notificationSaveAttribute(attribute, attributes, force, 'ADD_UTILIZATION_ATTRIBUTE');
+      return this.notificationSaveAttribute(attribute, force, 'ADD_UTILIZATION_ATTRIBUTE');
     },
 
     removeResource: function(resourceName) {
@@ -236,40 +220,28 @@ export default TabRoute.extend({
       this.store.reloadData();
     },
   },
-  notificationSaveAttribute(attribute, formData, force, actionName) {
+  notificationSaveAttribute(attribute, force, actionName) {
     const progressNotification = this.get('notifications').progress('XYZ');
     attribute.save({
       adapterOptions: {
         force
       }
     }).then(() => {
-      this.get('notifications').changeNotification(progressNotification, {
-        message: 'Meta Attribute ' + formData.key + ' for resource ' + this.get('resource.name') + ' was added',
-        type: 'info',
-        autoClear: true,
-        clearDuration: 2400,
-        onClick: (notification) => {
-          this.get('notifications').removeNotification(notification);
-        }
-      });
+      this.get('notifications').updateNotification(
+        progressNotification,
+        'SUCCESS',
+        'Meta Attribute for resource ' + this.get('resource.name') + ' was added');
     }, (xhr) => {
-      this.get('notifications').changeNotification(progressNotification, {
-        text: this.get('resource.name') + '::' + xhr.responseText,
-        type: 'error',
-        htmlContent: true,
-        onClick: (notification) => {
-          this.get('controller').set('modalInformation', {
-            action: actionName,
-            notification,
-            resource: this.get('resource'),
-            attribute,
-            formData,
-            response: xhr,
-          });
-          this.get('controller').send('toggleModal');
+      this.get('notifications').updateNotification(
+        progressNotification,
+        'ERROR',
+        this.get('resource.name') + '::' + xhr.responseText,
+        {
+          action: actionName,
+          record: attribute,
+          response: xhr,
         }
-      });
-      attribute.unloadRecord();
+      );
     })
   }
 });
