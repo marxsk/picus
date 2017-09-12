@@ -8,6 +8,7 @@ export default TabRoute.extend({
   resource: undefined,
   selectedResources: Ember.A(),
   notifications: Ember.inject.service('notifications'),
+  messages: Ember.inject.service('messages'),
 
   queryParams: {
     filterString: {
@@ -221,7 +222,13 @@ export default TabRoute.extend({
     },
   },
   notificationSaveAttribute(attribute, force, actionName) {
-    const progressNotification = this.get('notifications').progress('XYZ');
+    const messages = this.get('messages').getNotificiationMessage({
+      resourceName: this.get('resource.name'),
+      attributeKey: attribute.get('key'),
+      attributeName: attribute.get('name'),
+    }, actionName);
+
+    const progressNotification = this.get('notifications').progress(messages.progress);
     attribute.save({
       adapterOptions: {
         force
@@ -230,12 +237,13 @@ export default TabRoute.extend({
       this.get('notifications').updateNotification(
         progressNotification,
         'SUCCESS',
-        'Meta Attribute for resource ' + this.get('resource.name') + ' was added');
+        messages.success
+      );
     }, (xhr) => {
       this.get('notifications').updateNotification(
         progressNotification,
         'ERROR',
-        this.get('resource.name') + '::' + xhr.responseText,
+        messages.error,
         {
           action: actionName,
           record: attribute,
