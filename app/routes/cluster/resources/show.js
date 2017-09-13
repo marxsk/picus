@@ -111,25 +111,7 @@ export default TabRoute.extend({
 
     deletePreference: function(actionName, constraint) {
       constraint.deleteRecord();
-      const progressNotification = this.get('notifications').progress('delete');
-      constraint.save().then(() => {
-        this.get('notifications').updateNotification(
-          progressNotification,
-          'SUCCESS',
-          'Attribute ' + constraint.get('key') + ' was deleted',
-        );
-      }, (xhr) => {
-        this.get('notifications').updateNotification(
-          progressNotification,
-          'ERROR',
-          this.get('resource.name') + '::' + xhr.responseText,
-          {
-            action: actionName,
-            record: constraint,
-            response: xhr,
-          }
-        )
-      })
+      this._notificationSaveAttribute(constraint, actionName);
     },
 
     appendLocationPreference: function(attributes) {
@@ -138,8 +120,9 @@ export default TabRoute.extend({
         node: attributes.node,
         score: attributes.score,
       });
-      preference.save();
+      return this._notificationSaveAttribute(preference, 'ADD_LOCATION_PREFERENCE');
     },
+
     appendColocationPreference: function(attributes) {
       const preference = this.get('store').createRecord('colocation-preference', {
         resource: this.get('resource'),
@@ -147,8 +130,9 @@ export default TabRoute.extend({
         colocationType: attributes.colocationType,
         score: attributes.score,
       });
-      preference.save();
+      return this._notificationSaveAttribute(preference, 'ADD_COLOCATION_PREFERENCE');
     },
+
     appendOrderingPreference: function(attributes) {
       const preference = this.get('store').createRecord('ordering-preference', {
         resource: this.get('resource'),
@@ -158,8 +142,9 @@ export default TabRoute.extend({
         order: attributes.order,
         action: attributes.action,
       });
-      preference.save();
+      return this._notificationSaveAttribute(preference, 'ADD_ORDERING_PREFERENCE');
     },
+
     appendTicketPreference: function(attributes) {
       const preference = this.get('store').createRecord('ticket-preference', {
         resource: this.get('resource'),
@@ -167,26 +152,25 @@ export default TabRoute.extend({
         role: attributes.role,
         lossPolicy: attributes.lossPolicy,
       });
-      preference.save();
+      return this._notificationSaveAttribute(preference, 'ADD_TICKET_PREFERENCE');
     },
 
-    appendMetaAttribute: function(attributes, force=false) {
+    appendMetaAttribute: function(attributes) {
       const attribute = this.get('store').createRecord('attribute', {
         resource: this.get('resource'),
         key: attributes.key,
         value: attributes.value,
       })
-
-      return this.notificationSaveAttribute(attribute, force, 'ADD_META_ATTRIBUTE');
+      return this._notificationSaveAttribute(attribute, 'ADD_META_ATTRIBUTE');
     },
-    appendUtilizationAttribute: function(attributes, force=false) {
+
+    appendUtilizationAttribute: function(attributes) {
       const attribute = this.get('store').createRecord('utilization-attribute', {
         resource: this.get('resource'),
         name: attributes.name,
         value: attributes.value,
       });
-
-      return this.notificationSaveAttribute(attribute, force, 'ADD_UTILIZATION_ATTRIBUTE');
+      return this._notificationSaveAttribute(attribute, 'ADD_UTILIZATION_ATTRIBUTE');
     },
 
     removeResource: function(resourceName) {
@@ -221,19 +205,21 @@ export default TabRoute.extend({
       this.store.reloadData();
     },
   },
-  notificationSaveAttribute(attribute, force, actionName) {
-    const messages = this.get('messages').getNotificiationMessage({
-      resourceName: this.get('resource.name'),
-      attributeKey: attribute.get('key'),
-      attributeName: attribute.get('name'),
-    }, actionName);
+
+  // Save changes and show notification messages
+  _notificationSaveAttribute(attribute, actionName) {
+    const notificationData = Ember.Object.create(
+      {
+        data: {
+          action: actionName,
+          record: attribute,
+        }
+      }
+    );
+    const messages = this.get('messages').getNotificiationMessage(notificationData, actionName);
 
     const progressNotification = this.get('notifications').progress(messages.progress);
-    attribute.save({
-      adapterOptions: {
-        force
-      }
-    }).then(() => {
+    attribute.save().then(() => {
       this.get('notifications').updateNotification(
         progressNotification,
         'SUCCESS',
@@ -245,8 +231,8 @@ export default TabRoute.extend({
         'ERROR',
         messages.error,
         {
-          action: actionName,
-          record: attribute,
+          action: notificationData.action,
+          record: notificationData.record,
           response: xhr,
         }
       );

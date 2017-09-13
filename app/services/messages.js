@@ -1,26 +1,31 @@
 import Ember from 'ember';
 
 const messages = {
+  ADD_META_ATTRIBUTE: {
+    progress: (notification) => `Adding meta attribute ${notification.get('data.record.key')} for resource ${notification.get('data.record.resource.name')}`,
+    success: (notification) => `Meta Attribute ${notification.get('data.record.key')} for resource ${notification.get('data.record.resource.name')} was added`,
+    error: (notification) => `Someting is wrong with ${notification.get('data.record.key')}`,
+  },
   FORCE_ADD_META_ATTRIBUTE: {
     progress: (notification) => `Forcing add meta attribute ...`,
     success: (notification) => `Meta Attribute ${notification.get('data.record.name')} for resource ${notification.get('data.record.resource.name')} was added`,
     error: (notification) => `Something is wrong`,
+  },
+  ADD_UTILIZATION_ATTRIBUTE: {
+    progress: (notification) => `Adding utilization attribute ${notification.get('data.record.name')} for resource ${notification.get('data.record.resource.name')}`,
+    success: (notification) => `Utilization Attribute ${notification.get('data.record.name')} for resource ${notification.get('data.record.resource.name')} was added`,
+    error: (notification) => `Someting is wrong with ${notification.get('data.record.name')}`,
   },
   FORCE_ADD_UTILIZATION_ATTRIBUTE: {
     progress: (notification) => `Forcing add utilization attribute ...`,
     success: (notification) => `Utilization Attribute ${notification.get('data.record.name')} for resource ${notification.get('data.record.resource.name')} was added`,
     error: (notification) => `Something is wrong`,
   },
-  ADD_META_ATTRIBUTE: {
-    progress: (notification) => `Adding meta attribute ${notification.attributeKey} for resource ${notification.resourceName}`,
-    success: (notification) => `Meta Attribute ${notification.attributeKey} for resource ${notification.resourceName} was added`,
-    error: (notification) => `Someting is wrong with ${notification.attributeKey}`,
-  },
-  ADD_UTILIZATION_ATTRIBUTE: {
-    progress: (notification) => `Adding utilization attribute ${notification.attributeName} for resource ${notification.resourceName}`,
-    success: (notification) => `Utilization Attribute ${notification.attributeName} for resource ${notification.resourceName} was added`,
-    error: (notification) => `Someting is wrong with ${notification.attributeName}`,
-  }
+// @todo: Add messages for:
+//  (ADD/FORCE_ADD/DELETE)_LOCATION_PREFERENCE
+//  (ADD/FORCE_ADD/DELETE)_COLOCATION_PREFERENCE
+//  (ADD/FORCE_ADD/DELETE)_ORDERING_PREFERENCE
+//  (ADD/FORCE_ADD/DELETE)_TICKET_PREFERENCE
 }
 
 export default Ember.Service.extend({
@@ -32,6 +37,7 @@ export default Ember.Service.extend({
       notificationMessage.progress = messages[messageCode].progress(notification);
       notificationMessage.error = messages[messageCode].error(notification);
     } else {
+      Ember.Logger.warn(`Using default text in the notification for "${messageCode}"`);
       notificationMessage.success = 'Success';
       notificationMessage.progress = 'Progress';
       notificationMessage.error = 'Error';
