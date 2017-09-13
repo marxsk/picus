@@ -132,7 +132,7 @@
   {{#if (eq mode 'edit')}}
     {{#power-select
       selected=attr.targetResource
-      options=model.otherResourcesName
+      options=(map-by 'name' (without selResource model.resources))
       placeholder='Select a resource'
       onchange=(action (mut attr.targetResource))
       allowClear=false
@@ -161,7 +161,7 @@
     {{#if (eq mode 'edit')}}
       {{#power-select
         selected=attr.targetResource
-        options=model.otherResourcesName
+        options=(map-by 'name' (without selResource model.resources))
         placeholder='Select a resource'
         onchange=(action (mut attr.targetResource))
         allowClear=true

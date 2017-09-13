@@ -41,14 +41,6 @@ export default TabRoute.extend({
       });
     }
 
-    let ourName = resource.get('name');
-    let otherResourcesName = this.store.peekAll('resource').map((i) => {
-      return i.get('name');
-    });
-    otherResourcesName = otherResourcesName.filter((name) => {
-      return name !== ourName;
-    });
-
     let metadata;
     let parameters;
     let validations;
@@ -73,7 +65,7 @@ export default TabRoute.extend({
       formData: this.get('modelForm'),
       updatingCluster: this.store.peekAll('cluster'),
       selectedResource: resource,
-      otherResourcesName: otherResourcesName,
+      resources: this.store.peekAll('resource'),
       ResourceValidations: validations,
       ScoreValidations,
     });
