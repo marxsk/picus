@@ -6,4 +6,13 @@ export default TabController.extend({
   activeTab: 'status',
 
   appController: Ember.inject.controller('application'),
+
+  showAddMetaAttribute: false,
+  empty: {},
+
+  actions: {
+    clearForm: function() {
+      this.set('empty', {});
+    }
+  }
 });

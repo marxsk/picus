@@ -2,6 +2,10 @@ import Ember from 'ember';
 import categorizeProperties from '../../../utils/categorize-properties';
 import TabRoute from '../../tab-route';
 import ScoreValidations from '../../../validators/constraint-validations';
+import {
+  validatePresence,
+} from 'ember-changeset-validations/validators';
+import validateScore from '../../../validators/score';
 
 export default TabRoute.extend({
   modelForm: {},
@@ -58,6 +62,32 @@ export default TabRoute.extend({
       });
     }
 
+    const formValidators = {
+      addMetaAttribute: {
+        key: validatePresence(true),
+        value: validatePresence(true),
+      },
+      addUtilizationAttribute: {
+        name: validatePresence(true),
+        key: validatePresence(true),
+      },
+      addLocationPreference: {
+        node: validatePresence(true),
+        score: validateScore(),
+      },
+      addColocationPreference: {
+        targetResource: validatePresence(true),
+        score: validateScore(),
+      },
+      addOrderingPreference: {
+        targetResource: validatePresence(true),
+        score: validateScore(),
+      },
+      addTicketPreference: {
+        ticket: validatePresence(true),
+      }
+    };
+
     return Ember.RSVP.hash({
       params: params,
       metadata: metadata,
@@ -68,6 +98,7 @@ export default TabRoute.extend({
       resources: this.store.peekAll('resource'),
       ResourceValidations: validations,
       ScoreValidations,
+      validations: formValidators,
     });
   },
 
@@ -106,61 +137,61 @@ export default TabRoute.extend({
       this._notificationSaveAttribute(constraint, actionName);
     },
 
-    appendLocationPreference: function(attributes) {
+    addLocationPreference: function(form) {
       const preference = this.get('store').createRecord('location-preference', {
         resource: this.get('resource'),
-        node: attributes.node,
-        score: attributes.score,
+        node: form.get('node'),
+        score: form.get('score'),
       });
       return this._notificationSaveAttribute(preference, 'ADD_LOCATION_PREFERENCE');
     },
 
-    appendColocationPreference: function(attributes) {
+    addColocationPreference: function(form) {
       const preference = this.get('store').createRecord('colocation-preference', {
         resource: this.get('resource'),
-        targetResource: attributes.targetResource,
-        colocationType: attributes.colocationType,
-        score: attributes.score,
+        targetResource: form.get('targetResource'),
+        colocationType: form.get('colocationType'),
+        score: form.get('score'),
       });
       return this._notificationSaveAttribute(preference, 'ADD_COLOCATION_PREFERENCE');
     },
 
-    appendOrderingPreference: function(attributes) {
+    addOrderingPreference: function(form) {
       const preference = this.get('store').createRecord('ordering-preference', {
         resource: this.get('resource'),
-        targetResource: attributes.targetResource,
-        targetAction: attributes.targetAction,
-        score: attributes.score,
-        order: attributes.order,
-        action: attributes.action,
+        targetResource: form.get('targetResource'),
+        targetAction: form.get('targetAction'),
+        score: form.get('score'),
+        order: form.get('order'),
+        action: form.get('action'),
       });
       return this._notificationSaveAttribute(preference, 'ADD_ORDERING_PREFERENCE');
     },
 
-    appendTicketPreference: function(attributes) {
+    addTicketPreference: function(form) {
       const preference = this.get('store').createRecord('ticket-preference', {
         resource: this.get('resource'),
-        ticket: attributes.ticket,
-        role: attributes.role,
-        lossPolicy: attributes.lossPolicy,
+        ticket: form.get('ticket'),
+        role: form.get('role'),
+        lossPolicy: form.get('lossPolicy'),
       });
       return this._notificationSaveAttribute(preference, 'ADD_TICKET_PREFERENCE');
     },
 
-    appendMetaAttribute: function(attributes) {
+    addMetaAttribute: function(form) {
       const attribute = this.get('store').createRecord('attribute', {
         resource: this.get('resource'),
-        key: attributes.key,
-        value: attributes.value,
+        key: form.get('key'),
+        value: form.get('value'),
       })
       return this._notificationSaveAttribute(attribute, 'ADD_META_ATTRIBUTE');
     },
 
-    appendUtilizationAttribute: function(attributes) {
+    addUtilizationAttribute: function(form) {
       const attribute = this.get('store').createRecord('utilization-attribute', {
         resource: this.get('resource'),
-        name: attributes.name,
-        value: attributes.value,
+        name: form.get('name'),
+        value: form.get('value'),
       });
       return this._notificationSaveAttribute(attribute, 'ADD_UTILIZATION_ATTRIBUTE');
     },
@@ -228,6 +259,8 @@ export default TabRoute.extend({
           response: xhr,
         }
       );
-    })
+    });
+
+    return Ember.RSVP.Promise.resolve();
   }
 });

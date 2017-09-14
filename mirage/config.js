@@ -339,7 +339,7 @@ export default function() {
         pcs_id: `ordering-${params.res_id}-${params.target_res_id}-${params.score}`,
         targetResource: params.target_res_id,
         targetAction: params.target_action,
-        action: params.action,
+        action: params.res_action,
         order: params.order,
         score: params.score,
       })

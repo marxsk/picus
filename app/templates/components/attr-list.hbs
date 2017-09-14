@@ -7,15 +7,9 @@
 <table border='1'>
   {{#each attributes as |attr|}}
     {{#attr-single attribute=attr onCheckAction=(action 'onCheckAction') onDeleteAction=(action onDeleteAction) as |attr|}}
-      {{yield this 'show' attr}}
+      {{yield attr}}
     {{/attr-single}}
+  {{else}}
+    <div>{{emptyText}}</div>
   {{/each}}
-  <tr><td>
-    {{#with (changeset formEntry validations) as |changeset|}}
-      {{#form-for changeset submit=(action 'appendCleanAction') as |f|}}
-        {{yield this 'edit' changeset f}}
-        {{f.submit "Append" disabled=changeset.isInvalid}}
-      {{/form-for}}
-    {{/with}}
-  </td></tr>
 </table>

@@ -18,7 +18,6 @@ export default Ember.Component.extend({
    */
   attributes: undefined,
   onDeleteAction: undefined,
-  onAppendAction: undefined,
   /**
    * [optional] Action that deletes multiple records at once.
    *
@@ -27,7 +26,15 @@ export default Ember.Component.extend({
    */
   onDeleteMultipleAction: undefined,
 
-  checkedAttributes: Ember.A(),
+  /**
+   * Text shown when 'attributes' is empty
+   *
+   * @default: 'No entries'
+   * @public
+   **/
+  emptyText: 'No Entries',
+
+  _checkedAttributes: Ember.A(),
   /**
    * Object that holds information from form used to append records.
    *
@@ -44,19 +51,11 @@ export default Ember.Component.extend({
   },
 
   actions: {
-    appendCleanAction: function(attributes) {
-      this.attrs.onAppendAction(attributes.get('change'));
-      this.set('formEntry', {});
-
-      // @todo: ember-form-for requires a promise to re-enable Submit button
-      // it may be better to use returned promise from onAppendAction
-      return Ember.RSVP.resolve();
-    },
     onCheckAction: function(attribute, isChecked) {
       if (isChecked === true) {
-        this.get('checkedAttributes').pushObject(attribute);
+        this.get('_checkedAttributes').pushObject(attribute);
       } else {
-        this.get('checkedAttributes').removeObject(attribute);
+        this.get('_checkedAttributes').removeObject(attribute);
       }
     },
 

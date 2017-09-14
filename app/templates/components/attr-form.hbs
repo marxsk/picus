@@ -1,0 +1,17 @@
+{{#bs-button onClick=(toggle "_isFormVisible" this)}}
+    <span class="glyphicon glyphicon-plus-sign" />
+    {{visibilityTitle}}
+{{/bs-button}}
+
+{{#if _isFormVisible}}
+  {{#with (changeset _empty validations initValidation=true) as |changeset|}}
+    {{#form-for changeset submit=(pipe (action submitAction) (toggle "_isFormVisible" this)) as |f|}}
+      {{yield f changeset}}
+      {{#if changeset.isInvalid}}
+        {{#bs-button}}Fix issues!{{/bs-button}}
+      {{else}}
+        {{f.submit submitTitle}}
+      {{/if}}
+    {{/form-for}}
+  {{/with}}
+{{/if}}

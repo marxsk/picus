@@ -86,6 +86,7 @@
 {{#tab.pane elementId="status" title="Status"}}
   @todo DASHBOARD
 {{/tab.pane}}
+
 {{#tab.pane elementId="properties" title="Properties"}}
 {{#with (changeset model.formData model.ResourceValidations) as |changeset|}}
   {{#form-for changeset submit=(route-action 'onSubmitAction' selResource) as |f|}}
@@ -98,43 +99,42 @@
   {{/form-for}}
 {{/with}}
 {{/tab.pane}}
+
 {{#tab.pane elementId="constraints" title="Constraints"}}
 {{#bs-accordion selected="location" as |acc|}}
   {{#acc.item value="location" title="Resource Location Preference"}}
-
+  {{#attr-form
+    visibilityTitle="Add Location Preference"
+    submitTitle="Add"
+    submitAction=(route-action 'addLocationPreference')
+    validations=model.validations.addLocationPreference as |f|
+  }}
+    {{f.text-field 'node'}}
+    {{f.text-field 'score'}}
+  {{/attr-form}}
   {{#attr-list
       title='Resource Location Preference'
       attributes=selResource.locationPreferences
       onDeleteAction=(route-action 'deletePreference' 'DELETE_LOCATION_PREFERENCE')
-      onAppendAction=(route-action 'appendLocationPreference')
-      validations=model.ScoreValidations
-      as |form mode attr f|
+      as |attr|
   }}
-  {{#if (eq mode 'edit')}}
-    {{f.text-field 'node'}}
-    {{f.text-field 'score'}}
-  {{else}}
     <td>{{attr.node}}</td>
     <td>{{attr.score}}</td>
-  {{/if}}
   {{/attr-list}}
   {{/acc.item}}
-  {{#acc.item value="colocation" title="Resource Colocation Preference"}}
 
-  {{#attr-list
-      title='Resource Colocation Preference'
-      attributes=selResource.colocationPreferences
-      onDeleteAction=(route-action 'deletePreference' 'DELETE_COLOCATION_PREFERENCE')
-      onAppendAction=(route-action 'appendColocationPreference')
-      validations=model.ScoreValidations
-      as |form mode attr f|
+  {{#acc.item value="colocation" title="Resource Colocation Preference"}}
+  {{#attr-form
+    visibilityTitle="Add Colocation Preference"
+    submitTitle="Add"
+    submitAction=(route-action 'addColocationPreference')
+    validations=model.validations.addColocationPreference as |f changeset|
   }}
-  {{#if (eq mode 'edit')}}
     {{#power-select
-      selected=attr.targetResource
+      selected=changeset.targetResource
       options=(map-by 'name' (without selResource model.resources))
       placeholder='Select a resource'
-      onchange=(action (mut attr.targetResource))
+      onchange=(action (mut changeset.targetResource))
       allowClear=false
       as |record|
     }}
@@ -143,101 +143,126 @@
 
     {{f.select-field 'colocationType' 'Together Apart'}}
     {{f.text-field 'score'}}
-  {{else}}
+  {{/attr-form}}
+
+  {{#attr-list
+    title='Resource Colocation Preference'
+    attributes=selResource.colocationPreferences
+    onDeleteAction=(route-action 'deletePreference' 'DELETE_COLOCATION_PREFERENCE')
+    as |attr|
+  }}
     <td>{{attr.targetResource}}</td>
     <td>{{attr.colocationType}}</td>
     <td>{{attr.score}}</td>
-  {{/if}}
   {{/attr-list}}
   {{/acc.item}}
+
   {{#acc.item value="ordering" title="Resource Ordering Preference"}}
+  {{#attr-form
+    visibilityTitle="Add Ordering Preference"
+    submitTitle="Add"
+    submitAction=(route-action 'addOrderingPreference')
+    validations=model.validations.addOrderingPreference as |f changeset|
+  }}
+    {{#power-select
+      selected=changeset.targetResource
+      options=(map-by 'name' (without selResource model.resources))
+      placeholder='Select a resource'
+      onchange=(action (mut changeset.targetResource))
+      allowClear=true
+      as |record|
+    }}
+      {{record}}
+    {{/power-select}}
+
+    {{f.select-field 'targetAction' 'starts promotes demotes stops'}}
+    {{f.select-field 'order' 'before after'}}
+    {{f.select-field 'action' 'starts promotes demotes stops'}}
+    {{f.text-field 'score'}}
+  {{/attr-form}}
   {{#attr-list
       title='Resource Ordering Preference'
       attributes=selResource.orderingPreferences
       onDeleteAction=(route-action 'deletePreference' 'DELETE_ORDERING_PREFERENCE')
-      onAppendAction=(route-action 'appendOrderingPreference')
-      as |form mode attr f|
+      onAppendAction=(route-action 'addOrderingPreference')
+      as |attr|
   }}
-    {{#if (eq mode 'edit')}}
-      {{#power-select
-        selected=attr.targetResource
-        options=(map-by 'name' (without selResource model.resources))
-        placeholder='Select a resource'
-        onchange=(action (mut attr.targetResource))
-        allowClear=true
-        as |record|
-      }}
-        {{record}}
-      {{/power-select}}
-
-      {{f.select-field 'targetAction' 'starts promotes demotes stops'}}
-      {{f.select-field 'order' 'before after'}}
-      {{f.select-field 'action' 'starts promotes demotes stops'}}
-      {{f.text-field 'score'}}
-    {{else}}
-      <td>{{attr.targetResource}}</td>
-      <td>{{attr.targetAction}}</td>
-      <td>{{attr.order}}</td>
-      <td>{{attr.action}}</td>
-      <td>{{attr.score}}</td>
-    {{/if}}
+    <td>{{attr.targetResource}}</td>
+    <td>{{attr.targetAction}}</td>
+    <td>{{attr.order}}</td>
+    <td>{{attr.action}}</td>
+    <td>{{attr.score}}</td>
   {{/attr-list}}
-{{/acc.item}}
-{{#acc.item value="ticket" title="Resource Ticket Preferences"}}
-{{#attr-list
+  {{/acc.item}}
+
+  {{#acc.item value="ticket" title="Resource Ticket Preferences"}}
+  {{#attr-form
+    visibilityTitle="Add Ticket Preference"
+    submitTitle="Add"
+    submitAction=(route-action 'addTicketPreference')
+    validations=model.validations.addTicketPreference as |f changeset|
+  }}
+    {{f.text-field 'ticket'}}
+    {{f.select-field 'role' prompt=' ' promptIsSelectable=true options='Stopped Started Master Slave'}}
+    {{f.select-field 'lossPolicy' prompt=' ' promptIsSelectable=true options='fence stop freeze demote'}}
+  {{/attr-form}}
+
+  {{#attr-list
     title='Resource Ticket Preferences'
     attributes=selResource.ticketPreferences
     onDeleteAction=(route-action 'deletePreference' 'DELETE_TICKET_PREFERENCE')
-    onAppendAction=(route-action 'appendTicketPreference')
-    as |form mode attr f|
-}}
-{{#if (eq mode 'edit')}}
-  {{f.text-field 'ticket'}}
-  {{f.select-field 'role' prompt=' ' promptIsSelectable=true options='Stopped Started Master Slave'}}
-  {{f.select-field 'lossPolicy' prompt=' ' promptIsSelectable=true options='fence stop freeze demote'}}
-{{else}}
-  <td>{{attr.ticket}}</td>
-  <td>{{attr.role}}</td>
-  <td>{{attr.lossPolicy}}</td>
-{{/if}}
-{{/attr-list}}
-{{/acc.item}}
+    as |attr|
+  }}
+    <td>{{attr.ticket}}</td>
+    <td>{{attr.role}}</td>
+    <td>{{attr.lossPolicy}}</td>
+  {{/attr-list}}
+  {{/acc.item}}
 {{/bs-accordion}}
-  {{/tab.pane}}
+{{/tab.pane}}
+
   {{#tab.pane elementId="attributes" title="Attributes"}}
   {{#bs-accordion selected="meta" as |acc|}}
   {{#acc.item value="meta" title="Resource Meta Attributes"}}
+    {{#attr-form
+      visibilityTitle="Add Meta Attribute"
+      submitTitle="Add"
+      submitAction=(route-action 'addMetaAttribute')
+      validations=model.validations.addMetaAttribute as |f|
+    }}
+      {{f.text-field 'key'}}
+      {{f.text-field 'value'}}
+    {{/attr-form}}
     {{#attr-list
         title='Resource Meta Attributes'
         attributes=selResource.metaAttributes
         onDeleteAction=(route-action 'deletePreference' 'DELETE_META_ATTRIBUTE')
-        onAppendAction=(route-action 'appendMetaAttribute')
-        as |form mode attr f|
+        as |attr|
     }}
-      {{#if (eq mode 'edit')}}
-        {{f.text-field 'key'}}
-        {{f.text-field 'value'}}
-      {{else}}
         <td>{{attr.key}}</td>
         <td>{{attr.value}}</td>
-      {{/if}}
     {{/attr-list}}
     {{/acc.item}}
+
     {{#acc.item value="utilization" title="Resource Utilization Attributes"}}
+      {{#attr-form
+        visibilityTitle="Add Utilization Attribute"
+        submitTitle="Add"
+        submitAction=(route-action 'addUtilizationAttribute')
+        validations=model.validations.addUtilizationAttribute as |f|
+      }}
+        {{f.text-field 'name'}}
+        {{f.text-field 'value'}}
+      {{/attr-form}}
+
       {{#attr-list
           title='Resource Utilization Attributes'
           attributes=selResource.utilizationAttributes
           onDeleteAction=(route-action 'deletePreference' 'DELETE_UTILIZATION_ATTRIBUTE')
-          onAppendAction=(route-action 'appendUtilizationAttribute')
-          as |form mode attr f|
+          as |attr|
       }}
-        {{#if (eq mode 'edit')}}
-          {{f.text-field 'name'}}
-          {{f.text-field 'value'}}
-        {{else}}
-          <td>{{attr.name}}</td>
-          <td>{{attr.value}}</td>
-        {{/if}}
+        <td>{{attr.name}}</td>
+        <td>{{attr.value}}</td>
       {{/attr-list}}
       {{/acc.item}}
     {{/bs-accordion}}
