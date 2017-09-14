@@ -130,17 +130,12 @@
     submitAction=(route-action 'addColocationPreference')
     validations=model.validations.addColocationPreference as |f changeset|
   }}
-    {{#power-select
-      selected=changeset.targetResource
-      options=(map-by 'name' (without selResource model.resources))
+    {{f.custom-field
+      'targetResource'
+      control='form-for-power-select'
       placeholder='Select a resource'
-      onchange=(action (mut changeset.targetResource))
-      allowClear=false
-      as |record|
+      step=(map-by 'name' (without selResource model.resources))
     }}
-      {{record}}
-    {{/power-select}}
-
     {{f.select-field 'colocationType' 'Together Apart'}}
     {{f.text-field 'score'}}
   {{/attr-form}}
@@ -164,17 +159,12 @@
     submitAction=(route-action 'addOrderingPreference')
     validations=model.validations.addOrderingPreference as |f changeset|
   }}
-    {{#power-select
-      selected=changeset.targetResource
-      options=(map-by 'name' (without selResource model.resources))
+    {{f.custom-field
+      'targetResource'
+      control='form-for-power-select'
       placeholder='Select a resource'
-      onchange=(action (mut changeset.targetResource))
-      allowClear=true
-      as |record|
+      step=(map-by 'name' (without selResource model.resources))
     }}
-      {{record}}
-    {{/power-select}}
-
     {{f.select-field 'targetAction' 'starts promotes demotes stops'}}
     {{f.select-field 'order' 'before after'}}
     {{f.select-field 'action' 'starts promotes demotes stops'}}

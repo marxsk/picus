@@ -1,0 +1,32 @@
+import Ember from 'ember';
+
+/**
+ * Component that integrates ember-power-select into ember-form-for
+ *
+ * @todo: Reusing parameter 'step' for different purpose because I have
+ *  not find a better way yet
+ */
+export default Ember.Component.extend({
+  /**
+   * Selected value in the combo-box that is mutated after change
+   *
+   * @property First positional parameter
+   * @public
+   */
+  positionalParams: ['selected'],
+
+  /**
+   * Function that takes care about propagating changes to the ember-form-for
+   *
+   * @property update
+   * @public
+   */
+  update: undefined,
+
+  actions: {
+    onChange: function(selectedItem) {
+      this.set('selected', selectedItem);
+      this.get('update')(selectedItem);
+    }
+  }
+});
