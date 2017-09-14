@@ -7,7 +7,7 @@
     {{#unless attribute.id}}
       [ADDING]
     {{else}}
-      <span class="delete-attr" onClick={{action onDeleteAction attribute}}>DELETE</span>
+      <span class="delete-attr" onClick={{action onDeleteAction attribute}}><span class="glyphicon glyphicon-trash" /></span>
     {{/unless}}
   {{/if}}
 </td>
