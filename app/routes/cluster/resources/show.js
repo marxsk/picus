@@ -168,6 +168,10 @@ export default TabRoute.extend({
       return this._notificationSaveAttribute(preference, 'ADD_ORDERING_PREFERENCE');
     },
 
+    addSetOrderingPreference: function(form) {
+      return true;
+    },
+
     addTicketPreference: function(form) {
       const preference = this.get('store').createRecord('ticket-preference', {
         resource: this.get('resource'),

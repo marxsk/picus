@@ -170,6 +170,32 @@
     {{f.select-field 'action' 'starts promotes demotes stops'}}
     {{f.text-field 'score'}}
   {{/attr-form}}
+
+  {{#attr-form
+    visibilityTitle="Add Ordering Set Preference"
+    submitTitle="Add"
+    submitAction=(route-action 'addSetOrderingPreference')
+    validations=model.validations.addSetOrderingPreference as |f changeset|
+  }}
+    {{f.text-field 'name'}}
+    {{#dynamic-fields
+      src=changeset
+      key='ordering'
+      elementPrefix='ordering'
+      as |element dynamicUpdate|
+    }}
+      {{f.custom-field
+        element.name
+        control='form-for-power-select'
+        label='Resource Set'
+        multiple=true
+        placeholder='Select resources'
+        step=(map-by 'name' (without selResource model.resources))
+        update=dynamicUpdate
+      }}
+    {{/dynamic-fields}}
+  {{/attr-form}}
+
   {{#attr-list
       title='Resource Ordering Preference'
       attributes=selResource.orderingPreferences
