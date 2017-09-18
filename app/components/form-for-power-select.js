@@ -1,7 +1,7 @@
 import Ember from 'ember';
 
 /**
- * Component that integrates ember-power-select into ember-form-for
+ * Component that integrates ember-power-select(-multiple) into ember-form-for
  *
  * @todo: Reusing parameter 'step' for different purpose because I have
  *  not find a better way yet
@@ -22,6 +22,14 @@ export default Ember.Component.extend({
    * @public
    */
   update: undefined,
+
+  /**
+   * Allow selecting multiple options in the field
+   *
+   * @property multiple
+   * @public
+   */
+  multiple: false,
 
   actions: {
     onChange: function(selectedItem) {
