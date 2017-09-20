@@ -16,6 +16,13 @@
   display: unset;
 }
 
+/* ember-power-select-multiple is on a different line */
+.custom-field .form-control {
+  display: block;
+  padding: 0;
+  height: unset;
+}
+
 .form-group label {
   width: 10em;
   text-align: right;
