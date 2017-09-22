@@ -177,7 +177,11 @@
     submitAction=(route-action 'addSetOrderingPreference')
     validations=model.validations.addSetOrderingPreference as |f changeset|
   }}
+    {{#warning-set data=changeset.ordering selfName=selResource.name}}
+      None, of your sets contain this resource. You might want to fix this
+    {{/warning-set}}
     {{f.text-field 'name'}}
+
     {{#dynamic-fields
       src=changeset
       key='ordering'
@@ -190,7 +194,7 @@
         label='Resource Set'
         multiple=true
         placeholder='Select resources'
-        step=(map-by 'name' (without selResource model.resources))
+        step=(map-by 'name' model.resources)
         update=dynamicUpdate
       }}
     {{/dynamic-fields}}

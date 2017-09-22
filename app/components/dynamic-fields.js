@@ -20,7 +20,7 @@ export default Ember.Component.extend({
         this.get('src').set(this.get('key'), this.get('source'));
         this.get('source').pushObject(Ember.Object.create({
           name: `${this.get('elementPrefix')}_0`,
-          value: '',
+          value: Ember.A(),
         }));
       }
   },
@@ -31,9 +31,16 @@ export default Ember.Component.extend({
       const lastIndex = parseInt(re.exec(this.get('source.lastObject.name'))[1]);
       const currentIndex = parseInt(re.exec(objectName)[1]);
 
+      this.get('source').some((field) => {
+        if (field.name === objectName) {
+          field.set('value', Ember.A(value));
+          return true;
+        }
+      });
+
       if (`${this.get('elementPrefix')}_${lastIndex}` === objectName) {
         Ember.Logger.debug('dynamic-fields: Adding new field');
-        this.get('source').pushObject(Ember.Object.create({name: `${this.get('elementPrefix')}_${1 + lastIndex}`, value: ''}));
+        this.get('source').pushObject(Ember.Object.create({name: `${this.get('elementPrefix')}_${1 + lastIndex}`, value: Ember.A()}));
       } else if ((value === undefined) || (value.length === 0)) {
         Ember.Logger.debug('dynamic-fields: Removing field');
         this.get('source').removeAt(currentIndex);
