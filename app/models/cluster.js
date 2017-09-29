@@ -10,4 +10,6 @@ export default DS.Model.extend({
   aclUsers: DS.hasMany('aclUser'),
   aclGroups: DS.hasMany('aclGroup'),
   aclRoles: DS.hasMany('aclRole'),
+
+  orderingSet: DS.hasMany('constraintSet'),
 });

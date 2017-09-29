@@ -213,6 +213,22 @@
     <td>{{attr.action}}</td>
     <td>{{attr.score}}</td>
   {{/attr-list}}
+
+  {{#attr-list
+      title='Resource Set Ordering Preference (all)'
+      attributes=model.updatingCluster.firstObject.orderingSet
+      onDeleteAction=(route-action 'deletePreference' 'DELETE_SET_ORDERING_PREFERENCE')
+      onAppendAction=(route-action 'addOrderingPreference')
+      as |attr|
+  }}
+    <td>
+      {{#each attr.resourceSets as |rs|}}
+        {{#each rs.resources as |rr| }}
+          {{rr.name}}
+        {{/each}} <br />
+      {{/each}}
+    </td>
+  {{/attr-list}}
   {{/acc.item}}
 
   {{#acc.item value="ticket" title="Resource Ticket Preferences"}}

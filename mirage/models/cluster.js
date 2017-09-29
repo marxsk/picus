@@ -8,4 +8,5 @@ export default Model.extend({
   aclUsers: hasMany('aclUser'),
   aclGroups: hasMany('aclGroup'),
   aclRoles: hasMany('aclRole'),
+  orderingSet: hasMany('constraintSet'),
 });

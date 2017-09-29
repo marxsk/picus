@@ -164,7 +164,6 @@ export default DS.Store.extend({
               }
             });
         });
-
         store.push(normalized);
         store.set('isQueryInProgress', false);
         if (store.get('isQueryInQueue')) {

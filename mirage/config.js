@@ -354,6 +354,33 @@ export default function() {
     }
   });
 
+  this.post('/managec/my/add_constraint_set_remote', function(schema, request) {
+    const params = this.normalizedRequestAttrs();
+
+    const cluster = schema.clusters.find(1);
+    const constraintSet = cluster.createOrderingSet({
+      type: 'ord'
+    });
+
+// @todo: there is still an issue when resource is referenced by several resourceSets
+
+    Object.keys(params).forEach((p) => {
+      if (p.startsWith('resources[')) {
+//        const index = p.slice(10, -1);
+        let resourceSet = constraintSet.createResourceSet();
+        resourceSet.save();
+        params[p].forEach((resourceName) => {
+          const resource = schema.resources.where({name: resourceName}).models[0];
+
+          const z = resourceSet.resourceIds;
+          z.push(resource.id);
+          resourceSet.resourceIds = z;
+        });
+      }
+      constraintSet.save();
+    });
+  });
+
   this.post('/managec/my/remove_constraint_remote', function (schema, request) {
     const params = this.normalizedRequestAttrs();
     const constraintType = params.constraint_id.split('-')[0];

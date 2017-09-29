@@ -4,5 +4,7 @@ export default JSONAPISerializer.extend({
   include: ['nodes', 'resources', 'nodeAttributes', 'nodeUtilizationAttributes', 'properties',
     'fences', 'fenceProperties', 'resourceProperties', 'metaAttributes', 'locationPreferences',
     'orderingPreferences', 'aclUsers', 'aclGroups', 'aclRoles', 'aclPermissions', 'permissions',
-    'colocationPreferences', 'utilizationAttributes', 'ticketPreferences'],
+    'colocationPreferences', 'utilizationAttributes', 'ticketPreferences', 'constraintSet',
+    'resourceSets', 'constraintSets', 'orderingSet',
+  ],
 });

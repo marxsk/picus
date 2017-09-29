@@ -97,6 +97,24 @@ export default DS.JSONAPISerializer.extend({
           value: record.get('value'),
           force: force,
         });
+      } else if (snapshot.modelName === 'constraint-set') {
+        const json = {
+          disable_autocorrect: true,
+          c_type: 'ord',
+        };
+
+        let encodedDynamic = [];
+        record.get('resourceSets').forEach((s, i) => {
+          const fieldName = `resources[${i}][]`;
+
+          s.get('resources').forEach((resource) => {
+            encodedDynamic.push(this._postTextSerializer({
+              [fieldName]: resource.get('name')}
+            ));
+          })
+        })
+
+        return (this._postTextSerializer(json) + '&' + encodedDynamic.join('&'));
       } else {
         console.error(`[serializer] model ${snapshot.modelName} for CREATE can not be serialized`);
       }

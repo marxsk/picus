@@ -24,6 +24,7 @@ export default DS.Adapter.extend({
         'ticket-preference': 'add_constraint_remote',
         'attribute': 'add_meta_attr_remote',
         'utilization-attribute': 'set_resource_utilization',
+        'constraint-set': 'add_constraint_set_remote',
       }[modelName];
     }
   },

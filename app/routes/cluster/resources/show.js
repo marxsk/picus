@@ -169,7 +169,23 @@ export default TabRoute.extend({
     },
 
     addSetOrderingPreference: function(form) {
-      return true;
+      const preferenceSet = this.get('store').createRecord('constraint-set');
+      const cluster = this.store.peekAll('cluster').objectAt(0);
+      preferenceSet.set('cluster', cluster);
+
+      form.get('ordering').forEach((line) => {
+        if (line.get('value.length') === 0) {
+          return;
+        }
+
+        const resourceSet = this.get('store').createRecord('resource-set');
+        line.get('value').forEach((resourceName) => {
+          resourceSet.get('resources').addObject(this.store.peekRecordQueryName('resource', resourceName));
+        });
+        preferenceSet.get('resourceSets').addObject(resourceSet);
+      });
+
+      return this._notificationSaveAttribute(preferenceSet, 'ADD_ORDERING_SET_PREFERENCE');
     },
 
     addTicketPreference: function(form) {
