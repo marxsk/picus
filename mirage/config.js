@@ -298,8 +298,6 @@ export default function() {
     const params = this.normalizedRequestAttrs();
     const resource = schema.resources.where({name: params.res_id}).models[0];
 
-    let keyAlreadyExists = false;
-
     if (params.c_type === "loc") {
       const attribute = _getRecordByKey(params, resource.locationPreferenceIds, schema.locationPreferences, 'node_id');
 
@@ -414,7 +412,6 @@ export default function() {
   });
   this.get('/logout', () => {
     this.authenticated = false;
-    console.log('logout');
   });
   this.get('/login-status', () => {
     if (this.authenticated) {
@@ -463,7 +460,6 @@ export default function() {
 
   this.post('/acl-permission', (schema, request) => {
     const params = JSON.parse(request.requestBody);
-    const cluster = schema.clusters.find(1);
     const role = schema.aclRoles.where({name: params.data.attributes.roleName}).models[0];
 
     const attr = role.createPermission({

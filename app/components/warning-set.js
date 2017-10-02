@@ -10,8 +10,8 @@ export default Ember.Component.extend({
       return this.get('data').some((textField) => {
         return textField.get('value').some((name) => {
           return (this.get('selfName') === name);
-        })
-      })
+        });
+      });
     }
   }),
 });

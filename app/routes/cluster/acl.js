@@ -1,9 +1,6 @@
 import Ember from 'ember';
-import ResourceValidations from '../../validators/resource-validations';
 import {
   validatePresence,
-  validateLength,
-  validateNumber,
 } from 'ember-changeset-validations/validators';
 import TabRoute from '../tab-route';
 
@@ -14,7 +11,7 @@ export default TabRoute.extend({
     };
     let xpathValidation = {
       xpath: [ validatePresence({presence: true}) ]
-    }
+    };
 
     return Ember.RSVP.hash({
       updatingCluster: this.store.peekAll('cluster'),

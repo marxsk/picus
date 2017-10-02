@@ -37,7 +37,7 @@ export default Ember.Component.extend({
             record: notification.get('data.record'),
             response: xhr,
           }
-        )
+        );
       });
       this.send('unsetActiveNotification');
       this.get('notifications').removeNotification(notification);

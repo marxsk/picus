@@ -1,7 +1,6 @@
 import ResourceValidations from '../validators/resource-validations';
 import {
   validatePresence,
-  validateLength,
   validateNumber,
 } from 'ember-changeset-validations/validators';
 

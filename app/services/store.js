@@ -230,7 +230,7 @@ export default DS.Store.extend({
         url = undefined;
     }
 
-    console.assert((typeof url !== 'undefined'), `Invalid agentType (${agentType}) entered`);
+    Ember.Logger.assert((typeof url !== 'undefined'), `Invalid agentType (${agentType}) entered`);
 
     // @todo: proper encoding (URIEncode?)
     let data = `resource_type=${transformedAgentType}`;
@@ -286,7 +286,7 @@ export default DS.Store.extend({
         url = undefined;
     }
 
-    console.assert((typeof url !== 'undefined'), `Invalid agentType (${agentType}) entered`);
+    Ember.Logger.assert((typeof url !== 'undefined'), `Invalid agentType (${agentType}) entered`);
 
     return new Ember.RSVP.Promise((resolve) => {
       this.get('ajax').request(url).then((response) => {
@@ -333,7 +333,7 @@ export default DS.Store.extend({
         url = undefined;
     }
 
-    console.assert((typeof url !== 'undefined'), `Invalid agentType (${agentType}) entered`);
+    Ember.Logger.assert((typeof url !== 'undefined'), `Invalid agentType (${agentType}) entered`);
 
     return new Ember.RSVP.Promise((resolve) => {
       this.get('ajax').request(url, {data: {agent: agentName}}).then((response) => {
@@ -376,7 +376,7 @@ export default DS.Store.extend({
         separator = '-';
         break;
     }
-    console.assert((typeof separator !== 'undefined'), `Invalid agentType (${agentType}) entered`);
+    Ember.Logger.assert((typeof separator !== 'undefined'), `Invalid agentType (${agentType}) entered`);
 
     let jsonData = {};
     names.forEach((i) => {

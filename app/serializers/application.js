@@ -1,3 +1,4 @@
+import Ember from 'ember';
 import DS from 'ember-data';
 
 export default DS.JSONAPISerializer.extend({
@@ -33,7 +34,7 @@ export default DS.JSONAPISerializer.extend({
           value: '',
         });
       } else {
-        console.error(`[serializer] model ${snapshot.modelName} for DELETE can not be serialized`);
+        Ember.Logger.error(`[serializer] model ${snapshot.modelName} for DELETE can not be serialized`);
       }
     } else if (options.action === 'create') {
       let force = false;
@@ -111,12 +112,12 @@ export default DS.JSONAPISerializer.extend({
             encodedDynamic.push(this._postTextSerializer({
               [fieldName]: resource.get('name')}
             ));
-          })
-        })
+          });
+        });
 
         return (this._postTextSerializer(json) + '&' + encodedDynamic.join('&'));
       } else {
-        console.error(`[serializer] model ${snapshot.modelName} for CREATE can not be serialized`);
+        Ember.Logger.error(`[serializer] model ${snapshot.modelName} for CREATE can not be serialized`);
       }
     }
   }

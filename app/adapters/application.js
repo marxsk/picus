@@ -78,7 +78,7 @@ export default DS.Adapter.extend({
   reloadData: function(clusterName) {
     const options = {
       type: 'GET',
-    }
+    };
 
     if (clusterName) {
       this.set('namespace', `/managec/${clusterName}`);

@@ -136,8 +136,6 @@ skip('load resource with children resources [added in constructor]', function(as
   const cluster = server.create('cluster', {id:3, resources: [mainResource]});
   cluster.save();
 
-  console.log(server.db);
-
   store.reloadData();
   Ember.run.later(function() {
     assert.ok(store.peekAll('cluster').get('firstObject'), 'loading of first cluster object from store');

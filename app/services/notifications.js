@@ -13,7 +13,7 @@ export default NotificationsService.extend({
       return this.addNotification(Ember.assign({
         message: message,
         type: 'info',
-      }))
+      }, options));
     },
 
     updateNotification(notification, type, message, data={}) {
@@ -40,4 +40,4 @@ export default NotificationsService.extend({
         });
       }
     }
-})
+});

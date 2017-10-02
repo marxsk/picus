@@ -1,3 +1,4 @@
+import Ember from 'ember';
 import TabController from '../../tab-controller';
 
 export default TabController.extend({
