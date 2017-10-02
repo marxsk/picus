@@ -371,10 +371,10 @@ export default function() {
         resourceSet.save();
         params[p].forEach((resourceName) => {
           const resource = schema.resources.where({name: resourceName}).models[0];
-
           const z = resourceSet.resourceIds;
           z.push(resource.id);
           resourceSet.resourceIds = z;
+          resourceSet.save();
         });
       }
       constraintSet.save();
