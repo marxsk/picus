@@ -101,8 +101,13 @@ export default DS.JSONAPISerializer.extend({
       } else if (snapshot.modelName === 'constraint-set') {
         const json = {
           disable_autocorrect: true,
-          c_type: 'ord',
+          c_type: record.get('type'),
         };
+
+        if (record.get('type') === 'ticket') {
+          json['options[ticket]'] = record.get('ticket');
+          json['options[loss-policy]'] = record.get('lossPolicy');
+        }
 
         let encodedDynamic = [];
         record.get('resourceSets').forEach((s, i) => {

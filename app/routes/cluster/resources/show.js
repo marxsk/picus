@@ -172,6 +172,7 @@ export default TabRoute.extend({
       const preferenceSet = this.get('store').createRecord('constraint-set');
       const cluster = this.store.peekAll('cluster').objectAt(0);
       preferenceSet.set('cluster', cluster);
+      preferenceSet.set('type', 'ord');
 
       form.get('ordering').forEach((line) => {
         if (line.get('value.length') === 0) {
@@ -188,6 +189,27 @@ export default TabRoute.extend({
       return this._notificationSaveAttribute(preferenceSet, 'ADD_ORDERING_SET_PREFERENCE');
     },
 
+    addSetColocationPreference: function(form) {
+      const preferenceSet = this.get('store').createRecord('constraint-set');
+      const cluster = this.store.peekAll('cluster').objectAt(0);
+      preferenceSet.set('cluster', cluster);
+      preferenceSet.set('type', 'col');
+
+      form.get('colocation').forEach((line) => {
+        if (line.get('value.length') === 0) {
+          return;
+        }
+
+        const resourceSet = this.get('store').createRecord('resource-set');
+        line.get('value').forEach((resourceName) => {
+          resourceSet.get('resources').addObject(this.store.peekRecordQueryName('resource', resourceName));
+        });
+        preferenceSet.get('resourceSets').addObject(resourceSet);
+      });
+
+      return this._notificationSaveAttribute(preferenceSet, 'ADD_COLOCATION_SET_PREFERENCE');
+    },
+
     addTicketPreference: function(form) {
       const preference = this.get('store').createRecord('ticket-preference', {
         resource: this.get('resource'),
@@ -197,6 +219,30 @@ export default TabRoute.extend({
       });
       return this._notificationSaveAttribute(preference, 'ADD_TICKET_PREFERENCE');
     },
+    addSetTicketPreference: function(form) {
+      const preferenceSet = this.get('store').createRecord('constraint-set');
+      const cluster = this.store.peekAll('cluster').objectAt(0);
+      preferenceSet.set('cluster', cluster);
+      preferenceSet.set('type', 'ticket');
+
+      preferenceSet.set('ticket', form.get('ticketName'));
+      preferenceSet.set('lossPolicy', form.get('lossPolicy'));
+
+      form.get('ticket').forEach((line) => {
+        if (line.get('value.length') === 0) {
+          return;
+        }
+
+        const resourceSet = this.get('store').createRecord('resource-set');
+        line.get('value').forEach((resourceName) => {
+          resourceSet.get('resources').addObject(this.store.peekRecordQueryName('resource', resourceName));
+        });
+        preferenceSet.get('resourceSets').addObject(resourceSet);
+      });
+
+      return this._notificationSaveAttribute(preferenceSet, 'ADD_TICKET_SET_PREFERENCE');
+    },
+
 
     addMetaAttribute: function(form) {
       const attribute = this.get('store').createRecord('attribute', {

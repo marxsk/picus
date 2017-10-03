@@ -140,6 +140,34 @@
     {{f.text-field 'score'}}
   {{/attr-form}}
 
+  {{#attr-form
+    visibilityTitle="Add Colocation Set Preference"
+    submitTitle="Add"
+    submitAction=(route-action 'addSetColocationPreference')
+    validations=model.validations.addSetColocationPreference as |f changeset|
+  }}
+    {{#warning-set data=changeset.colocation selfName=selResource.name}}
+      None, of your sets contain this resource. You might want to fix this
+    {{/warning-set}}
+
+    {{#dynamic-fields
+      src=changeset
+      key='colocation'
+      elementPrefix='colocation'
+      as |element dynamicUpdate|
+    }}
+      {{f.custom-field
+        element.name
+        control='form-for-power-select'
+        label='Resource Set'
+        multiple=true
+        placeholder='Select resources'
+        step=(map-by 'name' model.resources)
+        update=dynamicUpdate
+      }}
+    {{/dynamic-fields}}
+  {{/attr-form}}
+
   {{#attr-list
     title='Resource Colocation Preference'
     attributes=selResource.colocationPreferences
@@ -149,6 +177,21 @@
     <td>{{attr.targetResource}}</td>
     <td>{{attr.colocationType}}</td>
     <td>{{attr.score}}</td>
+  {{/attr-list}}
+  {{#attr-list
+      title='Resource Set Colocation Preference (all)'
+      attributes=(filter-by 'type' 'col' model.updatingCluster.firstObject.constraintSets)
+      onDeleteAction=(route-action 'deletePreference' 'DELETE_SET_COLOCATION_PREFERENCE')
+      onAppendAction=(route-action 'addOrderingPreference')
+      as |attr|
+  }}
+    <td>
+      {{#each attr.resourceSets as |rs|}}
+        {{#each rs.resources as |rr| }}
+          {{rr.name}}
+        {{/each}} <br />
+      {{/each}}
+    </td>
   {{/attr-list}}
   {{/acc.item}}
 
@@ -180,7 +223,6 @@
     {{#warning-set data=changeset.ordering selfName=selResource.name}}
       None, of your sets contain this resource. You might want to fix this
     {{/warning-set}}
-    {{f.text-field 'name'}}
 
     {{#dynamic-fields
       src=changeset
@@ -216,7 +258,7 @@
 
   {{#attr-list
       title='Resource Set Ordering Preference (all)'
-      attributes=model.updatingCluster.firstObject.orderingSet
+      attributes=(filter-by 'type' 'ord' model.updatingCluster.firstObject.constraintSets)
       onDeleteAction=(route-action 'deletePreference' 'DELETE_SET_ORDERING_PREFERENCE')
       onAppendAction=(route-action 'addOrderingPreference')
       as |attr|
@@ -242,6 +284,36 @@
     {{f.select-field 'role' prompt=' ' promptIsSelectable=true options='Stopped Started Master Slave'}}
     {{f.select-field 'lossPolicy' prompt=' ' promptIsSelectable=true options='fence stop freeze demote'}}
   {{/attr-form}}
+  {{#attr-form
+    visibilityTitle="Add Ticket Set Preference"
+    submitTitle="Add"
+    submitAction=(route-action 'addSetTicketPreference')
+    validations=model.validations.addSetTicketPreference as |f changeset|
+  }}
+    {{f.text-field 'ticketName' label='Ticket'}}
+    {{f.select-field 'lossPolicy' prompt=' ' promptIsSelectable=true options='fence stop freeze demote'}}
+
+    {{#warning-set data=changeset.ticket selfName=selResource.name}}
+      None, of your sets contain this resource. You might want to fix this
+    {{/warning-set}}
+
+    {{#dynamic-fields
+      src=changeset
+      key='ticket'
+      elementPrefix='ticket'
+      as |element dynamicUpdate|
+    }}
+      {{f.custom-field
+        element.name
+        control='form-for-power-select'
+        label='Resource Set'
+        multiple=true
+        placeholder='Select resources'
+        step=(map-by 'name' model.resources)
+        update=dynamicUpdate
+      }}
+    {{/dynamic-fields}}
+  {{/attr-form}}
 
   {{#attr-list
     title='Resource Ticket Preferences'
@@ -253,6 +325,23 @@
     <td>{{attr.role}}</td>
     <td>{{attr.lossPolicy}}</td>
   {{/attr-list}}
+  {{#attr-list
+      title='Resource Set Ticket Preference (all)'
+      attributes=(filter-by 'type' 'ticket' model.updatingCluster.firstObject.constraintSets)
+      onDeleteAction=(route-action 'deletePreference' 'DELETE_SET_ORDERING_PREFERENCE')
+      onAppendAction=(route-action 'addOrderingPreference')
+      as |attr|
+  }}
+    <td>
+      [[ticket: {{attr.ticket}}; policy: {{attr.lossPolicy}}]] <br />
+      {{#each attr.resourceSets as |rs|}}
+        {{#each rs.resources as |rr| }}
+          {{rr.name}}
+        {{/each}} <br />
+      {{/each}}
+    </td>
+  {{/attr-list}}
+
   {{/acc.item}}
 {{/bs-accordion}}
 {{/tab.pane}}

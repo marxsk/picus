@@ -356,11 +356,11 @@ export default function() {
     const params = this.normalizedRequestAttrs();
 
     const cluster = schema.clusters.find(1);
-    const constraintSet = cluster.createOrderingSet({
-      type: 'ord'
+    const constraintSet = cluster.createConstraintSet({
+      type: params.c_type,
+      ticket: params['options%5Bticket%5D'],
+      lossPolicy: params['options%5Bloss-policy%5D'],
     });
-
-// @todo: there is still an issue when resource is referenced by several resourceSets
 
     Object.keys(params).forEach((p) => {
       if (p.startsWith('resources[')) {
