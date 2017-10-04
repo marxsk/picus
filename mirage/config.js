@@ -1,5 +1,7 @@
 import Response from 'ember-cli-mirage/response';
 
+let counterID = 1;
+
 function _getRecordByKey(params, attributeIds, schema, keyName) {
   let keyAlreadyExists = false;
   let attribute;
@@ -308,7 +310,7 @@ export default function() {
         attribute.update('score', params.score);
       } else {
         return resource.createLocationPreference({
-          pcs_id: `location-${params.res_id}-${params.node_id}-${params.score}`,
+          preferenceID: `location-${counterID++}`,
           node: params.node_id,
           ...params,
         });
@@ -324,7 +326,7 @@ export default function() {
 //        attribute.update('score', params.score);
       } else {
         return resource.createColocationPreference({
-          pcs_id: `colocation-${params.res_id}-${params.target_res_id}-${params.score}`,
+          preferenceID: `colocation-${counterID++}`,
           targetResource: params.target_res_id,
           colocationType: params.colocation_type,
           score: params.score
@@ -334,7 +336,7 @@ export default function() {
       // @note: pcs_id can be same for several items when only action differs, this is not an issue in a real backend
       // always create a new one; @todo - look at real response in case of 'duplicity'
       return resource.createOrderingPreference({
-        pcs_id: `ordering-${params.res_id}-${params.target_res_id}-${params.score}`,
+        preferenceID: `ordering-${counterID++}`,
         targetResource: params.target_res_id,
         targetAction: params.target_action,
         action: params.res_action,
@@ -344,7 +346,7 @@ export default function() {
     } else if (params.c_type === 'ticket') {
       // always create - as for 'ord'
       return resource.createTicketPreference({
-        pcs_id: `ticket-${params.ticket}-${params.res_id}-${params.role}`,
+        preferenceID: `ticket-${counterID++}`,
         ticket: params.ticket,
         role: params.role,
         lossPolicy: params['loss-policy'],
@@ -388,7 +390,7 @@ export default function() {
       ordering: schema.orderingPreferences,
       ticket: schema.ticketPreferences,
     }
-    const constraint = schemaMapping[constraintType].where({pcs_id: params.constraint_id}).models[0];
+    const constraint = schemaMapping[constraintType].where({preferenceID: params.constraint_id}).models[0];
 
     constraint.destroy();
   });

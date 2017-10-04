@@ -12,15 +12,8 @@ export default DS.JSONAPISerializer.extend({
     const record = snapshot.record;
 
     if (options.action === "delete") {
-      // @todo: IDs for preferences should not be generated as there might be additional suffixes
-      if (snapshot.modelName === "location-preference") {
-        return `constraint_id=location-${record.get('resource.name')}-${record.get('node')}-${record.get('score')}`;
-      } else if (snapshot.modelName === 'colocation-preference') {
-        return `constraint_id=colocation-${record.get('resource.name')}-${record.get('targetResource')}-${record.get('score')}`;
-      } else if (snapshot.modelName === 'ordering-preference') {
-        return `constraint_id=ordering-${record.get('resource.name')}-${record.get('targetResource')}-${record.get('score')}-${record.get('action')}`;
-      } else if (snapshot.modelName === 'ticket-preference') {
-        return `constraint_id=ticket-${record.get('ticket')}-${record.get('resource.name')}-${record.get('role')}`;
+      if (["location-preference", "colocation-preference", "ordering-preference", "ticket-preference"].contains(snapshot.modelName)) {
+        return `constraint_id=${record.get('preferenceID')}`;
       } else if (snapshot.modelName === 'attribute') {
         return this._postTextSerializer({
           res_id: record.get('resource.name'),
