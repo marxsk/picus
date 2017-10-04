@@ -146,7 +146,7 @@
     submitAction=(route-action 'addSetColocationPreference')
     validations=model.validations.addSetColocationPreference as |f changeset|
   }}
-    {{#warning-set data=changeset.colocation selfName=selResource.name}}
+    {{#warning-set data=changeset.resources selfName=selResource.name}}
       None, of your sets contain this resource. You might want to fix this
     {{/warning-set}}
 
@@ -220,7 +220,7 @@
     submitAction=(route-action 'addSetOrderingPreference')
     validations=model.validations.addSetOrderingPreference as |f changeset|
   }}
-    {{#warning-set data=changeset.ordering selfName=selResource.name}}
+    {{#warning-set data=changeset.resources selfName=selResource.name}}
       None, of your sets contain this resource. You might want to fix this
     {{/warning-set}}
 
@@ -293,7 +293,7 @@
     {{f.text-field 'ticketName' label='Ticket'}}
     {{f.select-field 'lossPolicy' prompt=' ' promptIsSelectable=true options='fence stop freeze demote'}}
 
-    {{#warning-set data=changeset.ticket selfName=selResource.name}}
+    {{#warning-set data=changeset.resources selfName=selResource.name}}
       None, of your sets contain this resource. You might want to fix this
     {{/warning-set}}
 
