@@ -178,13 +178,13 @@
     <td>{{attr.colocationType}}</td>
     <td>{{attr.score}}</td>
   {{/attr-list}}
-  {{#attr-list
-      title='Resource Set Colocation Preference (all)'
-      attributes=(filter-by 'type' 'col' model.updatingCluster.firstObject.constraintSets)
-      onDeleteAction=(route-action 'deletePreference' 'DELETE_SET_COLOCATION_PREFERENCE')
-      onAppendAction=(route-action 'addOrderingPreference')
-      as |attr|
-  }}
+  {{#display-constraint-set
+    title='Resource Set Colocation Preferences'
+    resource=selResource
+    attributes=(filter-by 'type' 'col' model.updatingCluster.firstObject.constraintSets)
+    onDeleteAction=(route-action 'deletePreference' 'DELETE_SET_COLOCATION_PREFERENCE')
+    onAppendAction=(route-action 'addOrderingPreference')
+    as |attr|}}
     <td>
       {{#each attr.resourceSets as |rs|}}
         {{#each rs.resources as |rr| }}
@@ -192,7 +192,7 @@
         {{/each}} <br />
       {{/each}}
     </td>
-  {{/attr-list}}
+  {{/display-constraint-set}}
   {{/acc.item}}
 
   {{#acc.item value="ordering" title="Resource Ordering Preference"}}
@@ -256,13 +256,13 @@
     <td>{{attr.score}}</td>
   {{/attr-list}}
 
-  {{#attr-list
-      title='Resource Set Ordering Preference (all)'
-      attributes=(filter-by 'type' 'ord' model.updatingCluster.firstObject.constraintSets)
-      onDeleteAction=(route-action 'deletePreference' 'DELETE_SET_ORDERING_PREFERENCE')
-      onAppendAction=(route-action 'addOrderingPreference')
-      as |attr|
-  }}
+  {{#display-constraint-set
+    title='Resource Set Ordering Preferences'
+    resource=selResource
+    attributes=(filter-by 'type' 'ord' model.updatingCluster.firstObject.constraintSets)
+    onDeleteAction=(route-action 'deletePreference' 'DELETE_SET_ORDERING_PREFERENCE')
+    onAppendAction=(route-action 'addOrderingPreference')
+    as |attr|}}
     <td>
       {{#each attr.resourceSets as |rs|}}
         {{#each rs.resources as |rr| }}
@@ -270,7 +270,7 @@
         {{/each}} <br />
       {{/each}}
     </td>
-  {{/attr-list}}
+  {{/display-constraint-set}}
   {{/acc.item}}
 
   {{#acc.item value="ticket" title="Resource Ticket Preferences"}}
@@ -325,13 +325,13 @@
     <td>{{attr.role}}</td>
     <td>{{attr.lossPolicy}}</td>
   {{/attr-list}}
-  {{#attr-list
-      title='Resource Set Ticket Preference (all)'
-      attributes=(filter-by 'type' 'ticket' model.updatingCluster.firstObject.constraintSets)
-      onDeleteAction=(route-action 'deletePreference' 'DELETE_SET_ORDERING_PREFERENCE')
-      onAppendAction=(route-action 'addOrderingPreference')
-      as |attr|
-  }}
+  {{#display-constraint-set
+    title='Resource Set Ticket Preferences'
+    resource=selResource
+    attributes=(filter-by 'type' 'ticket' model.updatingCluster.firstObject.constraintSets)
+    onDeleteAction=(route-action 'deletePreference' 'DELETE_SET_TICKET_PREFERENCE')
+    onAppendAction=(route-action 'addOrderingPreference')
+    as |attr|}}
     <td>
       [[ticket: {{attr.ticket}}; policy: {{attr.lossPolicy}}]] <br />
       {{#each attr.resourceSets as |rs|}}
@@ -340,8 +340,7 @@
         {{/each}} <br />
       {{/each}}
     </td>
-  {{/attr-list}}
-
+  {{/display-constraint-set}}
   {{/acc.item}}
 {{/bs-accordion}}
 {{/tab.pane}}
