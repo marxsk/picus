@@ -1,6 +1,7 @@
 import DS from 'ember-data';
 
 export default DS.Model.extend({
+  preferenceID: DS.attr('string'),
   cluster: DS.belongsTo('cluster'),
   resourceSets: DS.hasMany('resource-set'),
   type: DS.attr('string'),

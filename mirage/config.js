@@ -360,6 +360,7 @@ export default function() {
     const cluster = schema.clusters.find(1);
     const constraintSet = cluster.createConstraintSet({
       type: params.c_type,
+      preferenceID: `set-${counterID++}`,
       ticket: params['options%5Bticket%5D'],
       lossPolicy: params['options%5Bloss-policy%5D'],
     });
@@ -389,6 +390,7 @@ export default function() {
       colocation: schema.colocationPreferences,
       ordering: schema.orderingPreferences,
       ticket: schema.ticketPreferences,
+      set: schema.constraintSets
     }
     const constraint = schemaMapping[constraintType].where({preferenceID: params.constraint_id}).models[0];
 
