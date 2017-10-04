@@ -69,7 +69,7 @@ export default TabRoute.extend({
       },
       addUtilizationAttribute: {
         name: validatePresence(true),
-        key: validatePresence(true),
+        value: validatePresence(true),
       },
       addLocationPreference: {
         node: validatePresence(true),
