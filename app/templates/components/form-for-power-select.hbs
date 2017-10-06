@@ -10,14 +10,29 @@
     {{record}}
   {{/power-select}}
 {{else}}
-  {{#power-select-multiple
-    selected=selected
-    options=step
-    placeholder=placeholder
-    onchange=(action 'onChange')
-    allowClear=true
-    as |record|
-  }}
-    {{record}}
-  {{/power-select-multiple}}
+  {{#unless spellcheck}}
+    {{#power-select-multiple
+      selected=selected
+      options=step
+      placeholder=placeholder
+      onchange=(action 'onChange')
+      allowClear=true
+      as |record|
+    }}
+      {{record}}
+    {{/power-select-multiple}}
+  {{else}}
+    <!-- @todo: fix step/spellcheck are just because I have to create a separate component -->
+    {{#power-select-multiple-with-create
+      selected=selected
+      options=step
+      placeholder=placeholder
+      onchange=(action 'onChange')
+      oncreate=(action 'onCreate')
+      allowClear=true
+      as |record|
+    }}
+      {{record}}
+    {{/power-select-multiple-with-create}}
+  {{/unless}}
 {{/unless}}

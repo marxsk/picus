@@ -35,6 +35,10 @@ export default Ember.Component.extend({
     onChange: function(selectedItem) {
       this.set('selected', selectedItem);
       this.get('update')(selectedItem);
+    },
+    onCreate: function(newItem, component) {
+      component.options.unshiftObject(newItem);
+      component.selected.pushObject(newItem);
     }
   }
 });
