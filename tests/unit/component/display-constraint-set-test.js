@@ -1,3 +1,4 @@
+import Ember from 'ember';
 import { moduleFor, test } from 'ember-qunit';
 
 moduleFor('component:display-constraint-set', 'Unit | Component | display-constraint-set', {});
