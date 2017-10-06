@@ -91,6 +91,11 @@ export default DS.JSONAPISerializer.extend({
           value: record.get('value'),
           force: force,
         });
+      } else if (snapshot.modelName === 'acl-role') {
+        return this._postTextSerializer({
+          name: record.get('name'),
+          description: record.get('description'),
+        })
       } else if (snapshot.modelName === 'constraint-set') {
         const json = {
           disable_autocorrect: true,

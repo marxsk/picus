@@ -437,15 +437,16 @@ export default function() {
   });
   this.del('/acl-users/:id');
 
-  this.post('/acl-group', (schema, request) => {
-    const params = JSON.parse(request.requestBody);
+  this.post('/managec/my/add_acl_role', function(schema, request) {
+    const attrs = this.normalizedRequestAttrs();
     const cluster = schema.clusters.find(1);
 
-    const attr = cluster.createAclGroup({
-      name: params.data.attributes.name,
+    const role = cluster.createAclRole({
+      name: attrs.name,
+      description: attrs.description,
     });
 
-    return attr;
+    return role;
   });
   this.del('/acl-groups/:id');
 

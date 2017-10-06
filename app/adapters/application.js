@@ -26,6 +26,7 @@ export default DS.Adapter.extend({
         'attribute': 'add_meta_attr_remote',
         'utilization-attribute': 'set_resource_utilization',
         'constraint-set': 'add_constraint_set_remote',
+        'acl-role': 'add_acl_role',
       }[modelName];
     }
   },

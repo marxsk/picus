@@ -40,5 +40,13 @@ export default TabRoute.extend({
       }
       this.store.pushAppendPermission(roleName, attributes);
     },
+    addRole: function(attributes) {
+      const aclRole = this.get('store').createRecord('acl-role', {
+        name: attributes.get('name'),
+        description: attributes.get('description'),
+      })
+      // @todo: add notification
+      aclRole.save();
+    },
   }
 });
