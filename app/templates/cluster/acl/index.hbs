@@ -6,31 +6,6 @@
   (hash name="permissions" title="Permissions")
 )}}
 
-  {{#attr-form
-    visibilityTitle="Add Role"
-    submitTitle="Add"
-    submitAction=(route-action 'addRole')
-    validations=model.validations.addRole as |f changeset|
-  }}
-    {{f.text-field 'name'}}
-    {{f.text-field 'description'}}
-    {{f.custom-field
-      'users'
-      control='form-for-power-select'
-      multiple=true
-      spellcheck=true
-      placeholder='Assign users to the role'
-      step=(map-by 'name' model.updatingCluster.firstObject.resources)
-    }}
-    {{f.custom-field
-      'groups'
-      control='form-for-power-select'
-      multiple=true
-      placeholder='Assign groups to the role'
-      spellcheck=true
-      step=(map-by 'name' model.updatingCluster.firstObject.resources)
-    }}
-  {{/attr-form}}
 <div class="tab-content">
 {{#tab.pane elementId="users" title="Users & Groups"}}
 {{#attr-list
@@ -67,6 +42,32 @@
 
 {{/tab.pane}}
 {{#tab.pane elementId="roles" title="Roles"}}
+{{#attr-form
+  visibilityTitle="Add Role"
+  submitTitle="Add"
+  submitAction=(route-action 'addRole')
+  validations=model.validations.addRole as |f changeset|
+}}
+  {{f.text-field 'name'}}
+  {{f.text-field 'description'}}
+  {{f.custom-field
+    'users'
+    control='form-for-power-select'
+    multiple=true
+    spellcheck=true
+    placeholder='Assign users to the role'
+    step=(map-by 'name' model.updatingCluster.firstObject.resources)
+  }}
+  {{f.custom-field
+    'groups'
+    control='form-for-power-select'
+    multiple=true
+    placeholder='Assign groups to the role'
+    spellcheck=true
+    step=(map-by 'name' model.updatingCluster.firstObject.resources)
+  }}
+{{/attr-form}}
+
 {{#attr-list
     title='Roles'
     attributes=model.updatingCluster.firstObject.aclRoles
@@ -74,15 +75,16 @@
     onAppendAction=(route-action 'appendRole')
     onDeleteMultipleAction=(route-action 'deleteMultiple')
     validations=model.nameValidation
-    as |form mode attr f|
+    as |attr|
 }}
-  {{#if (eq mode 'edit')}}
-      {{f.text-field 'name'}}
-      {{f.text-field 'description'}}
-  {{else}}
-    <td>{{attr.name}}</td>
+    <td>
+      {{#if attr.id}}
+        {{#link-to "cluster.acl.role" attr.name}}{{attr.name}}{{/link-to}}
+      {{else}}
+        {{attr.name}}
+      {{/if}}
+</td>
     <td>{{attr.description}}</td>
-  {{/if}}
 {{/attr-list}}
 
 {{/tab.pane}}

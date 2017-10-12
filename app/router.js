@@ -31,7 +31,9 @@ Router.map(function() {
       this.route('show', { path: 'show/:fence_id' });
       this.route('create');
     });
-    this.route('acl');
+    this.route('acl', function() {
+      this.route('role', { path: 'role/:role_name'});
+    });
   });
   this.route('error');
 });

@@ -2,7 +2,7 @@ import Ember from 'ember';
 import {
   validatePresence,
 } from 'ember-changeset-validations/validators';
-import TabRoute from '../tab-route';
+import TabRoute from '../../tab-route';
 
 export default TabRoute.extend({
   model() {
@@ -41,7 +41,9 @@ export default TabRoute.extend({
       this.store.pushAppendPermission(roleName, attributes);
     },
     addRole: function(attributes) {
+      const cluster = this.store.peekAll('cluster').objectAt(0);
       const aclRole = this.get('store').createRecord('acl-role', {
+        cluster: cluster,
         name: attributes.get('name'),
         description: attributes.get('description'),
       })

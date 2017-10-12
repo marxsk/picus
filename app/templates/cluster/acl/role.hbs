@@ -1,0 +1,18 @@
+{{#ember-wormhole to="leftmenu"}}
+    {{filter-list
+      data=model.updatingCluster.firstObject.aclRoles
+      targetRoute='cluster.acl.role'
+      showFilter=true
+      titleKey='name'
+      idKey='name'
+    }}
+{{/ember-wormhole}}
+
+{{#ember-wormhole to="breadcrumb"}}
+  <!-- demo of breadcrumb; @todo: create a real component if used -->
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item">{{#link-to "cluster.properties"}}Home{{/link-to}}</li>
+    <li class="breadcrumb-item">{{#link-to "cluster.acl"}}ACL{{/link-to}}</li>
+    <li class="breadcrumb-item active">{{model.params.role_name}}</li>
+  </ol>
+{{/ember-wormhole}}

@@ -1,4 +1,4 @@
-import TabController from '../tab-controller';
+import TabController from '../../tab-controller';
 
 export default TabController.extend({
   activeTab: 'users',
