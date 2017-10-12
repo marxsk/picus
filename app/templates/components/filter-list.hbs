@@ -1,0 +1,19 @@
+{{#if showFilter}}
+  {{input-filter
+    placeholder=filterPlaceholder
+    value=filterString
+    keyUp=(action 'nothing')
+  }}
+{{/if}}
+
+<ul>
+  {{#each data as |record|}}
+    {{#if (incl (get record titleKey) filterString)}}
+      <li>
+        {{#link-to targetRoute (get record idKey)}}
+          {{get record titleKey}}
+        {{/link-to}}
+      </li>
+    {{/if }}
+  {{/each}}
+</ul>
