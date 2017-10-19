@@ -7,10 +7,10 @@ export default Ember.Route.extend({
     this.controllerFor('application').set('hideMainMenu', true);
   },
 
-  model() {
-    console.log('aaa');
+  model(params) {
     return Ember.RSVP.hash({
       updatingCluster: this.store.peekAll('cluster'),
+      params,
     });
   }
 });
