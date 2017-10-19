@@ -7,8 +7,10 @@ export default DS.Adapter.extend({
   namespace: undefined,
 
   pathForType: function(modelName, action) {
+    let resultURL;
+
     if (action === 'delete') {
-      return {
+      resultURL = {
         'location-preference': 'remove_constraint_remote',
         'colocation-preference': 'remove_constraint_remote',
         'ordering-preference': 'remove_constraint_remote',
@@ -18,7 +20,7 @@ export default DS.Adapter.extend({
         'constraint-set': 'remove_constraint_remote',
       }[modelName];
     } else if (action === 'create') {
-      return {
+      resultURL = {
         'location-preference': 'add_constraint_remote',
         'colocation-preference': 'add_constraint_remote',
         'ordering-preference': 'add_constraint_remote',
@@ -29,6 +31,12 @@ export default DS.Adapter.extend({
         'acl-role': 'add_acl_role',
       }[modelName];
     }
+
+    if (resultURL === undefined) {
+      Ember.Logger.error(`[adapter] model ${modelName} for ${action} has no endpoint definition`);
+    }
+
+    return resultURL;
   },
 
   createRecord(store, type, snapshot) {
