@@ -5,13 +5,6 @@
       isCollapsed=false
       targetRoute='cluster.resources.show'
     }}
-    {{filter-list
-      data=model.updatingCluster.firstObject.resources
-      targetRoute='cluster.resources.show'
-      showFilter=true
-      titleKey='name'
-      idKey='name'
-    }}
 {{/ember-wormhole}}
 
 {{#ember-wormhole to="breadcrumb"}}

@@ -18,6 +18,7 @@ export default DS.Adapter.extend({
         'attribute': 'add_meta_attr_remote',
         'utilization-attribute': 'set_resource_utilization',
         'constraint-set': 'remove_constraint_remote',
+        'acl-role': 'remove_acl_roles',
       }[modelName];
     } else if (action === 'create') {
       resultURL = {

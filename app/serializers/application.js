@@ -26,6 +26,10 @@ export default DS.JSONAPISerializer.extend({
           name: record.get('name'),
           value: '',
         });
+      } else if (snapshot.modelName === 'acl-role') {
+        return this._postTextSerializer({
+          'role-0': record.get('name'),
+        });
       } else {
         Ember.Logger.error(`[serializer] model ${snapshot.modelName} for DELETE can not be serialized`);
       }

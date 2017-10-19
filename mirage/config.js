@@ -448,20 +448,14 @@ export default function() {
 
     return role;
   });
-  this.del('/acl-groups/:id');
 
-  this.post('/acl-role', (schema, request) => {
-    const params = JSON.parse(request.requestBody);
-    const cluster = schema.clusters.find(1);
-
-    const attr = cluster.createAclRole({
-      name: params.data.attributes.name,
-      description: params.data.attributes.description,
-    });
-
-    return attr;
+  this.post('/managec/my/remove_acl_roles', function (schema, request) {
+    const params = this.normalizedRequestAttrs();
+    const role = schema.aclRoles.where({name: params['role-0']}).models[0];
+    role.destroy();
   });
-  this.del('/acl-roles/:id');
+
+  this.del('/acl-groups/:id');
 
   this.post('/acl-permission', (schema, request) => {
     const params = JSON.parse(request.requestBody);
