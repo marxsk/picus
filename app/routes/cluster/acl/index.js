@@ -5,6 +5,8 @@ import {
 import TabRoute from '../../tab-route';
 
 export default TabRoute.extend({
+  notifications: Ember.inject.service('notifications'),
+
   model() {
     let nameValidation = {
       name: [ validatePresence({presence: true}) ]
@@ -21,14 +23,14 @@ export default TabRoute.extend({
   },
 
   actions: {
-    delete: (attribute) => {
-      attribute.deleteRecord();
-      attribute.save();
+    delete: function(actionName, record) {
+      record.deleteRecord();
+      this.get('notifications').notificationSaveRecord(record, actionName);
     },
-    deleteMultiple: (attributes) => {
-      attributes.forEach((item) => {
-        item.deleteRecord();
-        item.save();
+    deleteMultiple: function(actionName, records) {
+      records.forEach((record) => {
+        record.deleteRecord();
+        this.get('notifications').notificationSaveRecord(record, actionName);
       });
     },
     appendUser: function(attributes) { this.store.pushAppendUser(attributes); },
@@ -47,8 +49,7 @@ export default TabRoute.extend({
         name: attributes.get('name'),
         description: attributes.get('description'),
       })
-      // @todo: add notification
-      aclRole.save();
+      this.get('notifications').notificationSaveRecord(aclRole, 'ADD_ACL_ROLE');
     },
   }
 });

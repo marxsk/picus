@@ -71,9 +71,7 @@
 {{#attr-list
     title='Roles'
     attributes=model.updatingCluster.firstObject.aclRoles
-    onDeleteAction=(route-action 'delete')
-    onAppendAction=(route-action 'appendRole')
-    onDeleteMultipleAction=(route-action 'deleteMultiple')
+    onDeleteAction=(route-action 'delete' 'DELETE_ACL_ROLE')
     validations=model.nameValidation
     as |attr|
 }}

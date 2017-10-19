@@ -21,6 +21,16 @@ const messages = {
     success: (notification) => `Utilization Attribute ${notification.get('data.record.name')} for resource ${notification.get('data.record.resource.name')} was added`,
     error: (notification) => `Something is wrong`,
   },
+  ADD_ACL_ROLE: {
+    progress: (notification) => `Adding ACL Role ${notification.get('data.record.name')}`,
+    success: (notification) => `ACL Role ${notification.get('data.record.name')} was added`,
+    error: (notification) => `Something is wrong`,
+  },
+  DELETE_ACL_ROLE: {
+    progress: (notification) => `Removing ACL Role ${notification.get('data.record.name')}`,
+    success: (notification) => `ACL Role ${notification.get('data.record.name')} was removed`,
+    error: (notification) => `Something is wrong`,
+  }
 // @todo: Add messages for:
 //  (ADD/FORCE_ADD/DELETE)_LOCATION_PREFERENCE
 //  (ADD/FORCE_ADD/DELETE)_COLOCATION_PREFERENCE
