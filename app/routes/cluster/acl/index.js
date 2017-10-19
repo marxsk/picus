@@ -25,12 +25,12 @@ export default TabRoute.extend({
   actions: {
     delete: function(actionName, record) {
       record.deleteRecord();
-      this.get('notifications').notificationSaveRecord(record, actionName);
+      return this.get('notifications').notificationSaveRecord(record, actionName);
     },
     deleteMultiple: function(actionName, records) {
       records.forEach((record) => {
         record.deleteRecord();
-        this.get('notifications').notificationSaveRecord(record, actionName);
+        return this.get('notifications').notificationSaveRecord(record, actionName);
       });
     },
     appendUser: function(attributes) { this.store.pushAppendUser(attributes); },
@@ -49,7 +49,7 @@ export default TabRoute.extend({
         name: attributes.get('name'),
         description: attributes.get('description'),
       })
-      this.get('notifications').notificationSaveRecord(aclRole, 'ADD_ACL_ROLE');
+      return this.get('notifications').notificationSaveRecord(aclRole, 'ADD_ACL_ROLE');
     },
   }
 });

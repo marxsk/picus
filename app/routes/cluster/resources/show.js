@@ -134,7 +134,7 @@ export default TabRoute.extend({
 
     deletePreference: function(actionName, constraint) {
       constraint.deleteRecord();
-      this._notificationSaveAttribute(constraint, actionName);
+      this.get('notifications').notificationSaveRecord(constraint, actionName);
     },
 
     addLocationPreference: function(form) {
@@ -143,7 +143,7 @@ export default TabRoute.extend({
         node: form.get('node'),
         score: form.get('score'),
       });
-      return this._notificationSaveAttribute(preference, 'ADD_LOCATION_PREFERENCE');
+      return this.get('notifications').notificationSaveRecord(preference, 'ADD_LOCATION_PREFERENCE');
     },
 
     addColocationPreference: function(form) {
@@ -153,7 +153,7 @@ export default TabRoute.extend({
         colocationType: form.get('colocationType'),
         score: form.get('score'),
       });
-      return this._notificationSaveAttribute(preference, 'ADD_COLOCATION_PREFERENCE');
+      return this.get('notifications').notificationSaveRecord(preference, 'ADD_COLOCATION_PREFERENCE');
     },
 
     addOrderingPreference: function(form) {
@@ -165,7 +165,7 @@ export default TabRoute.extend({
         order: form.get('order'),
         action: form.get('action'),
       });
-      return this._notificationSaveAttribute(preference, 'ADD_ORDERING_PREFERENCE');
+      return this.get('notifications').notificationSaveRecord(preference, 'ADD_ORDERING_PREFERENCE');
     },
 
     addSetOrderingPreference: function(form) {
@@ -176,7 +176,7 @@ export default TabRoute.extend({
       preferenceSet.set('type', 'ord');
       this._updateDynamicResources(form, preferenceSet);
 
-      return this._notificationSaveAttribute(preferenceSet, 'ADD_ORDERING_SET_PREFERENCE');
+      return this.get('notifications').notificationSaveRecord(preferenceSet, 'ADD_ORDERING_SET_PREFERENCE');
     },
 
     addSetColocationPreference: function(form) {
@@ -187,7 +187,7 @@ export default TabRoute.extend({
       preferenceSet.set('type', 'col');
       this._updateDynamicResources(form, preferenceSet);
 
-      return this._notificationSaveAttribute(preferenceSet, 'ADD_COLOCATION_SET_PREFERENCE');
+      return this.get('notifications').notificationSaveRecord(preferenceSet, 'ADD_COLOCATION_SET_PREFERENCE');
     },
 
     addTicketPreference: function(form) {
@@ -197,7 +197,7 @@ export default TabRoute.extend({
         role: form.get('role'),
         lossPolicy: form.get('lossPolicy'),
       });
-      return this._notificationSaveAttribute(preference, 'ADD_TICKET_PREFERENCE');
+      return this.get('notifications').notificationSaveRecord(preference, 'ADD_TICKET_PREFERENCE');
     },
     addSetTicketPreference: function(form) {
       const preferenceSet = this.get('store').createRecord('constraint-set');
@@ -209,9 +209,8 @@ export default TabRoute.extend({
       preferenceSet.set('lossPolicy', form.get('lossPolicy'));
       this._updateDynamicResources(form, preferenceSet);
 
-      return this._notificationSaveAttribute(preferenceSet, 'ADD_TICKET_SET_PREFERENCE');
+      return this.get('notifications').notificationSaveRecord(preferenceSet, 'ADD_TICKET_SET_PREFERENCE');
     },
-
 
     addMetaAttribute: function(form) {
       const attribute = this.get('store').createRecord('attribute', {
@@ -219,7 +218,7 @@ export default TabRoute.extend({
         key: form.get('key'),
         value: form.get('value'),
       })
-      return this._notificationSaveAttribute(attribute, 'ADD_META_ATTRIBUTE');
+      return this.get('notifications').notificationSaveRecord(attribute, 'ADD_META_ATTRIBUTE');
     },
 
     addUtilizationAttribute: function(form) {
@@ -228,7 +227,7 @@ export default TabRoute.extend({
         name: form.get('name'),
         value: form.get('value'),
       });
-      return this._notificationSaveAttribute(attribute, 'ADD_UTILIZATION_ATTRIBUTE');
+      return this.get('notifications').notificationSaveRecord(attribute, 'ADD_UTILIZATION_ATTRIBUTE');
     },
 
     removeResource: function(resourceName) {
@@ -262,41 +261,6 @@ export default TabRoute.extend({
     reload: function() {
       this.store.reloadData();
     },
-  },
-
-  // Save changes and show notification messages
-  _notificationSaveAttribute(attribute, actionName) {
-    const notificationData = Ember.Object.create(
-      {
-        data: {
-          action: actionName,
-          record: attribute,
-        }
-      }
-    );
-    const messages = this.get('messages').getNotificiationMessage(notificationData, actionName);
-
-    const progressNotification = this.get('notifications').progress(messages.progress);
-    attribute.save().then(() => {
-      this.get('notifications').updateNotification(
-        progressNotification,
-        'SUCCESS',
-        messages.success
-      );
-    }, (xhr) => {
-      this.get('notifications').updateNotification(
-        progressNotification,
-        'ERROR',
-        messages.error,
-        {
-          action: notificationData.action,
-          record: notificationData.record,
-          response: xhr,
-        }
-      );
-    });
-
-    return Ember.RSVP.Promise.resolve();
   },
 
   // Parse 'dynamic-fields' for resources and update constraintSet
