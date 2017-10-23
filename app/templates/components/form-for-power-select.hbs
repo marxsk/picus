@@ -1,6 +1,6 @@
 {{#unless multiple}}
   {{#power-select
-    selected=selected
+    selected=tabindex
     options=step
     placeholder=placeholder
     onchange=(action 'onChange')
@@ -12,7 +12,7 @@
 {{else}}
   {{#unless spellcheck}}
     {{#power-select-multiple
-      selected=selected
+      selected=tabindex
       options=step
       placeholder=placeholder
       onchange=(action 'onChange')
@@ -24,7 +24,7 @@
   {{else}}
     <!-- @todo: fix step/spellcheck are just because I have to create a separate component -->
     {{#power-select-multiple-with-create
-      selected=selected
+      selected=tabindex
       options=step
       placeholder=placeholder
       onchange=(action 'onChange')

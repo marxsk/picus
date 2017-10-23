@@ -56,6 +56,7 @@
     multiple=true
     spellcheck=true
     placeholder='Assign users to the role'
+    tabindex=changeset.users
     step=(map-by 'name' model.updatingCluster.firstObject.resources)
   }}
   {{f.custom-field
@@ -64,6 +65,7 @@
     multiple=true
     placeholder='Assign groups to the role'
     spellcheck=true
+    tabindex=changeset.groups
     step=(map-by 'name' model.updatingCluster.firstObject.resources)
   }}
 {{/attr-form}}
