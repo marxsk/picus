@@ -78,6 +78,7 @@ function _createEnvelopeResource(schema, attrs, resourceNames, resourceAttribute
     cluster.resources = ress;
   });
   envelopeResource.resources = resIDs;
+  return envelopeResource;
 }
 export default function() {
   this.timing = 2000;      // delay for each request, automatically set to 0 during testing
@@ -166,7 +167,7 @@ export default function() {
 
   this.post('/managec/my/add_group', function(schema, request) {
     const attrs = this.normalizedRequestAttrs();
-    _createEnvelopeResource(schema, attrs, attrs.resources.split(' '), {
+    return _createEnvelopeResource(schema, attrs, attrs.resources.split(' '), {
       name: attrs.resource_group,
       resourceType: 'group',
     });
@@ -380,6 +381,8 @@ export default function() {
       }
       constraintSet.save();
     });
+
+    return constraintSet;
   });
 
   this.post('/managec/my/remove_constraint_remote', function (schema, request) {

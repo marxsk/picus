@@ -51,6 +51,7 @@ export default DS.Adapter.extend({
         dataType: 'text',
         data: data,
       }).then((response) => {
+        Ember.Logger.assert(response !== "{}", `Response to createRecord() for ${snapshot.modelName} was empty, it has to include id of saved record`);
         // @todo: start handling of response from cluster
         // @todo: perhaps await store.reloadData()
         store.reloadData();
