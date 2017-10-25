@@ -55,6 +55,13 @@ export default DS.Adapter.extend({
         // @todo: start handling of response from cluster
         // @todo: perhaps await store.reloadData()
         store.reloadData();
+
+        if (snapshot.modelName === 'constraint-set') {
+          // We need to manually disconnect resource sets with null id
+          // as they won't be updated automatically
+          snapshot.record.set('resourceSets', Ember.A());
+        }
+
         Ember.run(null, resolve, JSON.parse(response));
       }, (jqXHR) => {
         // @todo: this is completely broken
