@@ -35,7 +35,7 @@
     "ember-cli-inject-live-reload": "^1.4.0",
     "ember-cli-mirage": "https://github.com/marxsk/ember-cli-mirage.git",
     "ember-cli-notifications": "https://github.com/marxsk/ember-cli-notifications.git#onClose",
-    "ember-cli-qunit": "^2.0.0",
+    "ember-cli-qunit": "^4.0.1",
     "ember-cli-release": "^0.2.9",
     "ember-cli-sass": "7.0.0",
     "ember-cli-sri": "^2.1.0",
