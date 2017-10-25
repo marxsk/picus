@@ -6,13 +6,16 @@ module.exports = function(defaults) {
   var app = new EmberApp(defaults, {
     babel: {
       optional: ['es6.spec.symbols'],
-      includePolyfill: true,
     },
 
     'ember-bootstrap': {
       'bootstrapVersion': 3,
       'importBootstrapFont': true,
       'importBootstrapCSS': false
+    },
+
+    'ember-cli-babel': {
+      includePolyfill: true,
     }
   });
 
