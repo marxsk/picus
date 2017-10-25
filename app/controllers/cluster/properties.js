@@ -11,7 +11,7 @@ export default Ember.Controller.extend({
       for (let attrName in changeset.get('change')) {
         properties.forEach(function(item) {
           if (item.get('name') === attrName) {
-            if (['enum', 'boolean'].contains(item.get('type')) && (changeset.get('change')[attrName] === 'default')) {
+            if (['enum', 'boolean'].includes(item.get('type')) && (changeset.get('change')[attrName] === 'default')) {
                 // default has to be translated for an empty string for enum/booleans
                 changeset.get('change')[attrName] = '';
             }

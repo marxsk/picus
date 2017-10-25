@@ -12,7 +12,7 @@ export default DS.JSONAPISerializer.extend({
     const record = snapshot.record;
 
     if (options.action === "delete") {
-      if (["location-preference", "colocation-preference", "ordering-preference", "ticket-preference", "constraint-set"].contains(snapshot.modelName)) {
+      if (["location-preference", "colocation-preference", "ordering-preference", "ticket-preference", "constraint-set"].includes(snapshot.modelName)) {
         return `constraint_id=${record.get('preferenceID')}`;
       } else if (snapshot.modelName === 'attribute') {
         return this._postTextSerializer({
