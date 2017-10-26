@@ -270,7 +270,7 @@ export default function() {
       resource.metaAttributeIds,
       schema.attributes,
       'key',
-      (x) => { resource.createMetaAttribute(x) }
+      (x) => { return resource.createMetaAttribute(x) }
     );
   });
 
@@ -293,7 +293,7 @@ export default function() {
       resource.utilizationAttributeIds,
       schema.utilizationAttributes,
       'name',
-      (x) => { resource.createUtilizationAttribute(x)},
+      (x) => { return resource.createUtilizationAttribute(x)},
     );
   });
 
