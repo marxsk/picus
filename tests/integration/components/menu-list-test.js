@@ -24,14 +24,16 @@ test('Show X menu items from data when there are no children', function(assert) 
 });
 
 test('Show X menu items from data with few children', function(assert) {
-  assert.expect(9);
+  assert.expect(8);
 
   const ITEMS_COUNT = 2;
   const CHILDREN_COUNT = 3;
   this.set('menuItems', createMenuItems(ITEMS_COUNT, 0, CHILDREN_COUNT));
 
   this.set('onClick', () => { });
-  this.set('onCheck', () => { });
+  this.set('onCheck', () => {
+    assert.ok(true, 'onCheck function was called as expected');
+  });
 
   this.render(hbs`{{menu-list data=menuItems onClickAction=(action onClick) onCheckAction=(action onCheck)}}`);
   assert.equal(this.$('li').length, ITEMS_COUNT, 'Count of item matches model');
@@ -48,14 +50,6 @@ test('Show X menu items from data with few children', function(assert) {
   $button.click();
   assert.equal(this.$('li').length, ITEMS_COUNT, 'Count of item matches model');
   assert.equal(this.$('ul').length, 0, 'There should be expanded items');
-
-  // Click on the button that should call action
-  const $actionButton = this.$('.menu-item:eq(0)');
-  this.set('onClick', (component, componentID) => {
-    assert.ok(component, 'Component is defined in onClick action');
-    assert.equal(component.get('id'), componentID, 'Component points to the same object as component ID');
-  });
-  $actionButton.click();
 
   // Click on the checkbox that should call action
   const $checkBox = this.$(':checkbox:eq(0)');

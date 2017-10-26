@@ -9,44 +9,28 @@ test('render title', function(assert) {
   assert.expect(2);
 
   this.render(hbs`{{menu-item title='Hello'}}`);
-  assert.ok(this.$('.menu-item').text().indexOf('Hello') > -1, 'Title is rendered');
+  assert.ok(this.$('a').text().indexOf('Hello') > -1, 'Title is rendered');
 
   this.render(hbs`{{menu-item title='World'}}`);
-  assert.ok(this.$('.menu-item').text().indexOf('World') > -1, 'Title is rendered');
+  assert.ok(this.$('a').text().indexOf('World') > -1, 'Title is rendered');
 });
 
 test('render title and status', function(assert) {
   assert.expect(2);
 
   this.render(hbs`{{menu-item title='World' status='offline'}}`);
-  assert.ok(this.$('.menu-item').text().indexOf('[offline]') > -1, 'Status is rendered');
+  assert.ok(this.$('a').text().indexOf('[offline]') > -1, 'Status is rendered');
 
   this.render(hbs`{{menu-item title='World' status='online'}}`);
-  assert.ok(this.$('.menu-item').text().indexOf('[online]') > -1, 'Status is rendered');
-});
-
-test('Selected item should propagate ID to closure', function(assert) {
-  assert.expect(4);
-
-  this.set('onClick', (component, componentId) => {
-    assert.ok(true, 'Closure action after click on item was executed');
-    assert.equal(component, 'abc', 'Component was sent to the onClickAction');
-    assert.equal(componentId, 'menu:Foo', 'Component ID is sent to the onClickAction');
-  });
-
-  this.render(hbs`{{menu-item title='Hello' component='abc' componentId='menu:Foo' onClickAction=(action onClick)}}`);
-
-  const $button = this.$('.menu-item');
-  assert.equal($button.length, 1, 'There is just one "button" to click on');
-  $button.click();
+  assert.ok(this.$('a').text().indexOf('[online]') > -1, 'Status is rendered');
 });
 
 test('Collapsability of menu item', function(assert) {
   assert.expect(4);
 
   this.render(hbs`{{menu-item title='Hello'}}`);
-  assert.ok(this.$('.menu-item').text().indexOf('+') === -1, 'Plus sign is not rendered because item is not collapsable');
-  assert.ok(this.$('.menu-item').text().indexOf('-') === -1, 'Minus sign is not rendered because item is not collapsable');
+  assert.ok(this.$('a').text().indexOf('+') === -1, 'Plus sign is not rendered because item is not collapsable');
+  assert.ok(this.$('a').text().indexOf('-') === -1, 'Minus sign is not rendered because item is not collapsable');
 
   this.render(hbs`{{menu-item title='Hello' isCollapsable=true}}`);
   assert.ok(this.$().text().indexOf('+') > -1, 'Plus sign is rendered because item is collapsable');
@@ -61,24 +45,6 @@ test('Collapsing/Uncollapsing menu item with +/-', function(assert) {
   this.render(hbs`{{menu-item title='Hello' isCollapsable=true}}`);
   assert.ok(this.$().text().indexOf('+') > -1, 'Plus sign is rendered because item is collapsable');
   const $button = this.$('.menu-item-collapse');
-  assert.equal($button.length, 1, 'There is just one collapse "button" to click on');
-  $button.click();
-  assert.ok(this.$().text().indexOf('-') > -1, 'Minus sign is rendered because item is collapsable');
-  $button.click();
-  assert.ok(this.$().text().indexOf('+') > -1, 'Plus sign is rendered because item is collapsable');
-});
-
-test('Collapsing/Uncollapsing menu item with clicking on text', function(assert) {
-  assert.expect(6);
-
-  this.set('onClick', () => {
-    assert.ok(true, 'Closure action after click on item was executed');
-  });
-
-  this.render(hbs`{{menu-item title='Hello' componentId='menu:Foo' onClickAction=(action onClick) isCollapsable=true}}`);
-
-  assert.ok(this.$().text().indexOf('+') > -1, 'Plus sign is rendered because item is collapsable');
-  const $button = this.$('.menu-item');
   assert.equal($button.length, 1, 'There is just one collapse "button" to click on');
   $button.click();
   assert.ok(this.$().text().indexOf('-') > -1, 'Minus sign is rendered because item is collapsable');

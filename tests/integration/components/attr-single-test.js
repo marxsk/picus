@@ -18,11 +18,14 @@ test('render usual attribute', function(assert) {
 
   this.set('myAttr', attr);
   this.set('onDelete', () => { });
-  this.render(hbs`{{attr-single attribute=myAttr onDeleteAction=(action onDelete)}}`);
+  this.render(hbs`{{#attr-single attribute=myAttr onDeleteAction=(action onDelete) as |attr|}}
+          <td>{{attr.key}}</td>
+          <td>{{attr.value}}</td>
+          {{/attr-single}}`);
 
   assert.equal(this.$('tr td:nth-child(2)').text(), 'foo');
   assert.equal(this.$('tr td:nth-child(3)').text(), 'bar');
-  assert.equal(this.$('tr td:nth-child(4)').text().trim(), 'DELETE');
+  assert.equal(this.$('tr td:nth-child(4) span').hasClass('glyphicon-trash'), true);
 });
 
 test('render attribute after marking as deleted', function(assert) {
@@ -37,7 +40,10 @@ test('render attribute after marking as deleted', function(assert) {
 
   this.set('myAttr', attr);
   this.set('onDelete', () => { });
-  this.render(hbs`{{attr-single attribute=myAttr onDeleteAction=(action onDelete)}}`);
+  this.render(hbs`{{#attr-single attribute=myAttr onDeleteAction=(action onDelete) as |attr|}}
+          <td>{{attr.key}}</td>
+          <td>{{attr.value}}</td>
+          {{/attr-single}}`);
 
   assert.equal(this.$('tr td:nth-child(4)').text().trim(), '[DELETING]');
 });
@@ -54,7 +60,10 @@ test('render new attribute which is not in backend yet', function(assert) {
 
   this.set('myAttr', attr);
   this.set('onDelete', () => { });
-  this.render(hbs`{{attr-single attribute=myAttr onDeleteAction=(action onDelete)}}`);
+  this.render(hbs`{{#attr-single attribute=myAttr onDeleteAction=(action onDelete) as |attr|}}
+          <td>{{attr.key}}</td>
+          <td>{{attr.value}}</td>
+          {{/attr-single}}`);
 
   assert.equal(this.$('tr td:nth-child(4)').text().trim(), '[ADDING]');
 });
