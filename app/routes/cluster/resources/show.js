@@ -76,11 +76,17 @@ export default TabRoute.extend({
         score: validateScore(),
       },
       addColocationPreference: {
-        targetResource: validatePresence(true),
+        _targetResources_0: validatePresence({
+          presence: true,
+          message: 'You have to select a resource to colocate with',
+        }),
         score: validateScore(),
       },
       addOrderingPreference: {
-        targetResource: validatePresence(true),
+        _targetResources_0: validatePresence({
+          presence: true,
+          message: 'You have to select a resource',
+        }),
         score: validateScore(),
       },
       addTicketPreference: {

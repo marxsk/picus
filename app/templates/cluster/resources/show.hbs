@@ -140,13 +140,18 @@
     {{f.custom-field
       (concat 'targetResources_' index)
       control='form-for-power-select'
-      label='Resource Set'
+      label='Target Resource'
       multiple=false
       placeholder='Select a resource'
       step=(map-by 'name' (without selResource model.resources))
       tabindex=record
       max=index
+      min=changeset
       pattern=(action dynamicUpdate '' index)
+    }}
+    {{f.custom-field
+      (concat '_targetResources_' index)
+      errorsOnly=true
     }}
   {{/dynamic-fields}}
 
@@ -226,13 +231,17 @@
       {{f.custom-field
         (concat 'targetResources_' index)
         control='form-for-power-select'
-        label='Resource Set'
+        label='Target Resource'
         multiple=false
         placeholder='Select a resource'
         step=(map-by 'name' (without selResource model.resources))
         tabindex=record
         max=index
         pattern=(action dynamicUpdate '' index)
+      }}
+      {{f.custom-field
+        (concat '_targetResources_' index)
+        errorsOnly=true
       }}
     {{/dynamic-fields}}
     {{f.select-field 'targetAction' 'starts promotes demotes stops'}}
