@@ -116,8 +116,8 @@ export default NotificationsService.extend({
           'ERROR',
           messages.error,
           {
-            action: notificationData.action,
-            record: notificationData.record,
+            action: notificationData.get('data.action'),
+            record: notificationData.get('data.record'),
             response: xhr,
           }
         );
