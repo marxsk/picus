@@ -33,7 +33,6 @@ export default Ember.Component.extend({
 
   actions: {
     onChange: function(selectedIndex, value) {
-      console.log(this.get('propertyName'));
       this.get('pattern')(value);
       this.get('min').set('_' + this.get('propertyName'), value);
     },
