@@ -1,14 +1,18 @@
 import Ember from 'ember';
 
 export default Ember.Component.extend({
-  containsSelf: Ember.computed('data.@each.value', {
+  containsSelf: Ember.computed('data.@each', {
     get() {
       if (this.get('data') === undefined) {
           return false;
       }
 
       return this.get('data').some((textField) => {
-        return textField.get('value').some((name) => {
+        if (! textField) {
+          return false;
+        }
+
+        return textField.some((name) => {
           return (this.get('selfName') === name);
         });
       });

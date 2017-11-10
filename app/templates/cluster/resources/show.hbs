@@ -130,12 +130,26 @@
     submitAction=(route-action 'addColocationPreference')
     validations=model.validations.addColocationPreference as |f changeset|
   }}
+
+  {{#dynamic-fields
+    dataObject=changeset
+    dataObjectKey='targetResources'
+    max=1
+    as |record index dynamicUpdate|
+  }}
     {{f.custom-field
-      'targetResource'
+      (concat 'targetResources_' index)
       control='form-for-power-select'
+      label='Resource Set'
+      multiple=false
       placeholder='Select a resource'
       step=(map-by 'name' (without selResource model.resources))
+      tabindex=record
+      max=index
+      pattern=(action dynamicUpdate '' index)
     }}
+  {{/dynamic-fields}}
+
     {{f.select-field 'colocationType' 'Together Apart'}}
     {{f.text-field 'score'}}
   {{/attr-form}}
@@ -151,20 +165,20 @@
     {{/warning-set}}
 
     {{#dynamic-fields
-      src=changeset
-      key='resources'
-      elementPrefix='resources'
-      as |element dynamicUpdate|
+      dataObject=changeset
+      dataObjectKey='resources'
+      as |record index dynamicUpdate|
     }}
       {{f.custom-field
-        element.name
+        (concat 'resources_' index)
         control='form-for-power-select'
         label='Resource Set'
         multiple=true
         placeholder='Select resources'
         step=(map-by 'name' model.resources)
-        tabindex=element.value
-        update=dynamicUpdate
+        tabindex=record
+        max=index
+        pattern=(action dynamicUpdate '' index)
       }}
     {{/dynamic-fields}}
   {{/attr-form}}
@@ -203,12 +217,24 @@
     submitAction=(route-action 'addOrderingPreference')
     validations=model.validations.addOrderingPreference as |f changeset|
   }}
-    {{f.custom-field
-      'targetResource'
-      control='form-for-power-select'
-      placeholder='Select a resource'
-      step=(map-by 'name' (without selResource model.resources))
+    {{#dynamic-fields
+      dataObject=changeset
+      dataObjectKey='targetResources'
+      max=1
+      as |record index dynamicUpdate|
     }}
+      {{f.custom-field
+        (concat 'targetResources_' index)
+        control='form-for-power-select'
+        label='Resource Set'
+        multiple=false
+        placeholder='Select a resource'
+        step=(map-by 'name' (without selResource model.resources))
+        tabindex=record
+        max=index
+        pattern=(action dynamicUpdate '' index)
+      }}
+    {{/dynamic-fields}}
     {{f.select-field 'targetAction' 'starts promotes demotes stops'}}
     {{f.select-field 'order' 'before after'}}
     {{f.select-field 'action' 'starts promotes demotes stops'}}
@@ -226,20 +252,20 @@
     {{/warning-set}}
 
     {{#dynamic-fields
-      src=changeset
-      key='resources'
-      elementPrefix='resources'
-      as |element dynamicUpdate|
+      dataObject=changeset
+      dataObjectKey='resources'
+      as |record index dynamicUpdate|
     }}
       {{f.custom-field
-        element.name
+        (concat 'resources_' index)
         control='form-for-power-select'
         label='Resource Set'
         multiple=true
         placeholder='Select resources'
         step=(map-by 'name' model.resources)
-        tabindex=element.value
-        update=dynamicUpdate
+        tabindex=record
+        max=index
+        pattern=(action dynamicUpdate '' index)
       }}
     {{/dynamic-fields}}
   {{/attr-form}}
@@ -300,20 +326,20 @@
     {{/warning-set}}
 
     {{#dynamic-fields
-      src=changeset
-      key='resources'
-      elementPrefix='resources'
-      as |element dynamicUpdate|
+      dataObject=changeset
+      dataObjectKey='resources'
+      as |record index dynamicUpdate|
     }}
       {{f.custom-field
-        element.name
+        (concat 'resources_' index)
         control='form-for-power-select'
         label='Resource Set'
         multiple=true
         placeholder='Select resources'
         step=(map-by 'name' model.resources)
-        tabindex=element.value
-        update=dynamicUpdate
+        tabindex=record
+        max=index
+        pattern=(action dynamicUpdate '' index)
       }}
     {{/dynamic-fields}}
   {{/attr-form}}

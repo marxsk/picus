@@ -149,7 +149,7 @@ export default TabRoute.extend({
     addColocationPreference: function(form) {
       const preference = this.get('store').createRecord('colocation-preference', {
         resource: this.get('resource'),
-        targetResource: form.get('targetResource'),
+        targetResource: form.get('targetResources.firstObject'),
         colocationType: form.get('colocationType'),
         score: form.get('score'),
       });
@@ -159,7 +159,7 @@ export default TabRoute.extend({
     addOrderingPreference: function(form) {
       const preference = this.get('store').createRecord('ordering-preference', {
         resource: this.get('resource'),
-        targetResource: form.get('targetResource'),
+        targetResource: form.get('targetResources.firstObject'),
         targetAction: form.get('targetAction'),
         score: form.get('score'),
         order: form.get('order'),
@@ -266,12 +266,12 @@ export default TabRoute.extend({
   // Parse 'dynamic-fields' for resources and update constraintSet
   _updateDynamicResources(form, constraintSet) {
     form.get('resources').forEach((line) => {
-      if (line.get('value.length') === 0) {
+      if (line.get('length') === 0) {
         return;
       }
 
       const resourceSet = this.get('store').createRecord('resource-set');
-      line.get('value').forEach((resourceName) => {
+      line.forEach((resourceName) => {
         resourceSet.get('resources').addObject(this.store.peekRecordQueryName('resource', resourceName));
       });
       constraintSet.get('resourceSets').addObject(resourceSet);

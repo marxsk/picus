@@ -32,9 +32,11 @@ export default Ember.Component.extend({
   multiple: false,
 
   actions: {
-    onChange: function(selectedItem) {
-      this.set('selected', selectedItem);
-      this.get('update')(selectedItem);
+    onChange: function(selectedIndex, value) {
+      // why we need selected ??
+      this.set('selected', selectedIndex);
+
+      this.get('pattern')(value);
     },
     onCreate: function(newItem, component) {
       component.options.unshiftObject(newItem);
