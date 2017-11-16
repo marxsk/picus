@@ -66,7 +66,12 @@ test('create an ACL role with name and description', async function(assert) {
   assert.equal('hugo', tableCells[1].innerText, 'Name of the ACL role is correctly set');
   assert.equal('description of hugo', tableCells[2].innerText, 'Description of the ACL role is correctly set');
 
-  assert.ok(find('table tr td a')[0].href.endsWith('/cluster/my/acl/role/hugo'), 'ACL role have ID from server, so it have to be clickable');
+  andThen(function() {
+    Ember.run.later(function() {
+      // code here will execute within a RunLoop in about 500ms with this == myContext
+      assert.ok(find('table tr td a')[0].href.endsWith('/cluster/my/acl/role/hugo'), 'ACL role have ID from server, so it has to be clickable');
+    }, 1000);
+  })
 });
 
 skip('@todo: add tests for warnings in the form', function(assert) {});
