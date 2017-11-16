@@ -1,4 +1,5 @@
-import { moduleFor, test } from 'ember-qunit';
+import { moduleFor } from 'ember-qunit';
+// import { test } from 'ember-qunit';
 import { skip } from 'qunit';
 
 moduleFor('controller:index', 'Unit | Controller | index', {

@@ -323,8 +323,7 @@ export default function() {
         attribute.destroy();
         return;
       } else if (attribute) {
-        console.log('@todo');
-//        attribute.update('score', params.score);
+        // @note: do we need update?
       } else {
         return resource.createColocationPreference({
           preferenceID: `colocation-${counterID++}`,

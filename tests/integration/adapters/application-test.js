@@ -19,5 +19,5 @@ test('route for reloading data from server', function(assert) {
   assert.expect(0);
   const adapter = this.subject();
 
-  let x = adapter.reloadData(CLUSTER_NAME);
+  return adapter.reloadData(CLUSTER_NAME);
 });

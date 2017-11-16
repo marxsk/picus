@@ -29,7 +29,7 @@ export default Ember.Controller.extend({
         this.get('groupedResources').addObject(resource);
       },
       sortEndAction: function() {
-        console.log(this.get('groupedResources'));
+        // @todo: do real action
       },
       createGroup: function(form) {
         let resourceIDInGroup = [];

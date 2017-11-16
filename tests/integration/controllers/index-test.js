@@ -1,7 +1,8 @@
-import { moduleFor, test } from 'ember-qunit';
+import { moduleFor } from 'ember-qunit';
+//import { test } from 'ember-qunit';
 import { skip } from 'qunit';
 import Ember from 'ember';
-import startApp from '../../helpers/start-app';
+//import startApp from '../../helpers/start-app';
 
 var application;
 var store;
