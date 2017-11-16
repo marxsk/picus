@@ -2,7 +2,10 @@ import { moduleForModel, test } from 'ember-qunit';
 import Ember from 'ember';
 
 moduleForModel('cluster', 'Unit | Model | cluster', {
-  needs: ['model:node', 'model:resource'],
+  needs: [
+    'model:node', 'model:resource', 'model:property', 'model:fence',
+    'model:acl-user', 'model:acl-role', 'model:acl-group', 'model:constraint-set',
+  ],
 });
 
 test('it exists', function(assert) {

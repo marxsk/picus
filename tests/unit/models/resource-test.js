@@ -2,7 +2,11 @@ import { moduleForModel, test } from 'ember-qunit';
 import Ember from 'ember';
 
 moduleForModel('resource', 'Unit | Model | resource', {
-  needs: []
+  needs: [
+    'model:resource-property', 'model:attribute', 'model:utilization-attribute',
+    'model:colocation-preference', 'model:location-preference', 'model:ordering-preference',
+    'model:ticket-preference',
+  ],
 });
 
 test('it exists', function(assert) {

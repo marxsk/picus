@@ -1,8 +1,7 @@
 import { moduleForModel, test } from 'ember-qunit';
 
 moduleForModel('attribute', 'Unit | Model | attribute', {
-  // Specify the other units that are required for this test.
-  needs: []
+  needs: ['model:resource'],
 });
 
 test('it exists', function(assert) {

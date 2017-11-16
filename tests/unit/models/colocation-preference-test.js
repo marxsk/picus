@@ -1,7 +1,6 @@
 import { moduleForModel, test } from 'ember-qunit';
 
-moduleForModel('collocation-preference', 'Unit | Model | collocation preference', {
-  // Specify the other units that are required for this test.
+moduleForModel('colocation-preference', 'Unit | Model | collocation preference', {
   needs: []
 });
 
