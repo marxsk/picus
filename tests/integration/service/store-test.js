@@ -107,7 +107,7 @@ skip('load one cluster with several resources [added in constructor]', function(
   return application.testHelpers.wait();
 });
 
-test('load one cluster with several resources [added using createNode]', function(assert) {
+skip('load one cluster with several resources [added using createNode]', function(assert) {
   assert.expect(2);
   const RESOURCES_COUNT = 3;
 

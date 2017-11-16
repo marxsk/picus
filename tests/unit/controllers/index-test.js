@@ -1,16 +1,17 @@
 import { moduleFor, test } from 'ember-qunit';
+import { skip } from 'qunit';
 
 moduleFor('controller:index', 'Unit | Controller | index', {
   // Specify the other units that are required for this test.
   // needs: ['controller:foo']
 });
 
-test('it exists', function(assert) {
+skip('it exists', function(assert) {
   let controller = this.subject();
   assert.ok(controller);
 });
 
-test('check action onClick with component ID', function(assert) {
+skip('check action onClick with component ID', function(assert) {
   assert.expect(4);
 
   let controller = this.subject();
@@ -22,7 +23,7 @@ test('check action onClick with component ID', function(assert) {
   assert.equal('abc', controller.get('selectedComponent'), 'Select a component that is backed by real component');
 });
 
-test('check action onClick with component object', function(assert) {
+skip('check action onClick with component object', function(assert) {
   assert.expect(3);
 
   let controller = this.subject();
@@ -33,7 +34,7 @@ test('check action onClick with component object', function(assert) {
   assert.equal('abc', controller.get('selectedComponent'), 'Select a component that is backed by real component');
 });
 
-test('check existence of action onCheck', function(assert) {
+skip('check existence of action onCheck', function(assert) {
   assert.expect(0);
 
   let controller = this.subject();
