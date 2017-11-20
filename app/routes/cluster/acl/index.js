@@ -33,15 +33,6 @@ export default TabRoute.extend({
         return this.get('notifications').notificationSaveRecord(record, actionName);
       });
     },
-    appendUser: function(attributes) { this.store.pushAppendUser(attributes); },
-    appendGroup: function(attributes) { this.store.pushAppendGroup(attributes); },
-    appendRole: function(attributes) { this.store.pushAppendRole(attributes); },
-    appendPermission: function(roleName, attributes) {
-      if (attributes.operation === undefined) {
-        attributes.operation = "deny";
-      }
-      this.store.pushAppendPermission(roleName, attributes);
-    },
     addRole: function(attributes) {
       const cluster = this.store.peekAll('cluster').objectAt(0);
       const aclRole = this.get('store').createRecord('acl-role', {

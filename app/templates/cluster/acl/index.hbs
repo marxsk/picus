@@ -1,46 +1,11 @@
 {{#bs-tab customTabs=true activeId=activeTab as |tab|}}
 
 {{bs-nav-items tab=tab onSetActiveTab=(action 'setActiveTab') items=(array
-  (hash name="users" title="Users & Groups")
   (hash name="roles" title="Roles")
   (hash name="permissions" title="Permissions")
 )}}
 
 <div class="tab-content">
-{{#tab.pane elementId="users" title="Users & Groups"}}
-{{#attr-list
-    title='User Management'
-    attributes=model.updatingCluster.firstObject.aclUsers
-    onDeleteAction=(route-action 'delete')
-    onAppendAction=(route-action 'appendUser')
-    onDeleteMultipleAction=(route-action 'deleteMultiple')
-    validations=model.nameValidation
-    as |form mode attr f|
-}}
-  {{#if (eq mode 'edit')}}
-    {{f.text-field 'name'}}
-  {{else}}
-    <td>{{attr.name}}</td>
-  {{/if}}
-{{/attr-list}}
-
-{{#attr-list
-    title='Group Management'
-    attributes=model.updatingCluster.firstObject.aclGroups
-    onDeleteAction=(route-action 'delete')
-    onAppendAction=(route-action 'appendGroup')
-    onDeleteMultipleAction=(route-action 'deleteMultiple')
-    validations=model.nameValidation
-    as |form mode attr f|
-}}
-  {{#if (eq mode 'edit')}}
-    {{f.text-field 'name'}}
-  {{else}}
-    <td>{{attr.name}}</td>
-  {{/if}}
-{{/attr-list}}
-
-{{/tab.pane}}
 {{#tab.pane elementId="roles" title="Roles"}}
 {{#attr-form
   visibilityTitle="Add Role"
@@ -50,24 +15,6 @@
 }}
   {{f.text-field 'name'}}
   {{f.text-field 'description'}}
-  {{f.custom-field
-    'users'
-    control='form-for-power-select'
-    multiple=true
-    spellcheck=true
-    placeholder='Assign users to the role'
-    tabindex=changeset.users
-    step=(map-by 'name' model.updatingCluster.firstObject.resources)
-  }}
-  {{f.custom-field
-    'groups'
-    control='form-for-power-select'
-    multiple=true
-    placeholder='Assign groups to the role'
-    spellcheck=true
-    tabindex=changeset.groups
-    step=(map-by 'name' model.updatingCluster.firstObject.resources)
-  }}
 {{/attr-form}}
 
 {{#attr-list
@@ -96,19 +43,13 @@
       title=role.name
       attributes=role.permissions
       onDeleteAction=(route-action 'delete')
-      onAppendAction=(route-action 'appendPermission' role.name)
       onDeleteMultipleAction=(route-action 'deleteMultiple')
       validations=model.xpathValidation
       as |form mode attr f|
   }}
-  {{#if (eq mode 'edit')}}
-      <!-- @note: it is required to handle 'empty' value which is obtained when user does not change the option. -->
-      {{f.select-field "operation" "deny read write"}}
-      {{f.text-field 'xpath'}}
-  {{else}}
-      <td>{{attr.operation}}</td>
-      <td>{{attr.xpath}}</td>
-  {{/if}}
+    <td>{{attr.operation}}</td>
+    <td>{{attr.xpath}}</td>
+    <td>{{attr.query}}</td>
   {{/attr-list}}
 
 {{else}}

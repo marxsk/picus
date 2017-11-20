@@ -7,8 +7,6 @@ export default DS.Model.extend({
   resources: DS.hasMany('resource'),
   properties: DS.hasMany('property'),
   fences: DS.hasMany('fence'),
-  aclUsers: DS.hasMany('aclUser'),
-  aclGroups: DS.hasMany('aclGroup'),
   aclRoles: DS.hasMany('aclRole'),
 
   constraintSets: DS.hasMany('constraintSet'),

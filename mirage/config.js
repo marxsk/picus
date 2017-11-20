@@ -427,18 +427,6 @@ export default function() {
     }
   });
 
-  this.post('/acl-user', (schema, request) => {
-    const params = JSON.parse(request.requestBody);
-    const cluster = schema.clusters.find(1);
-
-    const attr = cluster.createAclUser({
-      name: params.data.attributes.name,
-    });
-
-    return attr;
-  });
-  this.del('/acl-users/:id');
-
   this.post('/managec/my/add_acl_role', function(schema, request) {
     const attrs = this.normalizedRequestAttrs();
     const cluster = schema.clusters.find(1);
@@ -457,8 +445,6 @@ export default function() {
     role.destroy();
   });
 
-  this.del('/acl-groups/:id');
-
   this.post('/managec/my/add_acl', function(schema, request) {
     const attrs = this.normalizedRequestAttrs();
     const role = schema.aclRoles.where({name: attrs.role_id}).models[0];
@@ -472,6 +458,21 @@ export default function() {
       });
 
       return permission;
+    } else if (attrs.item === 'user') {
+      // @todo?: test if aclUser does not exists in cluster
+      // @todo?: test if user is not already in the role
+      role.createUser({
+        name: attrs.usergroup,
+      });
+
+      return role;
+    } else if (attrs.item === 'group') {
+      // @todo: same concerns as in 'user'
+      role.createGroup({
+        name: attrs.usergroup,
+      });
+
+      return role;
     }
   });
 
@@ -481,6 +482,52 @@ export default function() {
     if (attrs.item === 'permission') {
       const permission = schema.aclPermissions.where({permissionID: attrs.acl_perm_id}).models[0];
       permission.destroy();
+    } else if ((attrs.item === 'usergroup') && (attrs.item_type === 'user')) {
+      const role = schema.aclRoles.where({name: attrs.role_id}).models[0];
+      const user = schema.aclUsers.where({name: attrs.usergroup_id}).models[0];
+
+      let usedElsewhere = false;
+
+      schema.aclRoles.all().models.forEach((r) => {
+        if (r.name === role.name) {
+          role.userIds = role.userIds.filter(item => item != user.id);
+          role.save();
+        } else {
+          if (r.userIds.includes(user.id)) {
+            usedElsewhere = true;
+          }
+        }
+      });
+
+      if (!usedElsewhere) {
+        // remove only when it is not used in other roles
+        user.destroy();
+      }
+
+      return role;
+    } else if ((attrs.item === 'usergroup') && (attrs.item_type === 'group')) {
+      const role = schema.aclRoles.where({name: attrs.role_id}).models[0];
+      const group = schema.aclUsers.where({name: attrs.usergroup_id}).models[0];
+
+      let usedElsewhere = false;
+
+      schema.aclRoles.all().models.forEach((r) => {
+        if (r.name === role.name) {
+          role.groupIds = role.groupIds.filter(item => item != group.id);
+          role.save();
+        } else {
+          if (r.groupIds.includes(group.id)) {
+            usedElsewhere = true;
+          }
+        }
+      });
+
+      if (!usedElsewhere) {
+        // remove only when it is not used in other roles
+        group.destroy();
+      }
+
+      return role;
     }
   });
 

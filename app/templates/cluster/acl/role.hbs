@@ -32,8 +32,43 @@
   (hash name="permissions" title="Permissions")
 )}}
 
+{{#with (find-by 'name' model.aclRole.name model.updatingCluster.firstObject.aclRoles) as |updatingRole|}}
 <div class="tab-content">
 {{#tab.pane elementId="users" title="Users & Groups"}}
+{{#attr-form
+  visibilityTitle="Add User"
+  submitTitle="Add"
+  submitAction=(route-action 'addUser')
+  validations=model.validations.addUser as |f|
+}}
+  {{f.text-field 'name'}}
+{{/attr-form}}
+{{#attr-list
+  title='Users'
+  attributes=updatingRole.users
+  onDeleteAction=(route-action 'deleteUser' 'DELETE_ACL_USER_FROM_ROLE')
+  as |attr|
+}}
+  <td>{{attr.name}}</td>
+{{/attr-list}}
+
+{{#attr-form
+  visibilityTitle="Add Group"
+  submitTitle="Add"
+  submitAction=(route-action 'addGroup')
+  validations=model.validations.addGroup as |f|
+}}
+  {{f.text-field 'name'}}
+{{/attr-form}}
+{{#attr-list
+  title='Groups'
+  attributes=updatingRole.groups
+  onDeleteAction=(route-action 'deleteGroup' 'DELETE_ACL_GROUP_FROM_ROLE')
+  as |attr|
+}}
+  <td>{{attr.name}}</td>
+{{/attr-list}}
+
 {{/tab.pane}}
 
 {{#tab.pane elementId="permissions" title="Permissions"}}
@@ -59,5 +94,6 @@
   {{/attr-list}}
 {{/tab.pane}}
 </div>
+{{/with}}
 {{/bs-tab}}
 {{/unless}}

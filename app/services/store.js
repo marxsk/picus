@@ -154,7 +154,7 @@ export default DS.Store.extend({
         }
 
         // remove records which no longer exists on backend from store for every used model
-        ['node', 'fence', 'resource', 'attribute'].forEach(function(modelName) {
+        ['node', 'fence', 'resource', 'attribute', 'acl-user'].forEach(function(modelName) {
             store.peekAll(modelName).forEach(function(item) {
               if (!knownIds.includes(modelName + '::' + item.get('id'))) {
                 item.deleteRecord();
@@ -417,6 +417,37 @@ export default DS.Store.extend({
       });
     }, (error) => {
       alert(error);
+    });
+  },
+
+  pushAppendUserToRole(roleName, user) {
+    this._sendData('add_acl', {
+      item: 'user',
+      role_id: roleName,
+      usergroup: user.name,
+    });
+  },
+  pushRemoveUserFromRole(roleName, user) {
+    this._sendData('remove_acl', {
+      item: 'usergroup',
+      item_type: 'user',
+      role_id: roleName,
+      usergroup_id: user.name,
+    });
+  },
+  pushAppendGroupToRole(roleName, group) {
+    this._sendData('add_acl', {
+      item: 'group',
+      role_id: roleName,
+      usergroup: group.name,
+    });
+  },
+  pushRemoveGroupFromRole(roleName, user) {
+    this._sendData('remove_acl', {
+      item: 'usergroup',
+      item_type: 'user',
+      role_id: roleName,
+      usergroup_id: user.name,
     });
   },
 

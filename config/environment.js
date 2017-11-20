@@ -6,6 +6,11 @@ module.exports = function(environment) {
     environment: environment,
     rootURL: '/',
     locationType: 'auto',
+    changeTracker: {
+      enableIsDirty: true,
+      auto: true,
+      trackHasMany: true,
+    },
 
     'ember-cli-notifications': {
       includeFontAwesome: true

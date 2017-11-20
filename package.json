@@ -44,8 +44,10 @@
     "ember-cli-uglify": "^1.2.0",
     "ember-composable-helpers": "2.0.1",
     "ember-data": "^2.16.3",
+    "ember-data-change-tracker": "^0.7.1",
     "ember-data-filter": "1.13.0",
     "ember-drag-drop": "0.4.6",
+    "ember-dynamic-fields": "*",
     "ember-export-application-global": "^1.0.5",
     "ember-form-for": "git+https://github.com/marxsk/ember-form-for.git",
     "ember-load-initializers": "^1.0.0",
@@ -60,7 +62,6 @@
     "ember-truth-helpers": "1.2.0",
     "ember-welcome-page": "^1.0.1",
     "ember-wormhole": "0.5.1",
-    "loader.js": "^4.0.1",
-    "ember-dynamic-fields": "*"
+    "loader.js": "^4.0.1"
   }
 }

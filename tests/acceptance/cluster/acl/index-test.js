@@ -44,7 +44,7 @@ test('visiting /cluster/CLUSTERID/acl with specified tab and changing active tab
   assert.ok(rolesTab.classList.contains('active'), 'Tab "Roles" is active');
 
   const permTab = find('ul.nav-tabs li a');
-  await click(permTab[2]);
+  await click(permTab[1]);
   assert.equal(currentURL(), '/cluster/my/acl?tab=permissions', 'The URL was changed after clicking on a different tab');
 });
 
@@ -63,13 +63,13 @@ test('create an ACL role with name and description', async function(assert) {
   assert.ok(true, 'It was possible to fill in form and submit it for processing');
 
   const tableCells = find('table tr td');
-  assert.equal('hugo', tableCells[1].innerText, 'Name of the ACL role is correctly set');
-  assert.equal('description of hugo', tableCells[2].innerText, 'Description of the ACL role is correctly set');
+  assert.equal('hugo', tableCells[9].innerText, 'Name of the ACL role is correctly set');
+  assert.equal('description of hugo', tableCells[10].innerText, 'Description of the ACL role is correctly set');
 
   andThen(function() {
     Ember.run.later(function() {
       // code here will execute within a RunLoop in about 500ms with this == myContext
-      assert.ok(find('table tr td a')[0].href.endsWith('/cluster/my/acl/role/hugo'), 'ACL role have ID from server, so it has to be clickable');
+      assert.ok(find('table tr td a')[2].href.endsWith('/cluster/my/acl/role/hugo'), 'ACL role have ID from server, so it has to be clickable');
     }, 1000);
   })
 });

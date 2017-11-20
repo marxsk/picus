@@ -31,4 +31,16 @@ export default function(server) {
 
   cluster.createFence({name: 'Fence-01', agentType: 'fence_apc'});
   cluster.createResource({name: 'resource-ping', resourceType: 'primitive', agentType: 'check_fping', resourceProvider: 'nagios'});
+
+  cluster.createAclRole({
+    name: 'Foo',
+    description: 'Bar',
+  })
+  const role = cluster.createAclRole({
+    name: 'Hugo',
+    description: 'Hugo Hugo',
+  });
+  role.createUser({
+    name: 'Bubu',
+  });
 }
