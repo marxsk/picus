@@ -16,3 +16,48 @@
     <li class="breadcrumb-item active">{{model.params.role_name}}</li>
   </ol>
 {{/ember-wormhole}}
+
+<h3>{{model.aclRole.name}}</h3>
+<p>{{model.aclRole.description}}</p>
+
+{{#unless model.aclRole}}
+  {{#bs-alert type="danger" dismissible=0}}
+  The ACL role with ID '{{model.params.role_name}}' was not found, please select a proper ACL role.
+  {{/bs-alert}}
+{{else}}
+
+{{#bs-tab customTabs=true activeId=activeTab as |tab|}}
+{{bs-nav-items tab=tab onSetActiveTab=(action 'setActiveTab') items=(array
+  (hash name="users" title="Users & Groups")
+  (hash name="permissions" title="Permissions")
+)}}
+
+<div class="tab-content">
+{{#tab.pane elementId="users" title="Users & Groups"}}
+{{/tab.pane}}
+
+{{#tab.pane elementId="permissions" title="Permissions"}}
+  {{#attr-form
+    visibilityTitle="Add Permission"
+    submitTitle="Add"
+    submitAction=(route-action 'addPermission')
+    validations=model.validations.addPermission as |f|
+  }}
+    {{f.select-field 'operation' 'deny read write'}}
+    {{f.select-field 'xpath' 'XPath ID'}}
+    {{f.text-field 'query'}}
+  {{/attr-form}}
+  {{#attr-list
+    title='Permissions'
+    attributes=model.aclRole.permissions
+    onDeleteAction=(route-action 'deletePermission' 'DELETE_LOCATION_PREFERENCE')
+    as |attr|
+  }}
+    <td>{{attr.operation}}</td>
+    <td>{{attr.xpath}}</td>
+    <td>{{attr.query}}</td>
+  {{/attr-list}}
+{{/tab.pane}}
+</div>
+{{/bs-tab}}
+{{/unless}}

@@ -30,6 +30,11 @@ export default DS.JSONAPISerializer.extend({
         return this._postTextSerializer({
           'role-0': record.get('name'),
         });
+      } else if (snapshot.modelName === 'acl-permission') {
+        return this._postTextSerializer({
+          item: 'permission',
+          acl_perm_id: record.get('permissionID'),
+        });
       } else {
         Ember.Logger.error(`[serializer] model ${snapshot.modelName} for DELETE can not be serialized`);
       }
@@ -99,7 +104,15 @@ export default DS.JSONAPISerializer.extend({
         return this._postTextSerializer({
           name: record.get('name'),
           description: record.get('description'),
-        })
+        });
+      } else if (snapshot.modelName === 'acl-permission') {
+        return this._postTextSerializer({
+          role_id: record.get('role.name'),
+          item: 'permission',
+          type: record.get('operation'),
+          xpath_id: record.get('xpath'),
+          query_id: record.get('query'),
+        });
       } else if (snapshot.modelName === 'constraint-set') {
         const json = {
           disable_autocorrect: true,

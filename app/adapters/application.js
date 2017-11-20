@@ -19,6 +19,7 @@ export default DS.Adapter.extend({
         'utilization-attribute': 'set_resource_utilization',
         'constraint-set': 'remove_constraint_remote',
         'acl-role': 'remove_acl_roles',
+        'acl-permission': 'remove_acl',
       }[modelName];
     } else if (action === 'create') {
       resultURL = {
@@ -30,6 +31,7 @@ export default DS.Adapter.extend({
         'utilization-attribute': 'set_resource_utilization',
         'constraint-set': 'add_constraint_set_remote',
         'acl-role': 'add_acl_role',
+        'acl-permission': 'add_acl',
       }[modelName];
     }
 

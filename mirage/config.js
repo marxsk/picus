@@ -459,6 +459,31 @@ export default function() {
 
   this.del('/acl-groups/:id');
 
+  this.post('/managec/my/add_acl', function(schema, request) {
+    const attrs = this.normalizedRequestAttrs();
+    const role = schema.aclRoles.where({name: attrs.role_id}).models[0];
+
+    if (attrs.item === 'permission') {
+      const permission = role.createPermission({
+        permissionID: `location-${counterID++}`,
+        operation: attrs.operation,
+        query: attrs.query,
+        xpath: attrs.xpath,
+      });
+
+      return permission;
+    }
+  });
+
+  this.post('/managec/my/remove_acl', function (schema, request) {
+    const attrs = this.normalizedRequestAttrs();
+
+    if (attrs.item === 'permission') {
+      const permission = schema.aclPermissions.where({permissionID: attrs.acl_perm_id}).models[0];
+      permission.destroy();
+    }
+  });
+
   this.post('/acl-permission', (schema, request) => {
     const params = JSON.parse(request.requestBody);
     const role = schema.aclRoles.where({name: params.data.attributes.roleName}).models[0];
