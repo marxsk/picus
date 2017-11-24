@@ -65,6 +65,10 @@ export default Ember.Component.extend({
      *  @private
      */
     naiveDeleteMultipleAction: function(attributes) {
+      if (attributes === undefined) {
+        return
+      }
+
       attributes.forEach((attr) => {
         this.attrs.onDeleteAction(attr);
       });
