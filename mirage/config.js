@@ -507,7 +507,7 @@ export default function() {
       return role;
     } else if ((attrs.item === 'usergroup') && (attrs.item_type === 'group')) {
       const role = schema.aclRoles.where({name: attrs.role_id}).models[0];
-      const group = schema.aclUsers.where({name: attrs.usergroup_id}).models[0];
+      const group = schema.aclGroups.where({name: attrs.usergroup_id}).models[0];
 
       let usedElsewhere = false;
 

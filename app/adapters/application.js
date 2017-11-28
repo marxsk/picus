@@ -167,7 +167,7 @@ export default DS.Adapter.extend({
           item: 'usergroup',
           item_type: 'group',
           role_id: snapshot.record.get('name'),
-          usergroup_id: store.peekRecord('acl-user', deletedUserId[0]).get('name'),
+          usergroup_id: store.peekRecord('acl-group', deletedUserId[0]).get('name'),
         };
         data = _jsonToQueryString(data);
       } else if (snapshot.hasMany('groups').length > snapshot.record.savedTrackerValue('groups').length) {
