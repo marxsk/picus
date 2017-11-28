@@ -103,95 +103,89 @@ export default DS.Adapter.extend({
     });
   },
 
+  _updateAclElement(store, type, snapshot, fkName) {
+    if (snapshot.hasMany(fkName).length < snapshot.record.savedTrackerValue(fkName).length) {
+      const deletedElementId = snapshot.record.savedTrackerValue(fkName).filter((obj) => {
+        return !(snapshot.hasMany(fkName).some(o => (obj === o.id)));
+      });
+
+      return {
+        action: 'relation-removed',
+        elementId: deletedElementId,
+      }
+    } else if (snapshot.hasMany(fkName).length > snapshot.record.savedTrackerValue(fkName).length) {
+      // add new relation
+      let result;
+
+      snapshot.hasMany(fkName).some((user) => {
+        // @note: UI currently allows only single change at one click
+        const changes = user.changedAttributes();
+
+        if (Object.keys(changes).length === 0) {
+          return false;
+        } else if (('name' in changes) && (changes.name[0] === undefined)) {
+          result = {
+            action: 'relation-added',
+            elementId: changes.name[1],
+          }
+          return true;
+        } else {
+          Ember.Logger.error('[adapter] Only change in "users.name" is expected for acl-role');
+          return false;
+        }
+      });
+      if (result) {
+        return result;
+      } else {
+        return undefined;
+      }
+    }
+  },
+
   updateRecord(store, type, snapshot) {
     let data = undefined;
     let url = this.get('namespace') + '/';
 
     if (snapshot.modelName === 'acl-role') {
-      if (snapshot.hasMany('users').length < snapshot.record.savedTrackerValue('users').length) {
-        // remove existing relation
-        const deletedUserId = snapshot.record.savedTrackerValue('users').filter((obj) => {
-          return !(snapshot.hasMany('users').some((o) => {
-            if (obj === o.id) {
-              return true;
-            } else {
-              return false;
-            }
-          }))
-        });
+      const userResponse = this._updateAclElement(store, type, snapshot, 'users');
+      const groupResponse = this._updateAclElement(store, type, snapshot, 'groups');
 
-        url = url + 'remove_acl';
-        data = {
-          item: 'usergroup',
-          item_type: 'user',
-          role_id: snapshot.record.get('name'),
-          usergroup_id: store.peekRecord('acl-user', deletedUserId[0]).get('name'),
-        };
-        data = _jsonToQueryString(data);
-      } else if (snapshot.hasMany('users').length > snapshot.record.savedTrackerValue('users').length) {
-        // add new relation
-        snapshot.hasMany('users').forEach((user) => {
-          // @note: UI currently allows only single change at one click
-          const changes = user.changedAttributes();
-
-          if (Object.keys(changes).length === 0) {
-            return;
-          } else if (('name' in changes) && (changes.name[0] === undefined)) {
-            url = url + 'add_acl';
-
-            data = {
-              item: 'user',
-              role_id: snapshot.record.get('name'),
-              usergroup: changes.name[1],
-            }
-
-            data = _jsonToQueryString(data)
-          } else {
-            Ember.Logger.error('[adapter] Only change in "users.name" is expected for acl-role');
+      if (userResponse !== undefined) {
+        if (userResponse.action === 'relation-removed') {
+          url = url + 'remove_acl';
+          data = {
+            item: 'usergroup',
+            item_type: 'user',
+            role_id: snapshot.record.get('name'),
+            usergroup_id: store.peekRecord('acl-user', userResponse.elementId).get('name'),
+          };
+        } else if (userResponse.action === 'relation-added'){
+          url = url + 'add_acl';
+          data = {
+            item: 'user',
+            role_id: snapshot.record.get('name'),
+            usergroup: userResponse.elementId,
           }
-        });
-      } else if (snapshot.hasMany('groups').length < snapshot.record.savedTrackerValue('groups').length) {
-        // remove existing relation
-        const deletedUserId = snapshot.record.savedTrackerValue('groups').filter((obj) => {
-          return !(snapshot.hasMany('groups').some((o) => {
-            if (obj === o.id) {
-              return true;
-            } else {
-              return false;
-            }
-          }))
-        });
+        }
+      }
 
-        url = url + 'remove_acl';
-        data = {
-          item: 'usergroup',
-          item_type: 'group',
-          role_id: snapshot.record.get('name'),
-          usergroup_id: store.peekRecord('acl-group', deletedUserId[0]).get('name'),
-        };
-        data = _jsonToQueryString(data);
-      } else if (snapshot.hasMany('groups').length > snapshot.record.savedTrackerValue('groups').length) {
-        // add new relation
-        snapshot.hasMany('groups').forEach((user) => {
-          // @note: UI currently allows only single change at one click
-          const changes = user.changedAttributes();
-
-          if (Object.keys(changes).length === 0) {
-            return;
-          } else if (('name' in changes) && (changes.name[0] === undefined)) {
-            url = url + 'add_acl';
-
-            data = {
-              item: 'group',
-              role_id: snapshot.record.get('name'),
-              usergroup: changes.name[1],
-            }
-
-            data = _jsonToQueryString(data)
-          } else {
-            Ember.Logger.error('[adapter] Only change in "users.name" is expected for acl-role');
+      if (groupResponse !== undefined) {
+        if (groupResponse.action === 'relation-removed') {
+          url = url + 'remove_acl';
+          data = {
+            item: 'usergroup',
+            item_type: 'group',
+            role_id: snapshot.record.get('name'),
+            usergroup_id: store.peekRecord('acl-group', groupResponse.elementId).get('name'),
+          };
+        } else if (groupResponse.action === 'relation-added'){
+          url = url + 'add_acl';
+          data = {
+            item: 'group',
+            role_id: snapshot.record.get('name'),
+            usergroup: groupResponse.elementId,
           }
-        });
+        }
       }
     }
 
@@ -200,7 +194,7 @@ export default DS.Adapter.extend({
         type: 'POST',
         url,
         dataType: 'text',
-        data: data,
+        data: _jsonToQueryString(data),
       }).then((response) => {
         Ember.Logger.assert(response !== "{}", `Response to updateRecord() for ${snapshot.modelName} was empty, it has to include id of saved record`);
         // @todo: start handling of response from cluster
