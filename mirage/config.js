@@ -482,49 +482,33 @@ export default function() {
     if (attrs.item === 'permission') {
       const permission = schema.aclPermissions.where({permissionID: attrs.acl_perm_id}).models[0];
       permission.destroy();
-    } else if ((attrs.item === 'usergroup') && (attrs.item_type === 'user')) {
-      const role = schema.aclRoles.where({name: attrs.role_id}).models[0];
-      const user = schema.aclUsers.where({name: attrs.usergroup_id}).models[0];
-
-      let usedElsewhere = false;
-
-      schema.aclRoles.all().models.forEach((r) => {
-        if (r.name === role.name) {
-          role.userIds = role.userIds.filter(item => item != user.id);
-          role.save();
-        } else {
-          if (r.userIds.includes(user.id)) {
-            usedElsewhere = true;
-          }
-        }
-      });
-
-      if (!usedElsewhere) {
-        // remove only when it is not used in other roles
-        user.destroy();
+    } else if ((attrs.item === 'usergroup') && (['user', 'group'].includes(attrs.item_type))) {
+      const schemas = {
+        'user': schema.aclUsers,
+        'group': schema.aclGroups,
       }
 
-      return role;
-    } else if ((attrs.item === 'usergroup') && (attrs.item_type === 'group')) {
+      let usedInOtherRole = false;
       const role = schema.aclRoles.where({name: attrs.role_id}).models[0];
-      const group = schema.aclGroups.where({name: attrs.usergroup_id}).models[0];
-
-      let usedElsewhere = false;
+      let fk = `${attrs.item_type}Ids`;
+      const element = schemas[attrs.item_type].where({
+          name: attrs.usergroup_id
+        }).models[0];
 
       schema.aclRoles.all().models.forEach((r) => {
         if (r.name === role.name) {
-          role.groupIds = role.groupIds.filter(item => item != group.id);
+          role[fk] = role[fk].filter(item => item != element.id);
           role.save();
         } else {
-          if (r.groupIds.includes(group.id)) {
-            usedElsewhere = true;
+          if (role[fk].includes(element.id)) {
+            usedInOtherRole = true;
           }
         }
       });
 
-      if (!usedElsewhere) {
-        // remove only when it is not used in other roles
-        group.destroy();
+      if (!usedInOtherRole) {
+        // remove only when element is not used in any roles
+        element.destroy();
       }
 
       return role;
@@ -542,6 +526,4 @@ export default function() {
 
     return attr;
   });
-  this.del('/acl-permissions/:id');
-
 }
