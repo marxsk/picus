@@ -39,8 +39,7 @@ test('add (and remove) ACL user to the ACL role', async function(assert) {
   await click('button:first');
   assert.ok(find('label.form-field--label').length > 0, 'There is an open form');
 
-  const formFields = find('form div.form-group input');
-  await fillIn(formFields[0], 'foo');
+  await fillIn(emberFormForFind('Name'), 'foo');
   await click(find('form button'));
   assert.ok(true, 'It was possible to fill in form and submit it for processing');
 

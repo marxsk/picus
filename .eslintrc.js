@@ -15,6 +15,7 @@ module.exports = {
     "no-unused-vars": [ "error", { "args": "none" }]
   },
   globals: {
-    "server": true
+    "server": true,
+    "emberFormForFind": true
   }
 };

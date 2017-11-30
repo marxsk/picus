@@ -1,5 +1,6 @@
 import Ember from 'ember';
 import Application from '../../app';
+import './ember-form-for-find';
 import config from '../../config/environment';
 
 export default function startApp(attrs) {
