@@ -64,6 +64,7 @@
     "ember-welcome-page": "^1.0.1",
     "ember-wormhole": "0.5.1",
     "eslint-config-airbnb-base": "^12.1.0",
+    "eslint-plugin-import": "^2.8.0",
     "loader.js": "^4.0.1"
   }
 }
