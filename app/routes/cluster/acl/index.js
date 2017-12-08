@@ -1,18 +1,16 @@
 import Ember from 'ember';
-import {
-  validatePresence,
-} from 'ember-changeset-validations/validators';
+import { validatePresence } from 'ember-changeset-validations/validators';
 import TabRoute from '../../tab-route';
 
 export default TabRoute.extend({
   notifications: Ember.inject.service('notifications'),
 
   model() {
-    let nameValidation = {
-      name: [ validatePresence({presence: true}) ]
+    const nameValidation = {
+      name: [validatePresence({ presence: true })],
     };
-    let xpathValidation = {
-      xpath: [ validatePresence({presence: true}) ]
+    const xpathValidation = {
+      xpath: [validatePresence({ presence: true })],
     };
 
     return Ember.RSVP.hash({
@@ -23,24 +21,24 @@ export default TabRoute.extend({
   },
 
   actions: {
-    delete: function(actionName, record) {
+    delete(actionName, record) {
       record.deleteRecord();
       return this.get('notifications').notificationSaveRecord(record, actionName);
     },
-    deleteMultiple: function(actionName, records) {
+    deleteMultiple(actionName, records) {
       records.forEach((record) => {
         record.deleteRecord();
         return this.get('notifications').notificationSaveRecord(record, actionName);
       });
     },
-    addRole: function(attributes) {
+    addRole(attributes) {
       const cluster = this.store.peekAll('cluster').objectAt(0);
       const aclRole = this.get('store').createRecord('acl-role', {
-        cluster: cluster,
+        cluster,
         name: attributes.get('name'),
         description: attributes.get('description'),
-      })
+      });
       return this.get('notifications').notificationSaveRecord(aclRole, 'ADD_ACL_ROLE');
     },
-  }
+  },
 });

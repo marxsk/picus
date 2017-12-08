@@ -4,10 +4,9 @@ import Base from 'ember-simple-auth/authenticators/base';
 const { RSVP, Logger } = Ember;
 
 function _jsonToQueryString(json) {
-    return Object.keys(json).map(function(key) {
-            return encodeURIComponent(key) + '=' +
-                encodeURIComponent(json[key]);
-        }).join('&');
+  return Object.keys(json)
+    .map(key => `${encodeURIComponent(key)}=${encodeURIComponent(json[key])}`)
+    .join('&');
 }
 
 /**
@@ -64,10 +63,11 @@ export default Base.extend({
 
     @method authenticate
     @param {Array} data Login information send to the server
-    @return {Ember.RSVP.Promise} A promise that when it resolves results in the session becoming authenticated
+    @return {Ember.RSVP.Promise} A promise that when it resolves results in the
+      session becoming authenticated
     @public
   */
-  authenticate: function(data) {
+  authenticate(data) {
     const modData = {
       username: data.identification,
       password: data.password,
@@ -75,9 +75,9 @@ export default Base.extend({
     };
 
     return this.makeRequest(
-      {type: 'POST', url: this.serverLoginEndpoint, data: _jsonToQueryString(modData)},
+      { type: 'POST', url: this.serverLoginEndpoint, data: _jsonToQueryString(modData) },
       'Attempt to login was successful',
-      'Attempt to logout was not successful'
+      'Attempt to logout was not successful',
     );
   },
 
@@ -90,14 +90,15 @@ export default Base.extend({
     it is required to do a request to authenticated endpoint.
 
     @method restore
-    @return {Ember.RSVP.Promise} A promise that when it resolves results in the session becoming or remaining authenticated
+    @return {Ember.RSVP.Promise} A promise that when it resolves results in the
+      session becoming or remaining authenticated
     @public
   */
-  restore: function() {
+  restore() {
     return this.makeRequest(
-      {type: 'GET', url: this.serverStatusEndpoint},
+      { type: 'GET', url: this.serverStatusEndpoint },
       'Attempt to check if session is authenticated was successful',
-      'Attempt to check if session is authenticated was unsuccessful'
+      'Attempt to check if session is authenticated was unsuccessful',
     );
   },
 
@@ -111,11 +112,11 @@ export default Base.extend({
     @return A promise that when it resolves results in the session being invalidated
     @public
   */
-  invalidate: function() {
+  invalidate() {
     return this.makeRequest(
-        {type: 'GET', url: this.serverLogoutEndpoint},
-        'Attempt to logout session was successful',
-        'Attempt to logout session was unsuccessful'
+      { type: 'GET', url: this.serverLogoutEndpoint },
+      'Attempt to logout session was successful',
+      'Attempt to logout session was unsuccessful',
     );
   },
 
@@ -123,25 +124,25 @@ export default Base.extend({
     Makes a request to authentication server
 
     @param {Object} data The request data
-    @param {String} debug_msg_true Message displayed after successful AJAX call
-    @param {String} debug_msg_false Message displayed after unsuccessful AJAX call
+    @param {String} debugMsgTrue Message displayed after successful AJAX call
+    @param {String} debugMsgFalse Message displayed after unsuccessful AJAX call
   */
-  makeRequest: function(options, debug_msg_true, debug_msg_false) {
-    return new RSVP.Promise(function(resolve, reject) {
+  makeRequest(options, debugMsgTrue, debugMsgFalse) {
+    return new RSVP.Promise((resolve, reject) => {
       Ember.$.ajax(options).then(
-        function(response) {
+        (response) => {
           Ember.run(() => {
-            Logger.debug(debug_msg_true + ' with response: ' + JSON.stringify(response));
+            Logger.debug(`${debugMsgTrue} with response: ${JSON.stringify(response)}`);
             resolve(response);
           });
         },
-        function(xhr) {
+        (xhr) => {
           Ember.run(() => {
-            Logger.debug(debug_msg_false + ' with xhr: ' + JSON.stringify(xhr));
+            Logger.debug(`${debugMsgFalse} with xhr: ${JSON.stringify(xhr)}`);
             reject(xhr);
           });
-        }
+        },
       );
     });
-  }
+  },
 });

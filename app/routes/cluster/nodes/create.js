@@ -2,7 +2,7 @@ import Ember from 'ember';
 
 export default Ember.Route.extend({
   model() {
-    let modelForm = {
+    const modelForm = {
       nodeName: '',
       autoStart: true,
     };
@@ -12,12 +12,12 @@ export default Ember.Route.extend({
     });
   },
   actions: {
-    onSubmitAction: function(changeset) {
+    onSubmitAction(changeset) {
       this.store.pushNewNode({
         nodeName: changeset.get('nodeName'),
         autoStart: changeset.get('autoStart'),
       });
       this.transitionTo('cluster.nodes.show', '');
-    }
+    },
   },
 });

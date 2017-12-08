@@ -3,7 +3,7 @@ import DS from 'ember-data';
 export default DS.Model.extend({
   name: DS.attr('string'),
   recordId: DS.attr('string'), // @note: = ID in cluster config
-  status: DS.attr('string'),  // @todo: define a set of possible values
+  status: DS.attr('string'), // @todo: define a set of possible values
 
   nodeAttributes: DS.hasMany('attribute'),
   nodeUtilizationAttributes: DS.hasMany('attribute'),

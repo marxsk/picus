@@ -3,14 +3,14 @@ import hbs from 'htmlbars-inline-precompile';
 import createMenuItems from '../../helpers/create-menu-items';
 
 moduleForComponent('menu-list', 'Integration | Component | menu list', {
-  integration: true
+  integration: true,
 });
 
-test('Show X menu items from data when there are no children', function(assert) {
+test('Show X menu items from data when there are no children', function (assert) {
   assert.expect(2);
 
-  this.set('onClick', () => { });
-  this.set('onCheck', () => { });
+  this.set('onClick', () => {});
+  this.set('onCheck', () => {});
 
   let ITEMS_COUNT = 2;
   this.set('menuItems', createMenuItems(ITEMS_COUNT));
@@ -23,14 +23,14 @@ test('Show X menu items from data when there are no children', function(assert) 
   assert.equal(this.$('li').length, ITEMS_COUNT, 'Count of item matches model');
 });
 
-test('Show X menu items from data with few children', function(assert) {
+test('Show X menu items from data with few children', function (assert) {
   assert.expect(8);
 
   const ITEMS_COUNT = 2;
   const CHILDREN_COUNT = 3;
   this.set('menuItems', createMenuItems(ITEMS_COUNT, 0, CHILDREN_COUNT));
 
-  this.set('onClick', () => { });
+  this.set('onClick', () => {});
   this.set('onCheck', () => {
     assert.ok(true, 'onCheck function was called as expected');
   });
@@ -45,7 +45,11 @@ test('Show X menu items from data with few children', function(assert) {
   $button.click();
 
   assert.equal(this.$('ul').length, 1, 'There should be one expanded item');
-  assert.equal(this.$('li').length, ITEMS_COUNT + CHILDREN_COUNT, 'Count of item and its children matches model');
+  assert.equal(
+    this.$('li').length,
+    ITEMS_COUNT + CHILDREN_COUNT,
+    'Count of item and its children matches model',
+  );
 
   $button.click();
   assert.equal(this.$('li').length, ITEMS_COUNT, 'Count of item matches model');
@@ -54,4 +58,4 @@ test('Show X menu items from data with few children', function(assert) {
   // Click on the checkbox that should call action
   const $checkBox = this.$(':checkbox:eq(0)');
   $checkBox.click();
-  });
+});

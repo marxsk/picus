@@ -52,6 +52,7 @@
     "ember-form-for": "git+https://github.com/marxsk/ember-form-for.git",
     "ember-load-initializers": "^1.0.0",
     "ember-modal-dialog": "2.3.0",
+    "ember-native-dom-helpers": "^0.6.0",
     "ember-power-select": "1.4.3",
     "ember-power-select-with-create": "^0.4.5",
     "ember-resolver": "^2.0.3",
@@ -62,6 +63,7 @@
     "ember-truth-helpers": "1.2.0",
     "ember-welcome-page": "^1.0.1",
     "ember-wormhole": "0.5.1",
+    "eslint-config-airbnb-base": "^12.1.0",
     "loader.js": "^4.0.1"
   }
 }

@@ -1,8 +1,5 @@
+import { validatePresence, validateNumber } from 'ember-changeset-validations/validators';
 import ResourceValidations from '../validators/resource-validations';
-import {
-  validatePresence,
-  validateNumber,
-} from 'ember-changeset-validations/validators';
 
 /**
  *  Create base information for form generation from XML metadata
@@ -15,22 +12,22 @@ import {
  *  @param {Object[]} result.validations - Keys are field names filled with list of the validations
  *
  *  @todo Find a better name for this function
- **/
+ * */
 
 // input: parameters from resource/fence agent metadata
 // output: array [level] of array [properties + validations]
 export default function categorizeProperties(parameters) {
-  let result = {};
-  result.validations = {...ResourceValidations};
+  const result = {};
+  result.validations = { ...ResourceValidations };
   result.parameters = {};
 
   parameters.forEach((i) => {
     result.validations[i.name] = [];
     if (i.required) {
-      result.validations[i.name].push(validatePresence({presence: true}));
+      result.validations[i.name].push(validatePresence({ presence: true }));
     }
     if (i.type === 'integer') {
-      result.validations[i.name].push(validateNumber({integer: true, allowBlank: true}));
+      result.validations[i.name].push(validateNumber({ integer: true, allowBlank: true }));
     }
 
     const level = i.level ? i.level : 'standard';
@@ -39,7 +36,7 @@ export default function categorizeProperties(parameters) {
       result.parameters[level] = [];
     }
     result.parameters[level].push(i);
-  })
+  });
 
   return result;
 }

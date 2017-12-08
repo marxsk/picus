@@ -5,5 +5,5 @@ export default Ember.Route.extend({
     if (transition.targetName === 'cluster.resources.listing') {
       this.transitionTo('cluster.resources.index');
     }
-  }
+  },
 });

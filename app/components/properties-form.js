@@ -21,12 +21,12 @@ export default Ember.Component.extend({
       this.attrs.onInternalAction(result);
     },
     urlRefresh(search) {
-      Ember.run.debounce(this, '_triggerUrlRefresh', search ,300);
+      Ember.run.debounce(this, '_triggerUrlRefresh', search, 300);
     },
     setHelp(propertyName) {
       this.set('helpFor', `HELP FOR: ${propertyName}`);
       this.set('selectedInput', propertyName);
-    }
+    },
   },
 
   properties: null,
@@ -35,17 +35,18 @@ export default Ember.Component.extend({
       if (this.get('properties') === undefined) {
         return {};
       }
-      let ret = {};
-      this.get('properties').forEach(function(x) {
+      const ret = {};
+      this.get('properties').forEach((x) => {
         ret[x.get('name')] = x.get('value');
       });
       return ret;
-    }}),
+    },
+  }),
 
   init() {
     this.properties = this.get('data');
     this.set('filterString', this.get('presetFilter'));
 
     return this._super();
-  }
+  },
 });

@@ -8,6 +8,6 @@ export default Ember.Route.extend(ApplicationRouteMixin, {
     },
     unsetActiveNotification() {
       this.controller.get('appController').set('activeNotification', undefined);
-    }
-  }
+    },
+  },
 });

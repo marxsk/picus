@@ -1,17 +1,17 @@
+import Ember from 'ember';
 import { test, skip } from 'qunit';
 import moduleForAcceptance from 'picus/tests/helpers/module-for-acceptance';
 import defaultScenario from '../../../../mirage/scenarios/default';
 import startApp from '../../../helpers/start-app';
-import Ember from 'ember';
 
-var application;
+let application;
 
-let mockTickTock = Ember.Service.extend({
-    now: 111,
+const mockTickTock = Ember.Service.extend({
+  now: 111,
 });
 
 moduleForAcceptance('Acceptance | cluster/acl/index', {
-  beforeEach: function() {
+  beforeEach() {
     server.shutdown();
 
     application = startApp();
@@ -20,22 +20,21 @@ moduleForAcceptance('Acceptance | cluster/acl/index', {
 
     defaultScenario(server);
   },
-  afterEach: function() {
+  afterEach() {
     Ember.run(application, 'destroy');
-  }
+  },
 });
 
-
-test('visiting /cluster/CLUSTERID/acl', function(assert) {
+test('visiting /cluster/CLUSTERID/acl', (assert) => {
   visit('/cluster/my/acl');
 
-  andThen(function() {
+  andThen(() => {
     assert.equal(currentURL(), '/cluster/my/acl', 'URL exists');
   });
 });
 
 // @note: this should be test for navigation tabs; it does not test functionality of this page
-test('visiting /cluster/CLUSTERID/acl with specified tab and changing active tab', async function(assert) {
+test('visiting /cluster/CLUSTERID/acl with specified tab and changing active tab', async (assert) => {
   await visit('/cluster/my/acl?tab=roles');
   assert.equal(currentURL(), '/cluster/my/acl?tab=roles');
 
@@ -45,10 +44,14 @@ test('visiting /cluster/CLUSTERID/acl with specified tab and changing active tab
 
   const permTab = find('ul.nav-tabs li a');
   await click(permTab[1]);
-  assert.equal(currentURL(), '/cluster/my/acl?tab=permissions', 'The URL was changed after clicking on a different tab');
+  assert.equal(
+    currentURL(),
+    '/cluster/my/acl?tab=permissions',
+    'The URL was changed after clicking on a different tab',
+  );
 });
 
-test('create an ACL role with name and description', async function(assert) {
+test('create an ACL role with name and description', async (assert) => {
   await visit('/cluster/my/acl?tab=roles');
   assert.equal(find('label.form-field--label').length, 0, 'There are no open forms');
   await click('button:first');
@@ -62,15 +65,22 @@ test('create an ACL role with name and description', async function(assert) {
 
   const tableCells = find('table tr td');
   assert.equal('hugo', tableCells[9].innerText, 'Name of the ACL role is correctly set');
-  assert.equal('description of hugo', tableCells[10].innerText, 'Description of the ACL role is correctly set');
+  assert.equal(
+    'description of hugo',
+    tableCells[10].innerText,
+    'Description of the ACL role is correctly set',
+  );
 
-  andThen(function() {
-    Ember.run.later(function() {
+  andThen(() => {
+    Ember.run.later(() => {
       // code here will execute within a RunLoop in about 500ms with this == myContext
-      assert.ok(find('table tr td a')[2].href.endsWith('/cluster/my/acl/role/hugo'), 'ACL role have ID from server, so it has to be clickable');
+      assert.ok(
+        find('table tr td a')[2].href.endsWith('/cluster/my/acl/role/hugo'),
+        'ACL role have ID from server, so it has to be clickable',
+      );
     }, 1000);
-  })
+  });
 });
 
-skip('@todo: add tests for warnings in the form', function(assert) {});
-skip('@todo: add tests for notification popus after clicking on the button', function(assert) {});
+skip('@todo: add tests for warnings in the form', (assert) => {});
+skip('@todo: add tests for notification popus after clicking on the button', (assert) => {});

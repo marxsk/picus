@@ -6,5 +6,5 @@ export default Factory.extend({
   },
   value(i) {
     return `${i}`;
-  }
+  },
 });

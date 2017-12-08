@@ -5,19 +5,22 @@ import destroyApp from '../helpers/destroy-app';
 
 const { RSVP: { Promise } } = Ember;
 
-export default function(name, options = {}) {
+export default function (name, options = {}) {
   module(name, {
     beforeEach() {
       this.application = startApp();
 
       if (options.beforeEach) {
+        // eslint-disable-next-line
         return options.beforeEach.apply(this, arguments);
       }
+      return undefined;
     },
 
     afterEach() {
-      let afterEach = options.afterEach && options.afterEach.apply(this, arguments);
+      // eslint-disable-next-line
+      const afterEach = options.afterEach && options.afterEach.apply(this, arguments);
       return Promise.resolve(afterEach).then(() => destroyApp(this.application));
-    }
+    },
   });
 }

@@ -1,27 +1,27 @@
 import Ember from 'ember';
-//import AuthenticatedRouteMixin from 'ember-simple-auth/mixins/authenticated-route-mixin';
+// import AuthenticatedRouteMixin from 'ember-simple-auth/mixins/authenticated-route-mixin';
 
 export default Ember.Route.extend({
   queryParams: {
     filterString: {
       as: 's',
-      replace: true
-    }
+      replace: true,
+    },
   },
   actions: {
     pageRefresh() {
       this.refresh();
-    }
+    },
   },
 
   setupController(controller, model) {
     this._super(controller, model);
     // hide sidebar menu
     this.controllerFor('application').set('hideMainMenu', false);
-   },
+  },
 
-  model({filterString, advanced}) {
-    const advancedBoolean = advanced ? true : false;
+  model({ filterString, advanced }) {
+    const advancedBoolean = !!advanced;
     const staticCluster = this.store.peekRecord('cluster', 1);
 
     this._prepareEnumFields(staticCluster);
@@ -33,26 +33,26 @@ export default Ember.Route.extend({
     });
   },
 
-  /** In order to have 'default (default-value)' in select-field **/
+  /** In order to have 'default (default-value)' in select-field * */
   _prepareEnumFields(cluster) {
-    cluster.get('properties').forEach(function(property) {
+    cluster.get('properties').forEach((property) => {
       const e = property.get('enum');
       if (e !== undefined) {
         property.set('enum2', Ember.A());
         e.split(' ').forEach((enumItem) => {
-          if (enumItem === "default") {
+          if (enumItem === 'default') {
             property.get('enum2').addObject({
-              title: (enumItem + ' (' + property.get('default') + ')'),
-              name: 'default'
+              title: `${enumItem} (${property.get('default')})`,
+              name: 'default',
             });
           } else {
             property.get('enum2').addObject({
               title: enumItem,
-              name: enumItem
+              name: enumItem,
             });
           }
         });
       }
     });
-  }
+  },
 });

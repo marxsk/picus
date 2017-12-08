@@ -7,7 +7,7 @@ export default Ember.Component.extend({
    * @property data
    * @type {DS.Array}
    * @public
-   **/
+   * */
   data: undefined,
 
   /**
@@ -16,7 +16,7 @@ export default Ember.Component.extend({
    * @property titleKey
    * @type {DS.String}
    * @public
-   **/
+   * */
   titleKey: 'title',
 
   /**
@@ -25,7 +25,7 @@ export default Ember.Component.extend({
    * @property idKey
    * @type {DS.String}
    * @public
-   **/
+   * */
   idKey: undefined,
 
   /**
@@ -34,7 +34,7 @@ export default Ember.Component.extend({
    * @property showFilter
    * @type {DS.Boolean}
    * @public
-   **/
+   * */
   showFilter: false,
 
   /**
@@ -43,7 +43,7 @@ export default Ember.Component.extend({
    * @property filterPlaceholder
    * @type {DS.String}
    * @public
-   **/
+   * */
   filterPlaceholder: 'Filtering by ...',
 
   /**
@@ -52,10 +52,10 @@ export default Ember.Component.extend({
    * @property filterString
    * @type {DS.String}
    * @private
-   **/
+   * */
   filterString: '',
 
   actions: {
-     nothing() { return; }
-   }
+    nothing() {},
+  },
 });

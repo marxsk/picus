@@ -12,8 +12,8 @@ export default TabController.extend({
   empty: {},
 
   actions: {
-    clearForm: function() {
+    clearForm() {
       this.set('empty', {});
-    }
-  }
+    },
+  },
 });

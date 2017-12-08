@@ -15,32 +15,42 @@ export default Ember.Component.extend({
       this.send('unsetActiveNotification');
     },
     forceRecordSave(notification) {
-      const notificationMessages = this.get('messages').getNotificiationMessage(notification, `FORCE_${notification.get('data.action')}`);
+      const notificationMessages = this.get('messages').getNotificiationMessage(
+        notification,
+        `FORCE_${notification.get('data.action')}`,
+      );
 
       const progressNotification = this.get('notifications').progress(notificationMessages.progress);
-      notification.get('data.record').save({
-        adapterOptions: {
-          force: true,
-        }
-      }).then(() => {
-        this.get('notifications').updateNotification(
-          progressNotification,
-          'SUCCESS',
-          notificationMessages.success);
-      }, (xhr) => {
-        this.get('notifications').updateNotification(
-          progressNotification,
-          'ERROR',
-          notification.get('data.record.resource.name') + '::' + xhr.responseText,
-          {
-            action: notification.get('data.action'),
-            record: notification.get('data.record'),
-            response: xhr,
-          }
+      notification
+        .get('data.record')
+        .save({
+          adapterOptions: {
+            force: true,
+          },
+        })
+        .then(
+          () => {
+            this.get('notifications').updateNotification(
+              progressNotification,
+              'SUCCESS',
+              notificationMessages.success,
+            );
+          },
+          (xhr) => {
+            this.get('notifications').updateNotification(
+              progressNotification,
+              'ERROR',
+              `${notification.get('data.record.resource.name')}::${xhr.responseText}`,
+              {
+                action: notification.get('data.action'),
+                record: notification.get('data.record'),
+                response: xhr,
+              },
+            );
+          },
         );
-      });
       this.send('unsetActiveNotification');
       this.get('notifications').removeNotification(notification);
-    }
-  }
+    },
+  },
 });

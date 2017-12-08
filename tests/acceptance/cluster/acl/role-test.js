@@ -1,17 +1,17 @@
+import Ember from 'ember';
 import { test } from 'qunit';
 import moduleForAcceptance from 'picus/tests/helpers/module-for-acceptance';
 import defaultScenario from '../../../../mirage/scenarios/default';
 import startApp from '../../../helpers/start-app';
-import Ember from 'ember';
 
-var application;
+let application;
 
-let mockTickTock = Ember.Service.extend({
-    now: 111,
+const mockTickTock = Ember.Service.extend({
+  now: 111,
 });
 
 moduleForAcceptance('Acceptance | cluster/acl/role', {
-  beforeEach: function() {
+  beforeEach() {
     server.shutdown();
 
     application = startApp();
@@ -20,20 +20,20 @@ moduleForAcceptance('Acceptance | cluster/acl/role', {
 
     defaultScenario(server);
   },
-  afterEach: function() {
+  afterEach() {
     Ember.run(application, 'destroy');
-  }
+  },
 });
 
-test('visiting /cluster/CLUSTERID/acl/role/ROLEID', function(assert) {
+test('visiting /cluster/CLUSTERID/acl/role/ROLEID', (assert) => {
   visit('/cluster/my/acl/role/Hugo');
 
-  andThen(function() {
+  andThen(() => {
     assert.equal(currentURL(), '/cluster/my/acl/role/Hugo');
   });
 });
 
-test('add (and remove) ACL user to the ACL role', async function(assert) {
+test('add (and remove) ACL user to the ACL role', async (assert) => {
   visit('/cluster/my/acl/role/Hugo');
 
   await click('button:first');
@@ -49,8 +49,8 @@ test('add (and remove) ACL user to the ACL role', async function(assert) {
 
   await click(find('table tr td span.delete-attr:first'));
 
-  andThen(function() {
+  andThen(() => {
     tableCells = find('table tr td');
-    assert.equal(1*3, tableCells.length, 'User was removed from the ACL role');
+    assert.equal(1 * 3, tableCells.length, 'User was removed from the ACL role');
   });
 });

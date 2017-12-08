@@ -1,16 +1,16 @@
 import { moduleFor } from 'ember-qunit';
-//import { test } from 'ember-qunit';
+// import { test } from 'ember-qunit';
 import { skip } from 'qunit';
 import Ember from 'ember';
-//import startApp from '../../helpers/start-app';
+// import startApp from '../../helpers/start-app';
 
-var application;
-var store;
+let application;
+let store;
 const RELOAD_TIMEOUT = 1000;
 
 moduleFor('controller:index', 'Integration | Controller | index', {
   needs: ['model:node', 'model:resource'],
-/*  beforeEach: function() {
+  /*  beforeEach: function() {
     application = startApp();
     store = application.__container__.lookup('service:store');
   },
@@ -20,18 +20,18 @@ moduleFor('controller:index', 'Integration | Controller | index', {
 */
 });
 
-skip('it exists', function(assert) {
+skip('it exists', function (assert) {
   assert.ok(this.subject());
 });
 
-skip('check if selected component is Node', function(assert) {
+skip('check if selected component is Node', function (assert) {
   assert.expect(3);
 
-  let controller = this.subject();
+  const controller = this.subject();
 
-  Ember.run.later(function() {
-    const node = store.createRecord('node', {'name' : 'Only node'});
-    const resource = store.createRecord('resource', {'name' : 'My Resource'});
+  Ember.run.later(() => {
+    const node = store.createRecord('node', { name: 'Only node' });
+    const resource = store.createRecord('resource', { name: 'My Resource' });
 
     controller.set('selectedComponent', node);
     assert.equal(true, controller.get('isSelectedNode'), 'Select node is a real Node');

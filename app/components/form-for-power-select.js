@@ -32,13 +32,13 @@ export default Ember.Component.extend({
   multiple: false,
 
   actions: {
-    onChange: function(selectedIndex, value) {
+    onChange(selectedIndex, value) {
       this.get('pattern')(value);
-      this.get('min').set('_' + this.get('propertyName'), value);
+      this.get('min').set(`_${this.get('propertyName')}`, value);
     },
-    onCreate: function(newItem, component) {
+    onCreate(newItem, component) {
       component.options.unshiftObject(newItem);
       component.selected.pushObject(newItem);
     },
-  }
+  },
 });

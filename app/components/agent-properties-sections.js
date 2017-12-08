@@ -5,7 +5,7 @@ import Ember from 'ember';
  *
  * It also generates all form fields that are required. Their types and values are obtained
  * from the metadata information.
- **/
+ * */
 export default Ember.Component.extend({
   /**
    * form is ember-form-for component to which we include generated form-fields
@@ -23,7 +23,7 @@ export default Ember.Component.extend({
    * relevant part of agent's metadata
    *
    * @public
-   **/
+   * */
   parameters: undefined,
   /**
    * information about already filled changes in the form
@@ -43,24 +43,24 @@ export default Ember.Component.extend({
 
   actions: {
     showSecret(property, oldValue) {
-        // In order to obtain current value from form, we need to do a work-around
-        // If no-one touches the field -> return value from initializiation
-        // If the field was modified -> (work-around) updateSecretLength is executed and
-        // it sets us a formObject that cannot be accessed directly. And then a value is
-        // obtained from the form property.
+      // In order to obtain current value from form, we need to do a work-around
+      // If no-one touches the field -> return value from initializiation
+      // If the field was modified -> (work-around) updateSecretLength is executed and
+      // it sets us a formObject that cannot be accessed directly. And then a value is
+      // obtained from the form property.
 
-        let secret = '';
-        if (this.get('_formObject') && (this.get('_formObject').get(property) !== undefined)) {
-          secret = this.get('_formObject').get(property);
-        } else {
-          secret = oldValue;
-        }
+      let secret = '';
+      if (this.get('_formObject') && this.get('_formObject').get(property) !== undefined) {
+        secret = this.get('_formObject').get(property);
+      } else {
+        secret = oldValue;
+      }
 
-        alert(`The secret is '${secret}'`);
+      alert(`The secret is '${secret}'`);
     },
     updateSecretLength(object, property, value) {
       this._formObject = object;
       Ember.set(object, property, value);
-    }
-  }
+    },
+  },
 });

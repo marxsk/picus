@@ -4,18 +4,16 @@ export default Ember.Component.extend({
   containsSelf: Ember.computed('data.@each', {
     get() {
       if (this.get('data') === undefined) {
-          return false;
+        return false;
       }
 
       return this.get('data').some((textField) => {
-        if (! textField) {
+        if (!textField) {
           return false;
         }
 
-        return textField.some((name) => {
-          return (this.get('selfName') === name);
-        });
+        return textField.some(name => this.get('selfName') === name);
       });
-    }
+    },
   }),
 });

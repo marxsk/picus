@@ -1,10 +1,8 @@
 import Ember from 'ember';
+import { validatePresence } from 'ember-changeset-validations/validators';
 import categorizeProperties from '../../../utils/categorize-properties';
 import TabRoute from '../../tab-route';
 import ScoreValidations from '../../../validators/constraint-validations';
-import {
-  validatePresence,
-} from 'ember-changeset-validations/validators';
 import validateScore from '../../../validators/score';
 
 export default TabRoute.extend({
@@ -17,8 +15,8 @@ export default TabRoute.extend({
   queryParams: {
     filterString: {
       as: 's',
-      replace: true
-    }
+      replace: true,
+    },
   },
 
   beforeModel() {
@@ -37,10 +35,10 @@ export default TabRoute.extend({
 
     if (resource === null) {
       return Ember.RSVP.hash({
-        listing: (params.resource_id.length === 0) ? true : false,
+        listing: params.resource_id.length === 0,
         updatingCluster: this.store.peekAll('cluster'),
         selectedResources: this.get('selectedResources'),
-        params: params,
+        params,
         ScoreValidations,
       });
     }
@@ -50,15 +48,17 @@ export default TabRoute.extend({
     let validations;
 
     if (resource.get('resourceType') === 'primitive') {
-      metadata = await this.store.getAgentMetadata('resource', resource.get('resourceProvider') + ':' + resource.get('agentType'));
+      metadata = await this.store.getAgentMetadata(
+        'resource',
+        `${resource.get('resourceProvider')}:${resource.get('agentType')}`,
+      );
       const x = categorizeProperties(metadata.parameters);
-      parameters = x.parameters;
-      validations = x.validations;
+      ({ parameters, validations } = x);
     }
 
     if (resource.get('properties')) {
       resource.get('properties').forEach((item) => {
-        this.set('modelForm.' + item.get('name'), item.get('value'));
+        this.set(`modelForm.${item.get('name')}`, item.get('value'));
       });
     }
 
@@ -91,13 +91,13 @@ export default TabRoute.extend({
       },
       addTicketPreference: {
         ticket: validatePresence(true),
-      }
+      },
     };
 
     return Ember.RSVP.hash({
-      params: params,
-      metadata: metadata,
-      parameters: parameters,
+      params,
+      metadata,
+      parameters,
       formData: this.get('modelForm'),
       updatingCluster: this.store.peekAll('cluster'),
       selectedResource: resource,
@@ -109,60 +109,65 @@ export default TabRoute.extend({
   },
 
   actions: {
-    onSubmitAction: function(resource, form) {
-      this.store.pushUpdateAgentProperties('resource', {
-        name: resource.get('name'),
-        agentProvider: resource.get('selectedProvider'),
-        agentType: resource.get('selectedAgent'),
-        properties: form.get('changes'),
-      }, 'update');
+    onSubmitAction(resource, form) {
+      this.store.pushUpdateAgentProperties(
+        'resource',
+        {
+          name: resource.get('name'),
+          agentProvider: resource.get('selectedProvider'),
+          agentType: resource.get('selectedAgent'),
+          properties: form.get('changes'),
+        },
+        'update',
+      );
 
       this.transitionTo('cluster.resources.index');
     },
-    onCheckx: function(x) {
+    onCheckx(x) {
       if (this.get('selectedResources').includes(x)) {
         this.get('selectedResources').removeObject(x);
       } else {
         this.get('selectedResources').pushObject(x);
       }
     },
-    removeSelectedResources: function() {
-      this.store.removeAgents(
-        this.get('selectedResources').map((x) => {
-          return x.get('name');
-        }),
-        'resource'
-      );
+    removeSelectedResources() {
+      this.store.removeAgents(this.get('selectedResources').map(x => x.get('name')), 'resource');
       this.get('selectedResources').clear();
       this.transitionTo('cluster.resources.index');
     },
-    changeSelectedAgent: function() {},
+    changeSelectedAgent() {},
 
-    deletePreference: function(actionName, constraint) {
+    deletePreference(actionName, constraint) {
       constraint.deleteRecord();
       this.get('notifications').notificationSaveRecord(constraint, actionName);
     },
 
-    addLocationPreference: function(form) {
+    addLocationPreference(form) {
       const preference = this.get('store').createRecord('location-preference', {
         resource: this.get('resource'),
         node: form.get('node'),
         score: form.get('score'),
       });
-      return this.get('notifications').notificationSaveRecord(preference, 'ADD_LOCATION_PREFERENCE');
+      return this.get('notifications').notificationSaveRecord(
+        preference,
+        'ADD_LOCATION_PREFERENCE',
+      );
     },
 
-    addColocationPreference: function(form) {
+    addColocationPreference(form) {
       const preference = this.get('store').createRecord('colocation-preference', {
         resource: this.get('resource'),
         targetResource: form.get('targetResources.firstObject'),
         colocationType: form.get('colocationType'),
         score: form.get('score'),
       });
-      return this.get('notifications').notificationSaveRecord(preference, 'ADD_COLOCATION_PREFERENCE');
+      return this.get('notifications').notificationSaveRecord(
+        preference,
+        'ADD_COLOCATION_PREFERENCE',
+      );
     },
 
-    addOrderingPreference: function(form) {
+    addOrderingPreference(form) {
       const preference = this.get('store').createRecord('ordering-preference', {
         resource: this.get('resource'),
         targetResource: form.get('targetResources.firstObject'),
@@ -171,10 +176,13 @@ export default TabRoute.extend({
         order: form.get('order'),
         action: form.get('action'),
       });
-      return this.get('notifications').notificationSaveRecord(preference, 'ADD_ORDERING_PREFERENCE');
+      return this.get('notifications').notificationSaveRecord(
+        preference,
+        'ADD_ORDERING_PREFERENCE',
+      );
     },
 
-    addSetOrderingPreference: function(form) {
+    addSetOrderingPreference(form) {
       const preferenceSet = this.get('store').createRecord('constraint-set');
       const cluster = this.store.peekAll('cluster').objectAt(0);
 
@@ -182,10 +190,13 @@ export default TabRoute.extend({
       preferenceSet.set('type', 'ord');
       this._updateDynamicResources(form, preferenceSet);
 
-      return this.get('notifications').notificationSaveRecord(preferenceSet, 'ADD_ORDERING_SET_PREFERENCE');
+      return this.get('notifications').notificationSaveRecord(
+        preferenceSet,
+        'ADD_ORDERING_SET_PREFERENCE',
+      );
     },
 
-    addSetColocationPreference: function(form) {
+    addSetColocationPreference(form) {
       const preferenceSet = this.get('store').createRecord('constraint-set');
       const cluster = this.store.peekAll('cluster').objectAt(0);
 
@@ -193,10 +204,13 @@ export default TabRoute.extend({
       preferenceSet.set('type', 'col');
       this._updateDynamicResources(form, preferenceSet);
 
-      return this.get('notifications').notificationSaveRecord(preferenceSet, 'ADD_COLOCATION_SET_PREFERENCE');
+      return this.get('notifications').notificationSaveRecord(
+        preferenceSet,
+        'ADD_COLOCATION_SET_PREFERENCE',
+      );
     },
 
-    addTicketPreference: function(form) {
+    addTicketPreference(form) {
       const preference = this.get('store').createRecord('ticket-preference', {
         resource: this.get('resource'),
         ticket: form.get('ticket'),
@@ -205,7 +219,7 @@ export default TabRoute.extend({
       });
       return this.get('notifications').notificationSaveRecord(preference, 'ADD_TICKET_PREFERENCE');
     },
-    addSetTicketPreference: function(form) {
+    addSetTicketPreference(form) {
       const preferenceSet = this.get('store').createRecord('constraint-set');
       const cluster = this.store.peekAll('cluster').objectAt(0);
 
@@ -215,56 +229,62 @@ export default TabRoute.extend({
       preferenceSet.set('lossPolicy', form.get('lossPolicy'));
       this._updateDynamicResources(form, preferenceSet);
 
-      return this.get('notifications').notificationSaveRecord(preferenceSet, 'ADD_TICKET_SET_PREFERENCE');
+      return this.get('notifications').notificationSaveRecord(
+        preferenceSet,
+        'ADD_TICKET_SET_PREFERENCE',
+      );
     },
 
-    addMetaAttribute: function(form) {
+    addMetaAttribute(form) {
       const attribute = this.get('store').createRecord('attribute', {
         resource: this.get('resource'),
         key: form.get('key'),
         value: form.get('value'),
-      })
+      });
       return this.get('notifications').notificationSaveRecord(attribute, 'ADD_META_ATTRIBUTE');
     },
 
-    addUtilizationAttribute: function(form) {
+    addUtilizationAttribute(form) {
       const attribute = this.get('store').createRecord('utilization-attribute', {
         resource: this.get('resource'),
         name: form.get('name'),
         value: form.get('value'),
       });
-      return this.get('notifications').notificationSaveRecord(attribute, 'ADD_UTILIZATION_ATTRIBUTE');
+      return this.get('notifications').notificationSaveRecord(
+        attribute,
+        'ADD_UTILIZATION_ATTRIBUTE',
+      );
     },
 
-    removeResource: function(resourceName) {
+    removeResource(resourceName) {
       this.store.removeAgents([resourceName], 'resource');
       this.transitionTo('cluster.resources.index');
     },
 
-    createClone: function(resourceName) {
+    createClone(resourceName) {
       this.store.createClone(resourceName);
       this.transitionTo('cluster.resources.index');
     },
 
-    removeClone: function(resourceName) {
+    removeClone(resourceName) {
       this.store.destroyClone(resourceName);
       this.transitionTo('cluster.resources.index');
     },
-    removeGroup: function(resourceName) {
+    removeGroup(resourceName) {
       this.store.destroyGroup(resourceName);
       this.transitionTo('cluster.resources.index');
     },
 
-    createMaster: function(resourceName) {
+    createMaster(resourceName) {
       this.store.createMaster(resourceName);
       this.transitionTo('cluster.resources.index');
     },
-    removeMaster: function(resourceName) {
+    removeMaster(resourceName) {
       this.store.destroyMaster(resourceName);
       this.transitionTo('cluster.resources.index');
     },
 
-    reload: function() {
+    reload() {
       this.store.reloadData();
     },
   },
@@ -278,7 +298,9 @@ export default TabRoute.extend({
 
       const resourceSet = this.get('store').createRecord('resource-set');
       line.forEach((resourceName) => {
-        resourceSet.get('resources').addObject(this.store.peekRecordQueryName('resource', resourceName));
+        resourceSet
+          .get('resources')
+          .addObject(this.store.peekRecordQueryName('resource', resourceName));
       });
       constraintSet.get('resourceSets').addObject(resourceSet);
     });

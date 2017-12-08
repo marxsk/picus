@@ -5,11 +5,13 @@ export default Ember.Route.extend({
     if ('cluster' in transition.state.params) {
       return this.store.setActiveClusterName(transition.state.params.cluster.cluster_name);
     }
+
+    return undefined;
   },
 
   actions: {
-    error: function(error, transition) {
+    error(error, transition) {
       this.transitionTo('error');
     },
-  }
+  },
 });

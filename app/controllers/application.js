@@ -6,8 +6,8 @@ export default Ember.Controller.extend({
   activeNotification: undefined,
 
   actions: {
-      invalidateSession() {
-        this.get('session').invalidate();
-      },
+    invalidateSession() {
+      this.get('session').invalidate();
     },
+  },
 });

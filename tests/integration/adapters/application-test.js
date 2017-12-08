@@ -9,12 +9,12 @@ moduleFor('adapter:application', 'Integration | Adapter | application', {
   },
   afterEach() {
     window.server.shutdown();
-  }
+  },
 });
 
-test('route for reloading data from server', function(assert) {
+test('route for reloading data from server', function (assert) {
   // no asserts are expected because resulting promise is handled by qunit itself
-  const CLUSTER_NAME='my';
+  const CLUSTER_NAME = 'my';
 
   assert.expect(0);
   const adapter = this.subject();

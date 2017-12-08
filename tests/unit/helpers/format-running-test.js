@@ -3,7 +3,7 @@ import { module, test } from 'qunit';
 
 module('Unit | Helper | format running');
 
-test('it works', function(assert) {
+test('it works', (assert) => {
   assert.expect(2);
 
   assert.equal(formatRunning([true]), 'running');

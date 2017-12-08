@@ -6,7 +6,7 @@ moduleForComponent('attr-single', 'Integration | Component | attr single', {
   integration: true,
 });
 
-test('render usual attribute', function(assert) {
+test('render usual attribute', function (assert) {
   assert.expect(3);
 
   const attr = Ember.Object.create({
@@ -17,7 +17,7 @@ test('render usual attribute', function(assert) {
   });
 
   this.set('myAttr', attr);
-  this.set('onDelete', () => { });
+  this.set('onDelete', () => {});
   this.render(hbs`{{#attr-single attribute=myAttr onDeleteAction=(action onDelete) as |attr|}}
           <td>{{attr.key}}</td>
           <td>{{attr.value}}</td>
@@ -28,7 +28,7 @@ test('render usual attribute', function(assert) {
   assert.equal(this.$('tr td:nth-child(4) span').hasClass('glyphicon-trash'), true);
 });
 
-test('render attribute after marking as deleted', function(assert) {
+test('render attribute after marking as deleted', function (assert) {
   assert.expect(1);
 
   const attr = Ember.Object.create({
@@ -39,16 +39,21 @@ test('render attribute after marking as deleted', function(assert) {
   });
 
   this.set('myAttr', attr);
-  this.set('onDelete', () => { });
+  this.set('onDelete', () => {});
   this.render(hbs`{{#attr-single attribute=myAttr onDeleteAction=(action onDelete) as |attr|}}
           <td>{{attr.key}}</td>
           <td>{{attr.value}}</td>
           {{/attr-single}}`);
 
-  assert.equal(this.$('tr td:nth-child(4)').text().trim(), '[DELETING]');
+  assert.equal(
+    this.$('tr td:nth-child(4)')
+      .text()
+      .trim(),
+    '[DELETING]',
+  );
 });
 
-test('render new attribute which is not in backend yet', function(assert) {
+test('render new attribute which is not in backend yet', function (assert) {
   assert.expect(1);
 
   const attr = Ember.Object.create({
@@ -59,16 +64,21 @@ test('render new attribute which is not in backend yet', function(assert) {
   });
 
   this.set('myAttr', attr);
-  this.set('onDelete', () => { });
+  this.set('onDelete', () => {});
   this.render(hbs`{{#attr-single attribute=myAttr onDeleteAction=(action onDelete) as |attr|}}
           <td>{{attr.key}}</td>
           <td>{{attr.value}}</td>
           {{/attr-single}}`);
 
-  assert.equal(this.$('tr td:nth-child(4)').text().trim(), '[ADDING]');
+  assert.equal(
+    this.$('tr td:nth-child(4)')
+      .text()
+      .trim(),
+    '[ADDING]',
+  );
 });
 
-test('test if action to delete attribute was called', function(assert) {
+test('test if action to delete attribute was called', function (assert) {
   assert.expect(2);
 
   const attr = Ember.Object.create({
@@ -79,8 +89,8 @@ test('test if action to delete attribute was called', function(assert) {
   });
 
   this.set('myAttr', attr);
-  this.set('onAttrDelete', (attr) => {
-    assert.equal(123, attr.get('id'));
+  this.set('onAttrDelete', (attrToDelete) => {
+    assert.equal(123, attrToDelete.get('id'));
   });
   this.render(hbs`{{attr-single attribute=myAttr onDeleteAction=(action onAttrDelete)}}`);
   const $button = this.$('.delete-attr');
@@ -88,7 +98,7 @@ test('test if action to delete attribute was called', function(assert) {
   $button.click();
 });
 
-test('test if change on checkbox call action', function(assert) {
+test('test if change on checkbox call action', function (assert) {
   assert.expect(2);
 
   const attr = Ember.Object.create({
@@ -99,9 +109,9 @@ test('test if change on checkbox call action', function(assert) {
   });
 
   this.set('myAttr', attr);
-  this.set('onAttrDelete', () => { });
-  this.set('onCheck', (attr) => {
-    assert.equal(123, attr.get('id'));
+  this.set('onAttrDelete', () => {});
+  this.set('onCheck', (attrToDelete) => {
+    assert.equal(123, attrToDelete.get('id'));
   });
   this.render(hbs`{{attr-single attribute=myAttr onCheckAction=(action onCheck) onDeleteAction=(action onAttrDelete)}}`);
   const $button = this.$(':checkbox');

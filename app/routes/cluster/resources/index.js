@@ -12,7 +12,7 @@ export default Ember.Route.extend({
     this._super(controller, model);
     // hide sidebar menu
     this.controllerFor('application').set('hideMainMenu', false);
-   },
+  },
 
   model() {
     return Ember.RSVP.hash({
@@ -22,7 +22,7 @@ export default Ember.Route.extend({
   },
 
   actions: {
-    onCheck: function(x) {
+    onCheck(x) {
       if (this.get('selectedResources').includes(x)) {
         this.get('selectedResources').removeObject(x);
       } else {
@@ -30,17 +30,14 @@ export default Ember.Route.extend({
       }
     },
 
-    removeSelectedResources: function() {
-      this.store.removeAgents(
-        this.get('selectedResources').map((x) => {return x.get('name');}),
-        'resource'
-      );
+    removeSelectedResources() {
+      this.store.removeAgents(this.get('selectedResources').map(x => x.get('name')), 'resource');
       this.get('selectedResources').clear();
       this.transitionTo('cluster.resources.show', '');
     },
 
-    linkTo: function(path) {
+    linkTo(path) {
       this.transitionTo(path);
-    }
-  }
+    },
+  },
 });

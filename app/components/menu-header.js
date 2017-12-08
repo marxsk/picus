@@ -15,25 +15,21 @@ export default Ember.Component.extend({
   onlyErrors: false,
   onCheckAction: undefined,
 
-  errorCount: function() {
+  errorCount: function () {
     const list = this.get('errorList');
 
     if (list) {
       return list.get('length');
-    } else {
-      return null;
     }
+    return null;
   }.property('errorList.@each.status'),
 
-  errorList: function() {
+  errorList: function () {
     const list = this.get('data');
     if (list) {
-      return list.filter(function(item) {
-        return ['error', 'failed'].includes(item.get('status'));
-      });
-    } else {
-      return [];
+      return list.filter(item => ['error', 'failed'].includes(item.get('status')));
     }
+    return [];
   }.property('data.@each.status'),
 
   actions: {
@@ -48,6 +44,6 @@ export default Ember.Component.extend({
     showOnlyErrors() {
       this.set('isCollapsed', false);
       this.set('onlyErrors', true);
-    }
+    },
   },
 });

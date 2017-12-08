@@ -4,16 +4,15 @@ import Ember from 'ember';
 const { RSVP } = Ember;
 
 function _jsonToQueryString(json) {
-    return Object.keys(json).map(function(key) {
-            return encodeURIComponent(key) + '=' +
-                encodeURIComponent(json[key]);
-        }).join('&');
+  return Object.keys(json)
+    .map(key => `${encodeURIComponent(key)}=${encodeURIComponent(json[key])}`)
+    .join('&');
 }
 
 export default DS.Adapter.extend({
   namespace: undefined,
 
-  pathForType: function(modelName, action) {
+  pathForType(modelName, action) {
     let resultURL;
 
     if (action === 'delete') {
@@ -22,7 +21,7 @@ export default DS.Adapter.extend({
         'colocation-preference': 'remove_constraint_remote',
         'ordering-preference': 'remove_constraint_remote',
         'ticket-preference': 'remove_constraint_remote',
-        'attribute': 'add_meta_attr_remote',
+        attribute: 'add_meta_attr_remote',
         'utilization-attribute': 'set_resource_utilization',
         'constraint-set': 'remove_constraint_remote',
         'acl-role': 'remove_acl_roles',
@@ -34,7 +33,7 @@ export default DS.Adapter.extend({
         'colocation-preference': 'add_constraint_remote',
         'ordering-preference': 'add_constraint_remote',
         'ticket-preference': 'add_constraint_remote',
-        'attribute': 'add_meta_attr_remote',
+        attribute: 'add_meta_attr_remote',
         'utilization-attribute': 'set_resource_utilization',
         'constraint-set': 'add_constraint_set_remote',
         'acl-role': 'add_acl_role',
@@ -50,69 +49,82 @@ export default DS.Adapter.extend({
   },
 
   createRecord(store, type, snapshot) {
-    const data = this.serialize(snapshot, {action: 'create'});
-    const url = this.get('namespace') + '/' + this.pathForType(snapshot.modelName, 'create');
+    const data = this.serialize(snapshot, { action: 'create' });
+    const url = `${this.get('namespace')}/${this.pathForType(snapshot.modelName, 'create')}`;
 
     return new Ember.RSVP.Promise((resolve, reject) => {
       Ember.$.ajax({
         type: 'POST',
         url,
         dataType: 'text',
-        data: data,
-      }).then((response) => {
-        Ember.Logger.assert(response !== "{}", `Response to createRecord() for ${snapshot.modelName} was empty, it has to include id of saved record`);
-        // @todo: start handling of response from cluster
-        // @todo: perhaps await store.reloadData()
-        store.reloadData();
+        data,
+      }).then(
+        (response) => {
+          Ember.Logger.assert(
+            response !== '{}',
+            `Response to createRecord() for ${
+              snapshot.modelName
+            } was empty, it has to include id of saved record`,
+          );
+          // @todo: start handling of response from cluster
+          // @todo: perhaps await store.reloadData()
+          store.reloadData();
 
-        if (snapshot.modelName === 'constraint-set') {
-          // We need to manually disconnect resource sets with null id
-          // as they won't be updated automatically
-          snapshot.record.set('resourceSets', Ember.A());
-        }
+          if (snapshot.modelName === 'constraint-set') {
+            // We need to manually disconnect resource sets with null id
+            // as they won't be updated automatically
+            snapshot.record.set('resourceSets', Ember.A());
+          }
 
-        Ember.run(null, resolve, JSON.parse(response));
-      }, (jqXHR) => {
-        // @todo: this is completely broken
-        jqXHR.then = null; // copied from official documentation
-        Ember.run(null, reject, jqXHR);
-      });
+          Ember.run(null, resolve, JSON.parse(response));
+        },
+        (jqXHR) => {
+          // @todo: this is completely broken
+          const xhr = jqXHR;
+          xhr.then = null; // copied from official documentation
+          Ember.run(null, reject, xhr);
+        },
+      );
     });
   },
 
   deleteRecord(store, type, snapshot) {
-    const data = this.serialize(snapshot, {action: 'delete'});
-    const url = this.get('namespace') + '/' + this.pathForType(snapshot.modelName, 'delete');
+    const data = this.serialize(snapshot, { action: 'delete' });
+    const url = `${this.get('namespace')}/${this.pathForType(snapshot.modelName, 'delete')}`;
 
     return new Ember.RSVP.Promise((resolve, reject) => {
       Ember.$.ajax({
         type: 'POST',
         url,
         dataType: 'text',
-        data: data,
-      }).then((response) => {
-        // @todo: start handling of response from cluster
-        // @todo: perhaps await store.reloadData()
-        store.reloadData();
-        Ember.run(null, resolve, { errors: [ { status: 202, }, ] });
-      }, (jqXHR) => {
-        // @todo: this is completely broken
-        jqXHR.then = null; // copied from official documentation
-        Ember.run(null, reject, jqXHR);
-      });
+        data,
+      }).then(
+        (response) => {
+          // @todo: start handling of response from cluster
+          // @todo: perhaps await store.reloadData()
+          store.reloadData();
+          Ember.run(null, resolve, { errors: [{ status: 202 }] });
+        },
+        (jqXHR) => {
+          // @todo: this is completely broken
+          const xhr = jqXHR;
+          xhr.then = null; // copied from official documentation
+          Ember.run(null, reject, xhr);
+        },
+      );
     });
   },
 
   _updateAclElement(store, type, snapshot, fkName) {
     if (snapshot.hasMany(fkName).length < snapshot.record.savedTrackerValue(fkName).length) {
-      const deletedElementId = snapshot.record.savedTrackerValue(fkName).filter((obj) => {
-        return !(snapshot.hasMany(fkName).some(o => (obj === o.id)));
-      });
+      const deletedElementId = snapshot.record
+        .savedTrackerValue(fkName)
+        .filter(obj => !snapshot.hasMany(fkName).some(o => obj === o.id));
 
       return {
         action: 'relation-removed',
         elementId: deletedElementId,
-      }
+      };
     } else if (snapshot.hasMany(fkName).length > snapshot.record.savedTrackerValue(fkName).length) {
       // add new relation
       let result;
@@ -123,28 +135,27 @@ export default DS.Adapter.extend({
 
         if (Object.keys(changes).length === 0) {
           return false;
-        } else if (('name' in changes) && (changes.name[0] === undefined)) {
+        } else if ('name' in changes && changes.name[0] === undefined) {
           result = {
             action: 'relation-added',
             elementId: changes.name[1],
-          }
+          };
           return true;
-        } else {
-          Ember.Logger.error('[adapter] Only change in "users.name" is expected for acl-role');
-          return false;
         }
+        Ember.Logger.error('[adapter] Only change in "users.name" is expected for acl-role');
+        return false;
       });
       if (result) {
         return result;
-      } else {
-        return undefined;
       }
+      return {};
     }
+    return {};
   },
 
   updateRecord(store, type, snapshot) {
-    let data = undefined;
-    let url = this.get('namespace') + '/';
+    let data;
+    let url = `${this.get('namespace')}/`;
 
     if (snapshot.modelName === 'acl-role') {
       const userResponse = this._updateAclElement(store, type, snapshot, 'users');
@@ -152,39 +163,39 @@ export default DS.Adapter.extend({
 
       if (userResponse !== undefined) {
         if (userResponse.action === 'relation-removed') {
-          url = url + 'remove_acl';
+          url += 'remove_acl';
           data = {
             item: 'usergroup',
             item_type: 'user',
             role_id: snapshot.record.get('name'),
             usergroup_id: store.peekRecord('acl-user', userResponse.elementId).get('name'),
           };
-        } else if (userResponse.action === 'relation-added'){
-          url = url + 'add_acl';
+        } else if (userResponse.action === 'relation-added') {
+          url += 'add_acl';
           data = {
             item: 'user',
             role_id: snapshot.record.get('name'),
             usergroup: userResponse.elementId,
-          }
+          };
         }
       }
 
       if (groupResponse !== undefined) {
         if (groupResponse.action === 'relation-removed') {
-          url = url + 'remove_acl';
+          url += 'remove_acl';
           data = {
             item: 'usergroup',
             item_type: 'group',
             role_id: snapshot.record.get('name'),
             usergroup_id: store.peekRecord('acl-group', groupResponse.elementId).get('name'),
           };
-        } else if (groupResponse.action === 'relation-added'){
-          url = url + 'add_acl';
+        } else if (groupResponse.action === 'relation-added') {
+          url += 'add_acl';
           data = {
             item: 'group',
             role_id: snapshot.record.get('name'),
             usergroup: groupResponse.elementId,
-          }
+          };
         }
       }
     }
@@ -195,32 +206,42 @@ export default DS.Adapter.extend({
         url,
         dataType: 'text',
         data: _jsonToQueryString(data),
-      }).then((response) => {
-        Ember.Logger.assert(response !== "{}", `Response to updateRecord() for ${snapshot.modelName} was empty, it has to include id of saved record`);
-        // @todo: start handling of response from cluster
-        // @todo: perhaps await store.reloadData()
-        store.reloadData();
+      }).then(
+        (response) => {
+          Ember.Logger.assert(
+            response !== '{}',
+            `Response to updateRecord() for ${
+              snapshot.modelName
+            } was empty, it has to include id of saved record`,
+          );
+          // @todo: start handling of response from cluster
+          // @todo: perhaps await store.reloadData()
+          store.reloadData();
 
-        // We need to manually disconnect children objects created
-        // on backend as they won't be updated automatically
-        if (snapshot.modelName === 'constraint-set') {
-          snapshot.record.set('resourceSets', Ember.A());
-        } else if (snapshot.modelName == 'acl-role') {
-          // @todo: this might show invalid state (for short-moment) when we are adding multiple users/groups fast enough
-          snapshot.record.set('users', Ember.A());
-          snapshot.record.set('groups', Ember.A());
-        }
+          // We need to manually disconnect children objects created
+          // on backend as they won't be updated automatically
+          if (snapshot.modelName === 'constraint-set') {
+            snapshot.record.set('resourceSets', Ember.A());
+          } else if (snapshot.modelName === 'acl-role') {
+            // @todo: this might show invalid state (for short-moment) when
+            // we are adding multiple users/groups fast enough
+            snapshot.record.set('users', Ember.A());
+            snapshot.record.set('groups', Ember.A());
+          }
 
-        Ember.run(null, resolve, JSON.parse(response));
-      }, (jqXHR) => {
-        // @todo: this is completely broken
-        jqXHR.then = null; // copied from official documentation
-        Ember.run(null, reject, jqXHR);
-      });
+          Ember.run(null, resolve, JSON.parse(response));
+        },
+        (jqXHR) => {
+          // @todo: this is completely broken
+          const xhr = jqXHR;
+          xhr.then = null; // copied from official documentation
+          Ember.run(null, reject, jqXHR);
+        },
+      );
     });
   },
 
-  reloadData: function(clusterName) {
+  reloadData(clusterName) {
     const options = {
       type: 'GET',
     };
@@ -228,15 +249,16 @@ export default DS.Adapter.extend({
     if (clusterName) {
       this.set('namespace', `/managec/${clusterName}`);
     }
-    options.url = this.get('namespace') + '/cluster_status';
+    options.url = `${this.get('namespace')}/cluster_status`;
 
-    return new RSVP.Promise(function(resolve, reject) {
+    return new RSVP.Promise((resolve, reject) => {
       Ember.$.ajax(options).then(
-        function(response) {
+        (response) => {
           resolve(response);
-        }, function(xhr) {
+        },
+        (xhr) => {
           reject(xhr);
-        }
+        },
       );
     });
   },

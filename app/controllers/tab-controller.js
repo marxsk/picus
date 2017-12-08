@@ -9,5 +9,5 @@ export default Ember.Controller.extend({
       tabAction(tabName);
       this.set('activeTab', tabName);
     },
-  }
+  },
 });

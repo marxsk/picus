@@ -5,9 +5,11 @@ export default Ember.Controller.extend({
 
   actions: {
     authenticate(identification, password) {
-      this.get('session').authenticate('authenticator:cookie-authenticator', {identification, password}).catch((reason) => {
-        this.set('errorMessage', 'Invalid username or password');
-      });
-    }
-  }
+      this.get('session')
+        .authenticate('authenticator:cookie-authenticator', { identification, password })
+        .catch((reason) => {
+          this.set('errorMessage', 'Invalid username or password');
+        });
+    },
+  },
 });

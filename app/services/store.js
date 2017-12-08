@@ -2,10 +2,9 @@ import DS from 'ember-data';
 import Ember from 'ember';
 
 function _jsonToQueryString(json) {
-    return Object.keys(json).map(function(key) {
-            return encodeURIComponent(key) + '=' +
-                encodeURIComponent(json[key]);
-        }).join('&');
+  return Object.keys(json)
+    .map(key => `${encodeURIComponent(key)}=${encodeURIComponent(json[key])}`)
+    .join('&');
 }
 
 export default DS.Store.extend({
@@ -47,7 +46,7 @@ export default DS.Store.extend({
     @type Boolean
     @public
   */
-  isExpired: Ember.computed('expiresAt', 'ticktock.now', function() {
+  isExpired: Ember.computed('expiresAt', 'ticktock.now', function isExpired() {
     return this.get('expiresAt') < this.get('ticktock.now');
   }),
 
@@ -75,7 +74,7 @@ export default DS.Store.extend({
 
     @method init
   */
-  init: function() {
+  init() {
     this.get('isExpired');
     return this._super();
   },
@@ -85,7 +84,7 @@ export default DS.Store.extend({
 
     @method _reloader
   */
-  _reloader: function() {
+  _reloader: function _reloader() {
     if (this.get('isExpired')) {
       this.reloadData();
     }
@@ -94,7 +93,7 @@ export default DS.Store.extend({
   /** Set name of the active cluster
 
   Currently, it is possible to work with just one cluster at a given time.
-  **/
+  * */
   setActiveClusterName(clusterName) {
     this.set('clusterName', clusterName);
     return this.reloadData();
@@ -108,8 +107,8 @@ export default DS.Store.extend({
   data belongs to Adapter class but we want to access it also from the standard
   code.
 
-  **/
-  reloadData: async function() {
+  * */
+  async reloadData() {
     if (this.get('clusterName') === undefined) {
       return Ember.RSVP.resolve();
     }
@@ -127,75 +126,76 @@ export default DS.Store.extend({
     const ser = this.serializerFor('application');
     const store = this;
 
-    let prom = new Ember.RSVP.Promise(function(resolve, reject) {
-      res.then(function(response) {
-        var modelClass = store.modelFor('cluster');
-        var normalized = ser.normalizeSingleResponse(store, modelClass, response);
+    const prom = new Ember.RSVP.Promise((resolve, reject) => {
+      res.then(
+        (response) => {
+          const modelClass = store.modelFor('cluster');
+          const normalized = ser.normalizeSingleResponse(store, modelClass, response);
 
-        const generateId = function(json, parent) {
-          return Ember.get(json, parent + 'type') + '::' + Ember.get(json, parent + 'id');
-        };
+          const generateId = function (json, parent) {
+            return `${Ember.get(json, `${parent}type`)}::${Ember.get(json, `${parent}id`)}`;
+          };
 
-        if (generateId(normalized, 'data.0.') === 'undefined::undefined') {
-          // response does not contain relevant data, we should skip the processing
-          // @todo: error/warning?
-          return;
-        }
+          if (generateId(normalized, 'data.0.') === 'undefined::undefined') {
+            // response does not contain relevant data, we should skip the processing
+            // @todo: error/warning?
+            return;
+          }
 
-        const knownIds = Ember.A();
-        // add ID of cluster itself - we are working with just one cluster in response
-        knownIds.addObject(generateId(normalized, 'data.0.'));
+          const knownIds = Ember.A();
+          // add ID of cluster itself - we are working with just one cluster in response
+          knownIds.addObject(generateId(normalized, 'data.0.'));
 
-        // add information of all objects that are included with cluster response
-        if (Ember.get(normalized, 'included') !== undefined) {
-          Ember.get(normalized, 'included').forEach(function(item) {
-            knownIds.addObject(generateId(item, ''));
-          });
-        }
+          // add information of all objects that are included with cluster response
+          if (Ember.get(normalized, 'included') !== undefined) {
+            Ember.get(normalized, 'included').forEach((item) => {
+              knownIds.addObject(generateId(item, ''));
+            });
+          }
 
-        // remove records which no longer exists on backend from store for every used model
-        ['node', 'fence', 'resource', 'attribute', 'acl-user'].forEach(function(modelName) {
-            store.peekAll(modelName).forEach(function(item) {
-              if (!knownIds.includes(modelName + '::' + item.get('id'))) {
+          // remove records which no longer exists on backend from store for every used model
+          ['node', 'fence', 'resource', 'attribute', 'acl-user'].forEach((modelName) => {
+            store.peekAll(modelName).forEach((item) => {
+              if (!knownIds.includes(`${modelName}::${item.get('id')}`)) {
                 item.deleteRecord();
               } else {
                 // reset flags (isDeleted,...) to 'clean' state
                 item.rollbackAttributes();
               }
             });
-        });
-        store.push(normalized);
-        store.set('isQueryInProgress', false);
-        if (store.get('isQueryInQueue')) {
-          store.reloadData();
-        }
-        resolve();
-      }, function(error) {
-        alert(JSON.stringify(error));
-        store.set('isQueryInProgress', false);
-        if (store.get('isQueryInQueue')) {
-          return store.reloadData();
-        } else {
-          reject(error);
-        }
-      });
+          });
+          store.push(normalized);
+          store.set('isQueryInProgress', false);
+          if (store.get('isQueryInQueue')) {
+            store.reloadData();
+          }
+          resolve();
+        },
+        (error) => {
+          //          alert(JSON.stringify(error));
+          store.set('isQueryInProgress', false);
+          if (store.get('isQueryInQueue')) {
+            return store.reloadData();
+          }
+          return reject(error);
+        },
+      );
     });
 
     return prom;
   },
 
-  /** Push all cluster properties to server in one request **/
-  pushClusterProperties: function(changeset) {
+  /** Push all cluster properties to server in one request * */
+  pushClusterProperties(changeset) {
     // @todo: data has to be converted to the right format; send all vs changes? [+ default = null]
     this._sendData('update_cluster_settings', changeset.get('change'));
   },
 
-  /** Push new node into cluster **/
+  /** Push new node into cluster * */
   // @todo: move to standard API
-  pushNewNode: function(changeset) {
-    const newNode = this.createRecord('node',
-    {
-      name: changeset.nodeName
+  pushNewNode(changeset) {
+    const newNode = this.createRecord('node', {
+      name: changeset.nodeName,
     });
 
     newNode.save().then(() => {
@@ -212,15 +212,16 @@ export default DS.Store.extend({
    *
    *  @todo Create proper error handlers
    *  @todo Method should return promise?
-   **/
-  pushUpdateAgentProperties: function(agentType, attrs, operation = 'update') {
-    let url = '/managec/' + this.get('clusterName') + '/update_';
+   * */
+  pushUpdateAgentProperties(agentType, attrsObjects, operation = 'update') {
+    let url = `/managec/${this.get('clusterName')}/update_`;
     let transformedAgentType;
+    const attrs = attrsObjects;
 
     switch (agentType) {
       case 'resource':
         url += 'resource';
-        transformedAgentType = attrs.agentProvider + ':' + attrs.agentType;
+        transformedAgentType = `${attrs.agentProvider}:${attrs.agentType}`;
         break;
       case 'fence':
         url += 'fence_device';
@@ -230,7 +231,7 @@ export default DS.Store.extend({
         url = undefined;
     }
 
-    Ember.Logger.assert((typeof url !== 'undefined'), `Invalid agentType (${agentType}) entered`);
+    Ember.Logger.assert(typeof url !== 'undefined', `Invalid agentType (${agentType}) entered`);
 
     // @todo: proper encoding (URIEncode?)
     let data = `resource_type=${transformedAgentType}`;
@@ -240,23 +241,23 @@ export default DS.Store.extend({
 
     if (attrs.clone) {
       data += '&resource_clone=on';
-      attrs.properties = attrs.properties.filter(function( obj ) {
-          return obj.key !== 'clone';
-      });
+      attrs.properties = attrs.properties.filter(obj => obj.key !== 'clone');
     }
 
     if (attrs.masterslave) {
       data += '&resource_ms=on';
-      attrs.properties = attrs.properties.filter(function( obj ) {
-          return obj.key !== 'masterslave';
-      });
+      attrs.properties = attrs.properties.filter(obj => obj.key !== 'masterslave');
     }
 
-    attrs.properties.forEach(function(o) { data += `&_res_paramne_${o.key}=${o.value}`; });
-
-    this.get('ajax').post(url, {data: data}).then(() => {
-      this.reloadData();
+    attrs.properties.forEach((o) => {
+      data += `&_res_paramne_${o.key}=${o.value}`;
     });
+
+    this.get('ajax')
+      .post(url, { data })
+      .then(() => {
+        this.reloadData();
+      });
   },
 
   /**
@@ -271,7 +272,7 @@ export default DS.Store.extend({
    *    in the templates. This may (should) be replaced by template handlebar that will
    *    do Object.keys(result).
    *  @todo Create proper error handlers
-   **/
+   * */
   getAvailableAgents(agentType) {
     let url = '/remote';
 
@@ -286,30 +287,35 @@ export default DS.Store.extend({
         url = undefined;
     }
 
-    Ember.Logger.assert((typeof url !== 'undefined'), `Invalid agentType (${agentType}) entered`);
+    Ember.Logger.assert(typeof url !== 'undefined', `Invalid agentType (${agentType}) entered`);
 
-    return new Ember.RSVP.Promise((resolve) => {
-      this.get('ajax').request(url).then((response) => {
-        const agents = {};
-        agents._providers = [];
+    return new Ember.RSVP.Promise(
+      (resolve) => {
+        this.get('ajax')
+          .request(url)
+          .then((response) => {
+            const agents = {};
+            agents._providers = [];
 
-        Object.keys(response).forEach((agent) => {
-          const lastSemicolon = agent.lastIndexOf(':');
-          let provider = agent.substring(0, lastSemicolon);
-          provider = (provider === '') ? 'undefinedProvider' : provider;
-          const name = agent.substring(lastSemicolon + 1);
+            Object.keys(response).forEach((agent) => {
+              const lastSemicolon = agent.lastIndexOf(':');
+              let provider = agent.substring(0, lastSemicolon);
+              provider = provider === '' ? 'undefinedProvider' : provider;
+              const name = agent.substring(lastSemicolon + 1);
 
-          if (! (provider in agents)) {
-            agents._providers.push(provider);
-            agents[provider] = [];
-          }
-          agents[provider].push(name);
-        });
-        resolve(agents);
-      });
-    }, function(error) {
-      alert(error);
-    });
+              if (!(provider in agents)) {
+                agents._providers.push(provider);
+                agents[provider] = [];
+              }
+              agents[provider].push(name);
+            });
+            resolve(agents);
+          });
+      },
+      (error) => {
+        Ember.Logger.error(error);
+      },
+    );
   },
 
   /**
@@ -320,7 +326,7 @@ export default DS.Store.extend({
    *  @todo Create proper error handlers
    */
   getAgentMetadata(agentType, agentName) {
-    let url = '/managec/' + this.get('clusterName');
+    let url = `/managec/${this.get('clusterName')}`;
 
     switch (agentType) {
       case 'resource':
@@ -333,29 +339,39 @@ export default DS.Store.extend({
         url = undefined;
     }
 
-    Ember.Logger.assert((typeof url !== 'undefined'), `Invalid agentType (${agentType}) entered`);
+    Ember.Logger.assert(typeof url !== 'undefined', `Invalid agentType (${agentType}) entered`);
 
-    return new Ember.RSVP.Promise((resolve) => {
-      this.get('ajax').request(url, {data: {agent: agentName}}).then((response) => {
-        resolve(response);
-      });
-    }, (error) => {
-      alert(error);
-    });
+    return new Ember.RSVP.Promise(
+      (resolve) => {
+        this.get('ajax')
+          .request(url, { data: { agent: agentName } })
+          .then((response) => {
+            resolve(response);
+          });
+      },
+      (error) => {
+        Ember.Logger.error(error);
+      },
+    );
   },
 
   _sendPostData(endpoint, rawData) {
-    const url = '/managec/' + this.get('clusterName') + '/' + endpoint;
+    const url = `/managec/${this.get('clusterName')}/${endpoint}`;
     const data = JSON.stringify(rawData);
 
-    return new Ember.RSVP.Promise((resolve) => {
-      this.get('ajax').post(url, {data}).then((response) => {
-        this.reloadData();
-        resolve(response);
-      });
-    }, (error) => {
-      // @todo
-    });
+    return new Ember.RSVP.Promise(
+      (resolve) => {
+        this.get('ajax')
+          .post(url, { data })
+          .then((response) => {
+            this.reloadData();
+            resolve(response);
+          });
+      },
+      (error) => {
+        // @todo
+      },
+    );
   },
 
   createResouceGroup(groupId, resources) {
@@ -375,12 +391,17 @@ export default DS.Store.extend({
       case 'fence':
         separator = '-';
         break;
+      default:
+        Ember.Logger.error(`Unknown agent type ${agentType}`);
     }
-    Ember.Logger.assert((typeof separator !== 'undefined'), `Invalid agentType (${agentType}) entered`);
+    Ember.Logger.assert(
+      typeof separator !== 'undefined',
+      `Invalid agentType (${agentType}) entered`,
+    );
 
-    let jsonData = {};
+    const jsonData = {};
     names.forEach((i) => {
-      jsonData['resid' + separator + i] = 'true';
+      jsonData[`resid${separator}${i}`] = 'true';
     });
 
     // @todo: add attribute force:true if required
@@ -389,35 +410,52 @@ export default DS.Store.extend({
 
   // @todo: should it be a promise?
   _sendData(endpoint, data) {
-    let url = '/managec/' + this.get('clusterName') + '/' + endpoint;
+    const url = `/managec/${this.get('clusterName')}/${endpoint}`;
 
-    this.get('ajax').post(url, {
-      data: _jsonToQueryString(data)
-    }).then(() => {
-      this.reloadData();
-    });
+    this.get('ajax')
+      .post(url, {
+        data: _jsonToQueryString(data),
+      })
+      .then(() => {
+        this.reloadData();
+      });
   },
 
   _sendResourceId(endpoint, resourceName) {
-    this._sendData(endpoint, {resource_id: resourceName});
+    this._sendData(endpoint, { resource_id: resourceName });
   },
 
-  destroyGroup(name) { this._sendResourceId('resource_ungroup', name); },
+  destroyGroup(name) {
+    this._sendResourceId('resource_ungroup', name);
+  },
 
-  createClone(name) { this._sendResourceId('resource_clone', name); },
-  destroyClone(name) { this._sendResourceId('resource_unclone', name); },
+  createClone(name) {
+    this._sendResourceId('resource_clone', name);
+  },
+  destroyClone(name) {
+    this._sendResourceId('resource_unclone', name);
+  },
 
-  createMaster(name) { this._sendResourceId('resource_master', name); },
-  destroyMaster(name) { this._sendResourceId('resource_unclone', name); },
+  createMaster(name) {
+    this._sendResourceId('resource_master', name);
+  },
+  destroyMaster(name) {
+    this._sendResourceId('resource_unclone', name);
+  },
 
   loadClusters() {
-    return new Ember.RSVP.Promise((resolve) => {
-      this.get('ajax').request('/clusters_overview').then((response) => {
-        resolve(response.cluster_list);
-      });
-    }, (error) => {
-      alert(error);
-    });
+    return new Ember.RSVP.Promise(
+      (resolve) => {
+        this.get('ajax')
+          .request('/clusters_overview')
+          .then((response) => {
+            resolve(response.cluster_list);
+          });
+      },
+      (error) => {
+        Ember.Logger.error(error);
+      },
+    );
   },
 
   pushAppendUserToRole(roleName, user) {
@@ -453,29 +491,31 @@ export default DS.Store.extend({
 
   // @note: should it return promise?
   _sendAclData(url, data) {
-    this.get('ajax').post(url, {
-      data: JSON.stringify({data: data}),
-    }).then(() => {
-      this.reloadData();
-    });
+    this.get('ajax')
+      .post(url, {
+        data: JSON.stringify({ data }),
+      })
+      .then(() => {
+        this.reloadData();
+      });
   },
 
   pushAppendUser(attribute) {
     return this._sendAclData('/acl-user', {
-        type: 'acl-user',
-        attributes: { ...attribute }
+      type: 'acl-user',
+      attributes: { ...attribute },
     });
   },
   pushAppendGroup(attribute) {
     return this._sendAclData('/acl-group', {
       type: 'acl-group',
-      attributes: { ...attribute }
+      attributes: { ...attribute },
     });
   },
   pushAppendRole(attribute) {
     return this._sendAclData('/acl-role', {
       type: 'acl-role',
-      attributes: { ...attribute }
+      attributes: { ...attribute },
     });
   },
   pushAppendPermission(roleName, attribute) {
@@ -487,8 +527,10 @@ export default DS.Store.extend({
 
   /**
    * Query for single record on top of the already loaded data
-   **/
+   * */
   peekRecordQueryName(modelName, name) {
-    return this.peekAll(modelName).filterBy('name', name).get('firstObject');
+    return this.peekAll(modelName)
+      .filterBy('name', name)
+      .get('firstObject');
   },
 });

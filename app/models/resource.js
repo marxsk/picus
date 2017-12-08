@@ -2,7 +2,7 @@ import DS from 'ember-data';
 
 export default DS.Model.extend({
   name: DS.attr('string'),
-  status: DS.attr('string'),  // @todo: define a set of possible values
+  status: DS.attr('string'), // @todo: define a set of possible values
   resourceType: DS.attr('string'), // @todo: define a set of possible values
   agentType: DS.attr('string'),
   resourceProvider: DS.attr('string'), // @todo: define a set of possible values

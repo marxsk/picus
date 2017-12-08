@@ -1,8 +1,6 @@
 import Ember from 'ember';
 import TabRoute from 'picus/routes/tab-route';
-import {
-  validatePresence,
-} from 'ember-changeset-validations/validators';
+import { validatePresence } from 'ember-changeset-validations/validators';
 
 export default TabRoute.extend({
   notifications: Ember.inject.service('notifications'),
@@ -23,8 +21,8 @@ export default TabRoute.extend({
     const validations = {
       addPermission: {
         query: validatePresence(true),
-      }
-    }
+      },
+    };
 
     return Ember.RSVP.hash({
       updatingCluster: this.store.peekAll('cluster'),
@@ -35,7 +33,7 @@ export default TabRoute.extend({
   },
 
   actions: {
-    addPermission: function(form) {
+    addPermission(form) {
       const permission = this.get('store').createRecord('acl-permission', {
         role: this.get('aclRole'),
         operation: form.get('operation'),
@@ -44,34 +42,46 @@ export default TabRoute.extend({
       });
       return this.get('notifications').notificationSaveRecord(permission, 'ADD_ACL_PERMINISSION');
     },
-    deletePermission: function(actionName, permission) {
+    deletePermission(actionName, permission) {
       permission.deleteRecord();
       this.get('notifications').notificationSaveRecord(permission, actionName);
     },
-    addUser: function(form) {
+    addUser(form) {
       // @todo: do not create user when there is an old one with same name
       const aclUser = this.get('store').createRecord('acl-user', {
         name: form.get('name'),
       });
       // @todo: detection of duplicates users in same role also in front-end?
       this.get('aclRole.users').pushObject(aclUser);
-      return this.get('notifications').notificationSaveRecord(this.get('aclRole'), 'ADD_USER_TO_ACL_ROLE');
+      return this.get('notifications').notificationSaveRecord(
+        this.get('aclRole'),
+        'ADD_USER_TO_ACL_ROLE',
+      );
     },
-    deleteUser: function(actionName, user) {
+    deleteUser(actionName, user) {
       this.get('aclRole.users').removeObject(user);
-      return this.get('notifications').notificationSaveRecord(this.get('aclRole'), 'REMOVE_USER_FROM_ACL_ROLE');
+      return this.get('notifications').notificationSaveRecord(
+        this.get('aclRole'),
+        'REMOVE_USER_FROM_ACL_ROLE',
+      );
     },
-    addGroup: function(form) {
+    addGroup(form) {
       const aclGroup = this.get('store').createRecord('acl-group', {
         name: form.get('name'),
       });
       // @todo: (as in addUser) detection of duplicates users in same role also in front-end?
       this.get('aclRole.groups').pushObject(aclGroup);
-      return this.get('notifications').notificationSaveRecord(this.get('aclRole'), 'ADD_GROUP_TO_ACL_ROLE');
+      return this.get('notifications').notificationSaveRecord(
+        this.get('aclRole'),
+        'ADD_GROUP_TO_ACL_ROLE',
+      );
     },
-    deleteGroup: function(actionName, group) {
+    deleteGroup(actionName, group) {
       this.get('aclRole.groups').removeObject(group);
-      return this.get('notifications').notificationSaveRecord(this.get('aclRole'), 'REMOVE_GROUP_FROM_ACL_ROLE');
+      return this.get('notifications').notificationSaveRecord(
+        this.get('aclRole'),
+        'REMOVE_GROUP_FROM_ACL_ROLE',
+      );
     },
-  }
+  },
 });

@@ -13,7 +13,7 @@ export default Ember.Component.extend({
    * @property attribute
    * @type {DS.Model}
    * @public
-   **/
+   * */
   attribute: undefined,
   onDeleteAction: undefined,
   onCheckAction: undefined,
@@ -26,7 +26,7 @@ export default Ember.Component.extend({
   tagName: 'tr',
   isChecked: false,
 
-  toggleCheck: function(value) {
+  toggleCheck(value) {
     this.set('isChecked', value);
     this.attrs.onCheckAction(this.get('attribute'), this.get('isChecked'));
   },

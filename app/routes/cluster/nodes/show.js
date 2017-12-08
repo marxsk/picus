@@ -5,42 +5,42 @@ export default Ember.Route.extend({
 
   model(params) {
     return Ember.RSVP.hash({
-      params: params,
+      params,
       updatingCluster: this.store.peekAll('cluster'),
       selectedNode: this.store.peekRecord('node', params.node_id),
     });
   },
 
   actions: {
-    onClick: function(component) {
+    onClick(component) {
       this.set('selectedNode', component);
     },
-    onCheck: function() {    },
+    onCheck() {},
 
-    appendNodeAttribute: function(attributes, attr) {
-      var store = this.store;
-      var newAttribute = store.createRecord('attribute', attr);
+    appendNodeAttribute(attributes, attr) {
+      const { store } = this;
+      const newAttribute = store.createRecord('attribute', attr);
       attributes.pushObject(newAttribute);
       newAttribute.save();
     },
-    deleteNodeAttribute: function(attribute) {
+    deleteNodeAttribute(attribute) {
       attribute.deleteRecord();
       attribute.save();
     },
-    deleteMultipleAttributes: function(attributes) {
+    deleteMultipleAttributes(attributes) {
       attributes.forEach((item) => {
         item.deleteRecord();
         item.save();
       });
     },
-    appendNodeUtilizationAttribute: function(attributes, attr) {
-      var store = this.store;
-      var newAttribute = store.createRecord('attribute', attr);
+    appendNodeUtilizationAttribute(attributes, attr) {
+      const { store } = this;
+      const newAttribute = store.createRecord('attribute', attr);
       attributes.pushObject(newAttribute);
       newAttribute.save();
     },
-    nodeAction: function(action, component) {
-      switch(action) {
+    nodeAction(action, component) {
+      switch (action) {
         case 'start':
         case 'stop':
         case 'reboot':
@@ -49,5 +49,5 @@ export default Ember.Route.extend({
           break;
       }
     },
-  }
+  },
 });

@@ -1,8 +1,9 @@
 import Ember from 'ember';
+
 const { RSVP } = Ember;
 
 export default Ember.Route.extend({
-  selectedAgent : undefined,
+  selectedAgent: undefined,
   modelForm: {},
   metadata: {},
 
@@ -12,15 +13,16 @@ export default Ember.Route.extend({
         (response) => {
           this.set('availables', response);
           resolve(response);
-        }, (xhr) => {
+        },
+        (xhr) => {
           reject(xhr);
-        }
+        },
       );
     });
   },
 
   model() {
-    if (! (this.get('selectedAgent'))) {
+    if (!this.get('selectedAgent')) {
       const agent = this.get('availables.undefinedProvider')[0];
       this.set('modelForm.fenceAgent', agent);
       this.set('selectedAgent', agent);
@@ -29,25 +31,29 @@ export default Ember.Route.extend({
     return Ember.RSVP.hash({
       availableAgents: this.get('availables'),
       formData: this.get('modelForm'),
-      metadata: this.store.getAgentMetadata('fence', 'stonith:' + this.get('selectedAgent')),
+      metadata: this.store.getAgentMetadata('fence', `stonith:${this.get('selectedAgent')}`),
     });
   },
 
   actions: {
-    changeSelectedAgent: function(form, fieldName, selectedItem) {
+    changeSelectedAgent(form, fieldName, selectedItem) {
       this.set('modelForm', form);
       this.set('selectedAgent', selectedItem);
       this.refresh();
     },
-    onSubmitAction: function(selectedAgent, form) {
+    onSubmitAction(selectedAgent, form) {
       this.set('modelForm', form);
 
-      this.store.pushUpdateAgentProperties('fence', {
-        agentType: this.get('selectedAgent').replace(/^(stonith::)/,""),
-        properties: form.get('changes'),
-      }, 'create');
+      this.store.pushUpdateAgentProperties(
+        'fence',
+        {
+          agentType: this.get('selectedAgent').replace(/^(stonith::)/, ''),
+          properties: form.get('changes'),
+        },
+        'create',
+      );
 
       this.transitionTo('cluster.fences.show', '');
-    }
-  }
+    },
+  },
 });

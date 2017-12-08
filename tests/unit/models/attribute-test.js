@@ -4,17 +4,20 @@ moduleForModel('attribute', 'Unit | Model | attribute', {
   needs: ['model:resource'],
 });
 
-test('it exists', function(assert) {
-  let model = this.subject();
+test('it exists', function (assert) {
+  const model = this.subject();
   assert.ok(!!model);
 });
 
-test('has required attributes', function(assert) {
+test('has required attributes', function (assert) {
   const model = this.subject();
   const attrNames = ['key', 'value'];
 
   assert.expect(attrNames.length);
-  for (var attrName of attrNames) {
-    assert.ok(Object.keys(model.toJSON()).indexOf(attrName) > -1, 'attribute ' + attrName + ' is missing');
-  }
+  attrNames.forEach((attrName) => {
+    assert.ok(
+      Object.keys(model.toJSON()).indexOf(attrName) > -1,
+      `attribute ${attrName} is missing`,
+    );
+  });
 });

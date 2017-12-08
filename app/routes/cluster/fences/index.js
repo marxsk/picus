@@ -5,5 +5,5 @@ export default Ember.Route.extend({
     if (['cluster.fences.index', 'cluster.fences.listing'].indexOf(transition.targetName) >= 0) {
       this.transitionTo('cluster.fences.show', '');
     }
-  }
+  },
 });

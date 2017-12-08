@@ -3,28 +3,35 @@ import Ember from 'ember';
 
 moduleForModel('resource', 'Unit | Model | resource', {
   needs: [
-    'model:resource-property', 'model:attribute', 'model:utilization-attribute',
-    'model:colocation-preference', 'model:location-preference', 'model:ordering-preference',
+    'model:resource-property',
+    'model:attribute',
+    'model:utilization-attribute',
+    'model:colocation-preference',
+    'model:location-preference',
+    'model:ordering-preference',
     'model:ticket-preference',
   ],
 });
 
-test('it exists', function(assert) {
+test('it exists', function (assert) {
   const model = this.subject();
   assert.ok(!!model);
 });
 
-test('has required attributes', function(assert) {
+test('has required attributes', function (assert) {
   const model = this.subject();
   const attrNames = ['name', 'status', 'resourceType'];
 
   assert.expect(attrNames.length);
-  for (var attrName of attrNames) {
-    assert.ok(Object.keys(model.toJSON()).indexOf(attrName) > -1, 'attribute ' + attrName + ' is missing');
-  }
+  attrNames.forEach((attrName) => {
+    assert.ok(
+      Object.keys(model.toJSON()).indexOf(attrName) > -1,
+      `attribute ${attrName} is missing`,
+    );
+  });
 });
 
-test('has relationship to children resources', function(assert) {
+test('has relationship to children resources', function (assert) {
   const model = this.store().modelFor('resource');
   const relationship = Ember.get(model, 'relationshipsByName').get('resources');
 

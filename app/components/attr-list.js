@@ -31,7 +31,7 @@ export default Ember.Component.extend({
    *
    * @default: 'No entries'
    * @public
-   **/
+   * */
   emptyText: 'No Entries',
 
   _checkedAttributes: Ember.A(),
@@ -51,7 +51,7 @@ export default Ember.Component.extend({
   },
 
   actions: {
-    onCheckAction: function(attribute, isChecked) {
+    onCheckAction(attribute, isChecked) {
       if (isChecked === true) {
         this.get('_checkedAttributes').pushObject(attribute);
       } else {
@@ -64,14 +64,14 @@ export default Ember.Component.extend({
      *
      *  @private
      */
-    naiveDeleteMultipleAction: function(attributes) {
+    naiveDeleteMultipleAction(attributes) {
       if (attributes === undefined) {
-        return
+        return;
       }
 
       attributes.forEach((attr) => {
         this.attrs.onDeleteAction(attr);
       });
-    }
-  }
+    },
+  },
 });
