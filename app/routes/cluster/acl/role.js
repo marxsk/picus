@@ -65,6 +65,11 @@ export default TabRoute.extend({
         'REMOVE_USER_FROM_ACL_ROLE',
       );
     },
+    deleteRole(role) {
+      role.deleteRecord();
+      this.transitionTo('cluster.acl.index');
+      return this.get('notifications').notificationSaveRecord(role, 'DELETE_ACL_ROL');
+    },
     addGroup(form) {
       const aclGroup = this.get('store').createRecord('acl-group', {
         name: form.get('name'),

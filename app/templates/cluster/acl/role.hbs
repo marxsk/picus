@@ -20,6 +20,8 @@
 <h3>{{model.aclRole.name}}</h3>
 <p>{{model.aclRole.description}}</p>
 
+{{#bs-button onClick=(route-action 'deleteRole' model.aclRole)}} Remove role {{/bs-button}}
+
 {{#unless model.aclRole}}
   {{#bs-alert type="danger" dismissible=0}}
   The ACL role with ID '{{model.params.role_name}}' was not found, please select a proper ACL role.
