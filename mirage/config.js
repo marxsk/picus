@@ -500,12 +500,12 @@ export default function () {
     const attrs = this.normalizedRequestAttrs();
     const cluster = schema.clusters.find(1);
     let resourceId;
-
+    let resource;
     if (!('resource_id' in attrs)) {
       // Create new fence agent
       // @todo: proper fix instead of this naive solution that does not work always
       const agentType = attrs.resource_type.split(':');
-      const resource = cluster.createResource({
+      resource = cluster.createResource({
         name: attrs._res_paramne_resourceName,
         resourceType: 'primitive',
         agentType: agentType[agentType.length - 1],
@@ -516,6 +516,7 @@ export default function () {
       delete attrs._res_paramne_name;
     } else {
       resourceId = schema.resources.where({ name: attrs.resource_id }).models[0].attrs.id;
+      [resource] = schema.resources.where({ name: attrs.resource_id }).models;
     }
 
     if (attrs.resource_clone === 'on') {
@@ -538,11 +539,19 @@ export default function () {
 
     Object.keys(attrs).forEach((i) => {
       const cleanName = i.replace(/^_res_paramne_/, '');
-      const prop = schema.db.resourceProperties.firstOrCreate({
-        resourceId,
+
+      let propToUpdate = schema.resourceProperties.findBy({
         name: cleanName,
+        resourceId: resource.attrs.id,
       });
-      schema.db.resourceProperties.update(prop.id, { value: attrs[i] });
+
+      if (propToUpdate === null) {
+        propToUpdate = resource.createProperty({
+          name: cleanName,
+        });
+      }
+
+      propToUpdate.update('value', attrs[i]);
     });
   });
 
