@@ -38,6 +38,7 @@ export default DS.Adapter.extend({
         'constraint-set': 'add_constraint_set_remote',
         'acl-role': 'add_acl_role',
         'acl-permission': 'add_acl',
+        resource: 'update_resource',
       }[modelName];
     }
 

@@ -553,6 +553,8 @@ export default function () {
 
       propToUpdate.update('value', attrs[i]);
     });
+
+    return resource;
   });
 
   this.post('/managec/my/remove_resource', function removeResource(schema, request) {

@@ -4,6 +4,8 @@ import categorizeProperties from '../../../utils/categorize-properties';
 const { RSVP } = Ember;
 
 export default Ember.Route.extend({
+  notifications: Ember.inject.service('notifications'),
+
   selectedAgent: undefined,
   selectedProvider: undefined,
   modelForm: {},
@@ -71,25 +73,35 @@ export default Ember.Route.extend({
 
       form.validate().then(() => {
         if (form.get('isValid')) {
-          this.store.pushUpdateAgentProperties(
-            'resource',
-            {
-              name: form.get('resourceName'),
-              agentProvider: this.get('selectedProvider'),
-              agentType: this.get('selectedAgent'),
-              clone: form.get('clone'),
-              masterslave: form.get('masterslave'),
-              properties: form.get('changes'),
-            },
-            'create',
-          );
+          const cluster = this.store.peekAll('cluster').objectAt(0);
+
+          const resource = this.get('store').createRecord('resource', {
+            name: form.get('resourceName'),
+            agentProvider: this.get('selectedProvider'),
+            agentType: this.get('selectedAgent'),
+            clone: form.get('clone'),
+            masterslave: form.get('masterslave'),
+          });
+
+          form.get('changes').forEach((obj) => {
+            if (['resourceName', 'clone', 'masterslave'].includes(obj.key)) {
+              return;
+            }
+            resource.get('properties').addObject(this.get('store').createRecord('resource-property', {
+              resource,
+              name: obj.key,
+              value: obj.value,
+            }));
+          });
+
+          cluster.get('resources').addObject(resource);
 
           this.set('modelForm', {});
-
           this.transitionTo('cluster.resources.index');
-        } else {
-          alert('Fix it - @todo: Button stays on Processing');
+
+          return this.get('notifications').notificationSaveRecord(resource, 'ADD_RESOURCE');
         }
+        alert('Fix it - @todo: Button stays on Processing');
       });
     },
   },

@@ -143,6 +143,25 @@ export default DS.JSONAPISerializer.extend({
         });
 
         return `${this._postTextSerializer(json)}&${encodedDynamic.join('&')}`;
+      } else if (snapshot.modelName === 'resource') {
+        const postData = {};
+
+        postData.resource_type = `${record.get('agentProvider')}:${record.get('agentType')}`;
+        postData._res_paramne_resourceName = record.get('name');
+
+        if (record.get('clone')) {
+          postData.resource_clone = 'on';
+        }
+
+        if (record.get('masterslave')) {
+          postData.resource_ms = 'on';
+        }
+
+        record.get('properties').forEach((obj) => {
+          postData[`_res_paramne_${obj.get('name')}`] = obj.get('value');
+        });
+
+        return this._postTextSerializer(postData);
       }
       Ember.Logger.error(`[serializer] model ${snapshot.modelName} for CREATE can not be serialized`);
     }

@@ -154,7 +154,7 @@ export default DS.Store.extend({
           }
 
           // remove records which no longer exists on backend from store for every used model
-          ['node', 'fence', 'resource', 'attribute', 'acl-user'].forEach((modelName) => {
+          ['node', 'fence', 'resource', 'attribute', 'acl-user', 'resource-property'].forEach((modelName) => {
             store.peekAll(modelName).forEach((item) => {
               if (!knownIds.includes(`${modelName}::${item.get('id')}`)) {
                 item.deleteRecord();
