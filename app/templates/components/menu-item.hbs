@@ -6,11 +6,19 @@
 {{#if onCheckAction}}
   {{one-way-checkbox isChecked update=(action toggleCheck)}}
 {{/if}}
-{{#link-to targetRoute componentId}}{{title}}
+
+{{#unless component.isNew}}
+  {{#link-to targetRoute componentId}}{{title}}
+    {{#if status}}
+      [{{status}}]
+    {{/if}}
+  {{/link-to}}
+{{else}}
+  {{title}}
   {{#if status}}
     [{{status}}]
   {{/if}}
-{{/link-to}}
+{{/unless}}
 
 {{#unless isCollapsed}}
   {{yield}}
