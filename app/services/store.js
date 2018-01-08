@@ -157,7 +157,7 @@ export default DS.Store.extend({
           ['node', 'fence', 'resource', 'attribute', 'acl-user', 'resource-property'].forEach((modelName) => {
             store.peekAll(modelName).forEach((item) => {
               if (!knownIds.includes(`${modelName}::${item.get('id')}`)) {
-                item.deleteRecord();
+                item.unloadRecord();
               } else {
                 // reset flags (isDeleted,...) to 'clean' state
                 item.rollbackAttributes();
