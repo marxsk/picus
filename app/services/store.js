@@ -253,6 +253,9 @@ export default DS.Store.extend({
       data += `&_res_paramne_${o.key}=${o.value}`;
     });
 
+    console.log('REAL DATA:');
+    console.log(data);
+
     this.get('ajax')
       .post(url, { data })
       .then(() => {

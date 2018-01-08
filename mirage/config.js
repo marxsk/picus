@@ -551,7 +551,18 @@ export default function () {
         });
       }
 
-      propToUpdate.update('value', attrs[i]);
+      if (attrs[i] === '') {
+        // @note: Following line is just work-around for eslint-prettifier bug
+        const r = resource.propertyIds;
+        resource.resourcePropertiesIds = r.filter(item => item !== propToUpdate.id);
+        resource.save();
+
+        propToUpdate.update('resource', null);
+        propToUpdate.destroy();
+      } else {
+        propToUpdate.update('value', attrs[i]);
+        propToUpdate.save();
+      }
     });
 
     return resource;

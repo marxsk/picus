@@ -164,6 +164,21 @@ export default DS.JSONAPISerializer.extend({
         return this._postTextSerializer(postData);
       }
       Ember.Logger.error(`[serializer] model ${snapshot.modelName} for CREATE can not be serialized`);
+    } else if (options.action === 'update') {
+      if (snapshot.modelName === 'resource') {
+        const postData = {};
+
+        postData.resource_type = `${record.get('agentProvider')}:${record.get('agentType')}`;
+        postData.resource_id = record.get('name');
+
+        record.get('properties').forEach((obj) => {
+          postData[`_res_paramne_${obj.get('name')}`] = obj.get('value');
+        });
+
+        return this._postTextSerializer(postData);
+      }
+
+      Ember.Logger.error(`[serializer] model ${snapshot.modelName} for UPDATE can not be serialized`);
     }
     return undefined;
   },

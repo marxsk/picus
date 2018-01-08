@@ -101,7 +101,9 @@ export default Ember.Route.extend({
 
           return this.get('notifications').notificationSaveRecord(resource, 'ADD_RESOURCE');
         }
-        alert('Fix it - @todo: Button stays on Processing');
+
+        // alert('Fix it - @todo: Button stays on Processing');
+        return RSVP.reject('Form is not valid');
       });
     },
   },

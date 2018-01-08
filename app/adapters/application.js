@@ -40,6 +40,10 @@ export default DS.Adapter.extend({
         'acl-permission': 'add_acl',
         resource: 'update_resource',
       }[modelName];
+    } else if (action === 'update') {
+      resultURL = {
+        resource: 'update_resource',
+      }[modelName];
     }
 
     if (resultURL === undefined) {
@@ -155,8 +159,10 @@ export default DS.Adapter.extend({
   },
 
   updateRecord(store, type, snapshot) {
+    let jsonData;
     let data;
-    let url = `${this.get('namespace')}/`;
+    const baseURL = `${this.get('namespace')}`;
+    let url = `${baseURL}/${this.pathForType(snapshot.modelName, 'update')}`;
 
     if (snapshot.modelName === 'acl-role') {
       const userResponse = this._updateAclElement(store, type, snapshot, 'users');
@@ -164,16 +170,16 @@ export default DS.Adapter.extend({
 
       if (userResponse !== undefined) {
         if (userResponse.action === 'relation-removed') {
-          url += 'remove_acl';
-          data = {
+          url = `${baseURL}/remove_acl`;
+          jsonData = {
             item: 'usergroup',
             item_type: 'user',
             role_id: snapshot.record.get('name'),
             usergroup_id: store.peekRecord('acl-user', userResponse.elementId).get('name'),
           };
         } else if (userResponse.action === 'relation-added') {
-          url += 'add_acl';
-          data = {
+          url = `${baseURL}/add_acl`;
+          jsonData = {
             item: 'user',
             role_id: snapshot.record.get('name'),
             usergroup: userResponse.elementId,
@@ -183,22 +189,29 @@ export default DS.Adapter.extend({
 
       if (groupResponse !== undefined) {
         if (groupResponse.action === 'relation-removed') {
-          url += 'remove_acl';
-          data = {
+          url = `${baseURL}/remove_acl`;
+          jsonData = {
             item: 'usergroup',
             item_type: 'group',
             role_id: snapshot.record.get('name'),
             usergroup_id: store.peekRecord('acl-group', groupResponse.elementId).get('name'),
           };
         } else if (groupResponse.action === 'relation-added') {
-          url += 'add_acl';
-          data = {
+          url = `${baseURL}/add_acl`;
+          jsonData = {
             item: 'group',
             role_id: snapshot.record.get('name'),
             usergroup: groupResponse.elementId,
           };
         }
       }
+      data = _jsonToQueryString(jsonData);
+    } else if (snapshot.modelName === 'resource') {
+      data = this.serialize(snapshot, { action: 'update' });
+
+      console.log(data);
+    } else {
+      Ember.Logger.error(`[adapter] Changes in "${snapshot.modelName}" model are not expected`);
     }
 
     return new Ember.RSVP.Promise((resolve, reject) => {
@@ -206,7 +219,7 @@ export default DS.Adapter.extend({
         type: 'POST',
         url,
         dataType: 'text',
-        data: _jsonToQueryString(data),
+        data,
       }).then(
         (response) => {
           Ember.Logger.assert(

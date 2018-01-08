@@ -110,18 +110,26 @@ export default TabRoute.extend({
 
   actions: {
     onSubmitAction(resource, form) {
-      this.store.pushUpdateAgentProperties(
-        'resource',
-        {
-          name: resource.get('name'),
-          agentProvider: resource.get('selectedProvider'),
-          agentType: resource.get('selectedAgent'),
-          properties: form.get('changes'),
-        },
-        'update',
-      );
+      form.get('changes').forEach((obj) => {
+        const existingProps = this.get('store')
+          .peekAll('resource-property')
+          .filterBy('name', obj.key)
+          .filterBy('resource.name', resource.get('name'));
+
+        if (existingProps.length === 0) {
+          resource.get('properties').addObject(this.get('store').createRecord('resource-property', {
+            resource,
+            name: obj.key,
+            value: obj.value,
+          }));
+        } else {
+          existingProps[0].set('value', obj.value);
+        }
+      });
 
       this.transitionTo('cluster.resources.index');
+      this.set('modelForm', {});
+      return this.get('notifications').notificationSaveRecord(resource, 'UPDATE_RESOURCE');
     },
     onCheckx(x) {
       if (this.get('selectedResources').includes(x)) {
