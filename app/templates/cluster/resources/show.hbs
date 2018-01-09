@@ -35,7 +35,7 @@
   </select>
 
   <br />
-  {{#bs-button onClick=(action (route-action 'removeResource') selResource.name)}}
+  {{#bs-button onClick=(action (route-action 'removeResource') selResource)}}
     Remove resource
   {{/bs-button}}
   {{#if (eq selResource.resourceType 'clone')}}

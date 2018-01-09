@@ -570,10 +570,18 @@ export default function () {
 
   this.post('/managec/my/remove_resource', function removeResource(schema, request) {
     const attrs = this.normalizedRequestAttrs();
+    const cluster = schema.clusters.find(1);
 
     Object.keys(attrs).forEach((i) => {
       const name = i.substring(6, i.length);
       if (i.startsWith('resid_')) {
+        const resourceId = schema.resources.where({ name }).models[0].attrs.id;
+
+        // @note: hack for eslint-pretifier, feel free to remove if travis pass :)
+        const r = cluster.resourceIds;
+        cluster.resourceIds = r.filter(item => item !== resourceId);
+        cluster.save();
+
         schema.db.resources.remove({ name });
       } else if (i.startsWith('resid-')) {
         schema.db.fences.remove({ name });

@@ -384,7 +384,7 @@ export default DS.Store.extend({
     });
   },
 
-  removeAgents(names, agentType) {
+  removeAgents(agents, agentType) {
     let separator;
 
     switch (agentType) {
@@ -403,19 +403,24 @@ export default DS.Store.extend({
     );
 
     const jsonData = {};
-    names.forEach((i) => {
-      jsonData[`resid${separator}${i}`] = 'true';
+    agents.forEach((i) => {
+      console.log(i);
+      jsonData[`resid${separator}${i.get('name')}`] = 'true';
+      i.deleteRecord();
     });
 
+    // we are not using save() as it will do multiple requests and we need just one
+    // delete() is important for marking entry as a deleted so menu can change
+
     // @todo: add attribute force:true if required
-    this._sendData('remove_resource', jsonData);
+    return this._sendData('remove_resource', jsonData);
   },
 
   // @todo: should it be a promise?
   _sendData(endpoint, data) {
     const url = `/managec/${this.get('clusterName')}/${endpoint}`;
 
-    this.get('ajax')
+    return this.get('ajax')
       .post(url, {
         data: _jsonToQueryString(data),
       })

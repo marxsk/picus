@@ -26,6 +26,7 @@ export default DS.Adapter.extend({
         'constraint-set': 'remove_constraint_remote',
         'acl-role': 'remove_acl_roles',
         'acl-permission': 'remove_acl',
+        resource: 'remove_resource',
       }[modelName];
     } else if (action === 'create') {
       resultURL = {

@@ -1,6 +1,7 @@
 import Ember from 'ember';
 
 export default Ember.Route.extend({
+  notifications: Ember.inject.service('notifications'),
   selectedResources: Ember.A(),
 
   beforeModel() {
@@ -31,9 +32,13 @@ export default Ember.Route.extend({
     },
 
     removeSelectedResources() {
-      this.store.removeAgents(this.get('selectedResources').map(x => x.get('name')), 'resource');
+      this.get('notifications').notificationSaveRecord(
+        this.get('selectedResources'),
+        'REMOVE_RESOURCES',
+        this.store.removeAgents(this.get('selectedResources'), 'resource'),
+      );
+
       this.get('selectedResources').clear();
-      this.transitionTo('cluster.resources.show', '');
     },
 
     linkTo(path) {

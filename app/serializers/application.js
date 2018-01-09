@@ -43,6 +43,10 @@ export default DS.JSONAPISerializer.extend({
           item: 'permission',
           acl_perm_id: record.get('permissionID'),
         });
+      } else if (snapshot.modelName === 'resource') {
+        return this._postTextSerializer({
+          [`resid_${record.get('name')}`]: 'true',
+        });
       }
       Ember.Logger.error(`[serializer] model ${snapshot.modelName} for DELETE can not be serialized`);
     } else if (options.action === 'create') {

@@ -102,7 +102,7 @@ export default NotificationsService.extend({
       @param {Ember.Object} record - Record that we perform action on
       @param {String} actionName - Name of the action determines messages shown in the notification
     * */
-  notificationSaveRecord(record, actionName) {
+  notificationSaveRecord(record, actionName, prom = undefined) {
     const notificationData = Ember.Object.create({
       data: {
         action: actionName,
@@ -111,8 +111,13 @@ export default NotificationsService.extend({
     });
     const messages = this.get('messages').getNotificiationMessage(notificationData, actionName);
 
+    let savingPromise = prom;
+    if (savingPromise === undefined) {
+      savingPromise = record.save();
+    }
+
     const progressNotification = this.progress(messages.progress);
-    record.save().then(
+    savingPromise.then(
       () => {
         this.updateNotification(progressNotification, 'SUCCESS', messages.success);
       },

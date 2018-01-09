@@ -264,9 +264,10 @@ export default TabRoute.extend({
       );
     },
 
-    removeResource(resourceName) {
-      this.store.removeAgents([resourceName], 'resource');
+    removeResource(resource) {
+      resource.deleteRecord();
       this.transitionTo('cluster.resources.index');
+      return this.get('notifications').notificationSaveRecord(resource, 'REMOVE_RESOURCE');
     },
 
     createClone(resourceName) {

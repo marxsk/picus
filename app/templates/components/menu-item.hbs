@@ -3,11 +3,11 @@
     {{#if isCollapsed}}+{{else}}-{{/if}}
   </span>
 {{/if}}
-{{#if onCheckAction}}
-  {{one-way-checkbox isChecked update=(action toggleCheck)}}
-{{/if}}
 
-{{#unless component.isNew}}
+{{#unless (or (eq component.isNew true) (eq component.isDeleted true))}}
+  {{#if onCheckAction}}
+    {{one-way-checkbox isChecked update=(action toggleCheck)}}
+  {{/if}}
   {{#link-to targetRoute componentId}}{{title}}
     {{#if status}}
       [{{status}}]
