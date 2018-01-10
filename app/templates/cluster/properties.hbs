@@ -1,3 +1,11 @@
+{{#ember-wormhole to="breadcrumb"}}
+  <!-- demo of breadcrumb; @todo: create a real component if used -->
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item">{{#link-to "cluster.properties"}}Home{{/link-to}}</li>
+    <li class="breadcrumb-item active">Properties</li>
+  </ol>
+{{/ember-wormhole}}
+
 {{properties-form
   data=model.staticCluster.properties
 
