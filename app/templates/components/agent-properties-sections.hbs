@@ -2,22 +2,22 @@
   {{#if (incl p.name filter)}}
     {{#if (eq p.type 'boolean')}}
       {{#if (eq p.default 'true')}}
-        {{form.select-field p.name 'true' label=p.shortdesc}}
+        {{form.select-field p.name 'true' label=(if internal p.name p.shortdesc)}}
       {{else}}
-        {{form.select-field p.name 'default true false' label=p.shortdesc}}
+        {{form.select-field p.name 'default true false' label=(if internal p.name p.shortdesc)}}
       {{/if}}
     {{/if}}
 
     {{#if (eq p.type 'string')}}
-      {{form.text-field p.name label=p.shortdesc placeholder=p.default}}
+      {{form.text-field p.name label=(if internal p.name p.shortdesc) placeholder=p.default}}
     {{/if}}
 
     {{#if (eq p.type 'integer')}}
-      {{form.text-field p.name label=p.shortdesc placeholder=p.default}}
+      {{form.text-field p.name label=(if internal p.name p.shortdesc) placeholder=p.default}}
     {{/if}}
 
     {{#if (eq p.type 'secret')}}
-      {{form.password-field p.name label=p.shortdesc placeholder=p.default update=(action 'updateSecretLength')}}
+      {{form.password-field p.name label=(if internal p.name p.shortdesc) placeholder=p.default update=(action 'updateSecretLength')}}
       {{#bs-button onClick=(action 'showSecret' p.name (get changeset._content p.name))}}
         Show Password
       {{/bs-button}}

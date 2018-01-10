@@ -2,13 +2,15 @@ import Ember from 'ember';
 import TabController from '../../tab-controller';
 
 export default TabController.extend({
-  queryParams: ['filterString'],
+  queryParams: ['filterString', 'showInternalNames'],
   filterString: '',
   activeTab: 'status',
 
   appController: Ember.inject.controller('application'),
 
   showAddMetaAttribute: false,
+  showInternalNames: false,
+
   empty: {},
 
   _triggerUrlRefresh(search) {
@@ -22,6 +24,10 @@ export default TabController.extend({
     },
     urlRefresh(search) {
       Ember.run.debounce(this, '_triggerUrlRefresh', search, 300);
+    },
+    toggleInternalNames() {
+      this.toggleProperty('showInternalNames');
+      this.send('pageRefresh');
     },
   },
 });

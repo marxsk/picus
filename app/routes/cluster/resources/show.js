@@ -17,6 +17,10 @@ export default TabRoute.extend({
       as: 's',
       replace: true,
     },
+    showInternalNames: {
+      as: 'internal',
+      replace: true,
+    },
   },
 
   beforeModel() {
@@ -109,6 +113,9 @@ export default TabRoute.extend({
   },
 
   actions: {
+    pageRefresh() {
+      this.refresh();
+    },
     onSubmitAction(resource, form) {
       form.get('changes').forEach((obj) => {
         const existingProps = this.get('store')
