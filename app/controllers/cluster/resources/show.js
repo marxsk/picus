@@ -11,9 +11,17 @@ export default TabController.extend({
   showAddMetaAttribute: false,
   empty: {},
 
+  _triggerUrlRefresh(search) {
+    this.set('filterString', search);
+    this.send('pageRefresh');
+  },
+
   actions: {
     clearForm() {
       this.set('empty', {});
+    },
+    urlRefresh(search) {
+      Ember.run.debounce(this, '_triggerUrlRefresh', search, 300);
     },
   },
 });

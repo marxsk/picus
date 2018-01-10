@@ -92,7 +92,11 @@
   {{#form-for changeset submit=(route-action 'onSubmitAction' selResource) as |f|}}
     {{model.metadata.shortdesc}}
     <hr />
-    Filter: {{input type="text" value=filterString}} <br />
+    {{input-filter
+      placeholder="Filter By Name"
+      value=filterString
+      keyUp=(action 'urlRefresh' filterString)
+    }}
     {{agent-properties-form changeset=changeset parameters=model.parameters form=f levels=(array 'basic' 'advanced' 'expert' 'standard') filter=filterString}}
 
     {{f.submit "Update"}}
