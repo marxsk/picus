@@ -163,7 +163,7 @@ export default DS.Adapter.extend({
     let jsonData;
     let data;
     const baseURL = `${this.get('namespace')}`;
-    let url = `${baseURL}/${this.pathForType(snapshot.modelName, 'update')}`;
+    let url;
 
     if (snapshot.modelName === 'acl-role') {
       const userResponse = this._updateAclElement(store, type, snapshot, 'users');
@@ -208,6 +208,7 @@ export default DS.Adapter.extend({
       }
       data = _jsonToQueryString(jsonData);
     } else if (snapshot.modelName === 'resource') {
+      url = `${baseURL}/${this.pathForType(snapshot.modelName, 'update')}`;
       data = this.serialize(snapshot, { action: 'update' });
 
       console.log(data);
