@@ -1,6 +1,8 @@
 import Ember from 'ember';
 
 export default Ember.Controller.extend({
+  notifications: Ember.inject.service('notifications'),
+
   validResources: Ember.A(),
   groupedResources: Ember.A(),
   resourceForm: Ember.Object.create(),
@@ -37,8 +39,13 @@ export default Ember.Controller.extend({
         resourceIDInGroup.push(i.get('name'));
       });
 
-      this.store.createResouceGroup(form.get('groupName'), resourceIDInGroup);
-      this.transitionToRoute('resources.show', '');
+      this.get('notifications').notificationSaveRecord(
+        undefined,
+        'CREATE_GROUP',
+        this.store.createResouceGroup(form.get('groupName'), resourceIDInGroup),
+      );
+
+      this.transitionToRoute('cluster.resources.index');
     },
   },
 });

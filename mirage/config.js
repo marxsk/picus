@@ -76,8 +76,10 @@ function _createEnvelopeResource(schema, attrs, resourceNames, resourceAttribute
       }
     });
     cluster.resources = ress;
+    cluster.save();
   });
   envelopeResource.resources = resIDs;
+  envelopeResource.save();
   return envelopeResource;
 }
 export default function () {

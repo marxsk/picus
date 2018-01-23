@@ -1,44 +1,47 @@
+{{#ember-wormhole to="breadcrumb"}}
+  <!-- demo of breadcrumb; @todo: create a real component if used -->
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item">{{#link-to "cluster.properties"}}Home{{/link-to}}</li>
+    <li class="breadcrumb-item">{{#link-to "cluster.resources"}}Resources{{/link-to}}</li>
+    <li class="breadcrumb-item active">Add Group</li>
+  </ol>
+{{/ember-wormhole}}
+
+{{#with (changeset resourceForm model.validations initValidation=true) as |changeset|}}
+{{#form-for changeset submit=(action 'createGroup') as |f|}}
+  {{f.text-field 'groupName' label='Group Name' hint='small help'}}
+
 <!-- computed property hack -->
 {{#each allResources as |r|}} {{/each}}
 
-<hr>
-PRE-SELECTED:
-NOT-YET
-<hr>
-
-IN-GROUP:
-
+AVAILABLE RESOURCES:
 {{#draggable-object-target action="moveFromGroup" amount="5"}}
-<ul>
-{{#sortable-objects sortableObjectList=validResources sortEndAction='sortEndAction' sortingScope='a' }}
-  {{#each validResources as |r|}}
-    {{#draggable-object content=r isSortable=true sortingScope='a'}}
-      {{#double-clickable action=(action "moveToGroup") content=r}}
-        <li>{{r.name}}</li>
-      {{/double-clickable}}
-    {{/draggable-object}}
-  {{/each}}
-{{/sortable-objects}}
-</ul>
+  {{#sortable-objects sortableObjectList=validResources sortEndAction='sortEndAction' sortingScope='a' }}
+    {{#each validResources as |r|}}
+      {{#draggable-object content=r isSortable=true sortingScope='a'}}
+        {{#double-clickable action=(action "moveToGroup") content=r}}
+          <li>{{r.name}}</li>
+        {{/double-clickable}}
+      {{/draggable-object}}
+    {{/each}}
+  {{/sortable-objects}}
 {{/draggable-object-target}}
 
 <hr>
-Target:
+RESOURCES IN THE GROUP:
 {{#draggable-object-target action="moveToGroup" amount="5"}}
-{{#sortable-objects sortableObjectList=groupedResources sortEndAction='sortEndAction' enableSort=true useSwap=true sortingScope='b'}}
-  {{#each groupedResources as |r|}}
-    {{#draggable-object content=r sortingScope='b' isSortable=true}}
-    {{#double-clickable action=(action "moveFromGroup") content=r}}
-      <li>{{r.name}}</li>
-    {{/double-clickable}}
-    {{/draggable-object}}
-  {{/each}}
-{{/sortable-objects}}
+  {{#sortable-objects sortableObjectList=groupedResources sortEndAction='sortEndAction' enableSort=true useSwap=true sortingScope='b'}}
+    {{#each groupedResources as |r|}}
+      {{#draggable-object content=r sortingScope='b' isSortable=true}}
+        {{#double-clickable action=(action "moveFromGroup") content=r}}
+          <li>{{r.name}}</li>
+        {{/double-clickable}}
+      {{/draggable-object}}
+    {{/each}}
+  {{/sortable-objects}}
   Drag here to extend resource group
-
 {{/draggable-object-target}}
 
-{{#form-for resourceForm submit=(action 'createGroup') as |f|}}
-  {{f.text-field 'groupName' label='Group Name' hint='small help'}}
-  {{f.submit "Create"}}
+{{f.submit "Create"}}
 {{/form-for}}
+{{/with}}

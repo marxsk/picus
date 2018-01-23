@@ -378,7 +378,7 @@ export default DS.Store.extend({
   },
 
   createResouceGroup(groupId, resources) {
-    this._sendData('add_group', {
+    return this._sendData('add_group', {
       resource_group: groupId,
       resources: resources.join(' '),
     });
