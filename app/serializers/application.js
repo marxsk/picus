@@ -47,6 +47,10 @@ export default DS.JSONAPISerializer.extend({
         return this._postTextSerializer({
           [`resid_${record.get('name')}`]: 'true',
         });
+      } else if (snapshot.modelName === 'fence') {
+        return this._postTextSerializer({
+          [`resid-${record.get('name')}`]: 'true',
+        });
       }
       Ember.Logger.error(`[serializer] model ${snapshot.modelName} for DELETE can not be serialized`);
     } else if (options.action === 'create') {
@@ -166,6 +170,17 @@ export default DS.JSONAPISerializer.extend({
         });
 
         return this._postTextSerializer(postData);
+      } else if (snapshot.modelName === 'fence') {
+        const postData = {};
+
+        postData.resource_type = `${record.get('agentType')}`;
+        postData._res_paramne_name = record.get('name');
+
+        record.get('properties').forEach((obj) => {
+          postData[`_res_paramne_${obj.get('name')}`] = obj.get('value');
+        });
+
+        return this._postTextSerializer(postData);
       }
       Ember.Logger.error(`[serializer] model ${snapshot.modelName} for CREATE can not be serialized`);
     } else if (options.action === 'update') {
@@ -173,6 +188,17 @@ export default DS.JSONAPISerializer.extend({
         const postData = {};
 
         postData.resource_type = `${record.get('agentProvider')}:${record.get('agentType')}`;
+        postData.resource_id = record.get('name');
+
+        record.get('properties').forEach((obj) => {
+          postData[`_res_paramne_${obj.get('name')}`] = obj.get('value');
+        });
+
+        return this._postTextSerializer(postData);
+      } else if (snapshot.modelName === 'fence') {
+        const postData = {};
+
+        postData.resource_type = `${record.get('agentType')}`;
         postData.resource_id = record.get('name');
 
         record.get('properties').forEach((obj) => {

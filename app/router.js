@@ -28,9 +28,10 @@ Router.map(function router() {
 
     this.route('fences', function fencesRouter() {
       this.route('listing', { path: 'show/' });
-      this.route('show', { path: 'show/:fence_id' });
+      this.route('show', { path: 'show/:fence_name' });
       this.route('create');
     });
+
     this.route('acl', function aclRouter() {
       this.route('role', { path: 'role/:role_name' });
     });

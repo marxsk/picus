@@ -1,9 +1,9 @@
 /* jshint node: true */
 
-module.exports = function(environment) {
-  var ENV = {
+module.exports = function (environment) {
+  const ENV = {
     modulePrefix: 'picus',
-    environment: environment,
+    environment,
     rootURL: '/',
     locationType: 'auto',
     changeTracker: {
@@ -13,29 +13,29 @@ module.exports = function(environment) {
     },
 
     'ember-cli-notifications': {
-      includeFontAwesome: true
+      includeFontAwesome: true,
     },
 
     'ember-form-for': {
-          fieldClasses: 'form-group',
-          fieldHasErrorClasses: 'has-error',
-          inputClasses: 'form-control',
-          hintClasses: '',
-          errorClasses: 'alert alert-danger',
-          errorsPath: 'error.PROPERTY_NAME.validation',
+      fieldClasses: 'form-group',
+      fieldHasErrorClasses: 'has-error',
+      inputClasses: 'form-control',
+      hintClasses: '',
+      errorClasses: 'alert alert-danger',
+      errorsPath: 'error.PROPERTY_NAME.validation',
     },
 
     EmberENV: {
       FEATURES: {
         // Here you can enable experimental features on an ember canary build
         // e.g. 'with-controller': true
-      }
+      },
     },
 
     APP: {
       // Here you can pass flags/options to your application instance
       // when it is created
-    }
+    },
   };
 
   if (environment === 'development') {
@@ -58,12 +58,11 @@ module.exports = function(environment) {
   }
 
   if (environment === 'production') {
-
   }
 
   ENV['ember-cli-mirage'] = {
-    enabled: true
-  }
+    enabled: true,
+  };
 
   return ENV;
 };

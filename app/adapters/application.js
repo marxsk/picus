@@ -27,6 +27,7 @@ export default DS.Adapter.extend({
         'acl-role': 'remove_acl_roles',
         'acl-permission': 'remove_acl',
         resource: 'remove_resource',
+        fence: 'remove_resource',
       }[modelName];
     } else if (action === 'create') {
       resultURL = {
@@ -40,10 +41,12 @@ export default DS.Adapter.extend({
         'acl-role': 'add_acl_role',
         'acl-permission': 'add_acl',
         resource: 'update_resource',
+        fence: 'update_fence_device',
       }[modelName];
     } else if (action === 'update') {
       resultURL = {
         resource: 'update_resource',
+        fence: 'update_fence_device',
       }[modelName];
     }
 
@@ -207,7 +210,7 @@ export default DS.Adapter.extend({
         }
       }
       data = _jsonToQueryString(jsonData);
-    } else if (snapshot.modelName === 'resource') {
+    } else if (['resource', 'fence'].includes(snapshot.modelName)) {
       url = `${baseURL}/${this.pathForType(snapshot.modelName, 'update')}`;
       data = this.serialize(snapshot, { action: 'update' });
 

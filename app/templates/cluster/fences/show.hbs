@@ -1,33 +1,82 @@
-{{menu-header
-  title='Fence Devices'
-  data=model.updatingCluster.firstObject.fences
-  isCollapsed=false
-  targetRoute='cluster.fences.show'
-  onCheckAction=(route-action 'onCheck')
-}}
+{{#ember-wormhole to="leftmenu"}}
+    {{menu-header
+      title='Fence Devices'
+      data=model.updatingCluster.firstObject.fences
+      isCollapsed=false
+      targetRoute='cluster.fences.show'
+    }}
+{{/ember-wormhole}}
 
-<button {{action (route-action 'removeSelectedResources')}}>Remove selected agents</button>
-
-<hr />
-  {{#link-to 'cluster.fences.create'}}Add fence devices to the cluster{{/link-to}}
-<hr />
+{{#ember-wormhole to="breadcrumb"}}
+  <!-- demo of breadcrumb; @todo: create a real component if used -->
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item">{{#link-to "cluster.properties"}}Home{{/link-to}}</li>
+    <li class="breadcrumb-item">{{#link-to "cluster.fences"}}Fence Devices{{/link-to}}</li>
+    <li class="breadcrumb-item active">{{model.params.fence_name}}</li>
+  </ol>
+{{/ember-wormhole}}
 
 {{#unless model.listing}}
-  {{#unless model.selectedFence}}
-    The fence device with ID '{{model.params.fence_id}}' was not found, please select a different fence device.
-  {{/unless}}
+{{#unless model.selectedFence}}
+  {{#bs-alert type="danger" dismissible=0}}
+  The resource device with ID '{{model.params.fence_name}}' was not found, please select a different fence agent.
+  {{/bs-alert}}
+{{/unless}}
 {{/unless}}
 
 {{#with model.selectedFence as |selFence| }}
-  <br />
-  <button {{action (route-action 'removeResource') selFence.name}}>Remove agent</button>
+  <h3>Editable form for Fence Agents</h3>
+  Name: {{ selFence.name }}<br />
+  Resource Provider: <select disabled="1">
+    <option>stonith</option>
+  </select><br />
+  Fence Agent: <select disabled="1">
+    <option>{{selFence.agentType}}</option>
+  </select>
 
-  {{#form-for (changeset model.formData) submit=(route-action 'onSubmitAction' selFence) as |f|}}
-    Name: {{ selFence.name }}<br />
-    Fence Agent: <select disabled="1"><option>{{selFence.agentType}}</option></select><br />
-    {{model.metadata.shortdesc}}
-    <hr />
-    {{agent-properties-form metadata=model.metadata form=f}}
-    {{f.submit "Update"}}
-  {{/form-for}}
+  <br />
+  {{#bs-button onClick=(action (route-action 'removeResource') selFence)}}
+    Remove fence agent
+  {{/bs-button}}
+<br /><br />
+{{#bs-tab customTabs=true activeId=activeTab as |tab|}}
+
+{{bs-nav-items tab=tab onSetActiveTab=(action 'setActiveTab') items=(array
+  (hash name="status" title="Status")
+  (hash name="properties" title="Properties")
+)}}
+<div class="tab-content">
+  {{#tab.pane elementId="status" title="Status"}}
+    @todo DASHBOARD
+  {{/tab.pane}}
+
+  {{#tab.pane elementId="properties" title="Properties"}}
+  {{#with (changeset model.formData model.fenceValidations) as |changeset|}}
+    {{#form-for changeset submit=(route-action 'onSubmitAction' selFence) as |f|}}
+      {{model.metadata.shortdesc}}
+      <hr />
+      <div>
+        {{x-toggle
+          showLabels=true
+          onToggle=(action 'toggleInternalNames')
+          value=(readonly showInternalName)
+          offLabel="Internal names "
+          onLabel=""
+        }}
+      </div>
+      <div>
+      {{input-filter
+        placeholder="Filter By Name"
+        value=filterString
+        keyUp=(action 'urlRefresh' filterString)
+      }}
+    </div>
+      {{agent-properties-form changeset=changeset parameters=model.parameters form=f levels=(array 'basic' 'advanced' 'expert' 'standard') filter=filterString internal=showInternalNames}}
+
+      {{f.submit "Update"}}
+    {{/form-for}}
+  {{/with}}
+  {{/tab.pane}}
+  </div>
+  {{/bs-tab}}
 {{/with}}

@@ -1,8 +1,12 @@
-{{#form-for (changeset model.formData) submit=(route-action 'onSubmitAction' model.metadata.name) as |f|}}
-  {{f.text-field 'name' label='Fence Device Name' hint='small help'}}
+{{#with (changeset model.formData model.ResourceValidations initValidation=true) as |changeset|}}
+
+{{#form-for changeset submit=(route-action 'onSubmitAction') as |f|}}
+  {{f.text-field 'resourceName' label='Fence Device Name' hint='small help'}}
   {{f.select-field 'fenceAgent' model.availableAgents.undefinedProvider label='Fence Agent' update=(route-action 'changeSelectedAgent')}}
   {{model.metadata.shortdesc}}
   <hr />
-  {{agent-properties-form metadata=model.metadata form=f}}
-  {{f.submit "Create"}}
+  {{agent-properties-form changeset=changeset parameters=model.parameters form=f levels=(array 'basic' 'advanced' 'expert' 'standard')}}
+  {{f.submit "Create" disabled=changeset.isInvalid}}
 {{/form-for}}
+
+{{/with}}

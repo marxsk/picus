@@ -464,20 +464,19 @@ export default function () {
 
   this.post('/managec/my/update_fence_device', function updateFenceDevice(schema, request) {
     const attrs = this.normalizedRequestAttrs();
-    let fenceId;
+    let fence;
 
     if (!('resource_id' in attrs)) {
       // Create new fence agent
       const cluster = schema.clusters.find(1);
-      const fence = cluster.createFence({
+      fence = cluster.createFence({
         name: attrs._res_paramne_name,
         agentType: attrs.resource_type,
       });
-      fenceId = fence.id;
 
       delete attrs._res_paramne_name;
     } else {
-      fenceId = schema.fences.where({ name: attrs.resource_id }).models[0].attrs.id;
+      [fence] = schema.fences.where({ name: attrs.resource_id }).models;
     }
 
     delete attrs.resource_id;
@@ -485,9 +484,33 @@ export default function () {
 
     Object.keys(attrs).forEach((i) => {
       const cleanName = i.replace(/^_res_paramne_/, '');
-      const prop = schema.db.fenceProperties.firstOrCreate({ fenceId, name: cleanName });
-      schema.db.fenceProperties.update(prop.id, { value: attrs[i] });
+
+      let propToUpdate = schema.fenceProperties.findBy({
+        name: cleanName,
+        resourceId: fence.attrs.id,
+      });
+
+      if (propToUpdate === null) {
+        propToUpdate = fence.createProperty({
+          name: cleanName,
+        });
+      }
+
+      if (attrs[i] === '') {
+        // @note: Following line is just work-around for eslint-prettifier bug
+        const r = fence.propertyIds;
+        fence.fencePropertiesIds = r.filter(item => item !== propToUpdate.id);
+        fence.save();
+
+        propToUpdate.update('fence', null);
+        propToUpdate.destroy();
+      } else {
+        propToUpdate.update('value', attrs[i]);
+        propToUpdate.save();
+      }
     });
+
+    return fence;
   });
 
   this.post('/managec/my/add_group', function addGroup(schema, request) {
@@ -573,7 +596,6 @@ export default function () {
   this.post('/managec/my/remove_resource', function removeResource(schema, request) {
     const attrs = this.normalizedRequestAttrs();
     const cluster = schema.clusters.find(1);
-
     Object.keys(attrs).forEach((i) => {
       const name = i.substring(6, i.length);
       if (i.startsWith('resid_')) {
@@ -586,7 +608,12 @@ export default function () {
 
         schema.db.resources.remove({ name });
       } else if (i.startsWith('resid-')) {
-        schema.db.fences.remove({ name });
+        const resourceId = schema.fences.where({ name }).models[0].attrs.id;
+
+        // @note: hack for eslint-pretifier, feel free to remove if travis pass :)
+        const r = cluster.fenceIds;
+        cluster.fenceIds = r.filter(item => item !== resourceId);
+        cluster.save();
       }
     });
   });
