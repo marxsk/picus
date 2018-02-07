@@ -1,0 +1,8 @@
+{{#ember-wormhole to="breadcrumb"}}
+  <ol class="breadcrumb">
+    {{#each path as |routeName|}}
+      <li class="breadcrumb-item">{{#link-to routeName}}{{get routeTitles (camelize routeName)}}{{/link-to}}</li>
+    {{/each}}
+    <li class="breadcrumb-item active">{{active}}</li>
+  </ol>
+{{/ember-wormhole}}

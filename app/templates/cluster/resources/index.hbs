@@ -1,11 +1,4 @@
-{{#ember-wormhole to="breadcrumb"}}
-  <!-- demo of breadcrumb; @todo: create a real component if used -->
-  <ol class="breadcrumb">
-    <li class="breadcrumb-item">{{#link-to "cluster.properties"}}Home{{/link-to}}</li>
-    <li class="breadcrumb-item active">Resources</li>
-  </ol>
-{{/ember-wormhole}}
-
+{{breadcrumb-menu active="Resources" path=(array "cluster.index")}}
 <div style="width: 100%; text-align: left; margin-bottom: 1em">
   {{#bs-button onClick=(route-action 'linkTo' 'cluster.resources.create')}}
     Add

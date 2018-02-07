@@ -1,10 +1,4 @@
-{{#ember-wormhole to="breadcrumb"}}
-  <!-- demo of breadcrumb; @todo: create a real component if used -->
-  <ol class="breadcrumb">
-    <li class="breadcrumb-item">{{#link-to "cluster.properties"}}Home{{/link-to}}</li>
-    <li class="breadcrumb-item active">ACL</li>
-  </ol>
-{{/ember-wormhole}}
+{{breadcrumb-menu active="ACL" path=(array "cluster.index")}}
 
 {{#bs-tab customTabs=true activeId=activeTab as |tab|}}
 

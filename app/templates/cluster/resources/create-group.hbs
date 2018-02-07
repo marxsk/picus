@@ -1,11 +1,4 @@
-{{#ember-wormhole to="breadcrumb"}}
-  <!-- demo of breadcrumb; @todo: create a real component if used -->
-  <ol class="breadcrumb">
-    <li class="breadcrumb-item">{{#link-to "cluster.properties"}}Home{{/link-to}}</li>
-    <li class="breadcrumb-item">{{#link-to "cluster.resources"}}Resources{{/link-to}}</li>
-    <li class="breadcrumb-item active">Add Group</li>
-  </ol>
-{{/ember-wormhole}}
+{{breadcrumb-menu active="Add Group" path=(array "cluster.index" "cluster.resources")}}
 
 {{#with (changeset resourceForm model.validations initValidation=true) as |changeset|}}
 {{#form-for changeset submit=(action 'createGroup') as |f|}}

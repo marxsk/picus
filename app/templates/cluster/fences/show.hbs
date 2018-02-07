@@ -7,14 +7,7 @@
     }}
 {{/ember-wormhole}}
 
-{{#ember-wormhole to="breadcrumb"}}
-  <!-- demo of breadcrumb; @todo: create a real component if used -->
-  <ol class="breadcrumb">
-    <li class="breadcrumb-item">{{#link-to "cluster.properties"}}Home{{/link-to}}</li>
-    <li class="breadcrumb-item">{{#link-to "cluster.fences"}}Fence Devices{{/link-to}}</li>
-    <li class="breadcrumb-item active">{{model.params.fence_name}}</li>
-  </ol>
-{{/ember-wormhole}}
+{{breadcrumb-menu active=model.params.fence_name path=(array "cluster.index" "cluster.fences")}}
 
 {{#unless model.listing}}
 {{#unless model.selectedFence}}
