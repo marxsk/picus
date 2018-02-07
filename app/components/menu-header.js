@@ -15,7 +15,7 @@ export default Ember.Component.extend({
   onlyErrors: false,
   onCheckAction: undefined,
 
-  errorCount: function () {
+  errorCount: function countErrors() {
     const list = this.get('errorList');
 
     if (list) {
@@ -24,7 +24,7 @@ export default Ember.Component.extend({
     return null;
   }.property('errorList.@each.status'),
 
-  errorList: function () {
+  errorList: function createErrorList() {
     const list = this.get('data');
     if (list) {
       return list.filter(item => ['error', 'failed'].includes(item.get('status')));

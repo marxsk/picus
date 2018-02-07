@@ -7,7 +7,7 @@ export default Ember.Controller.extend({
   groupedResources: Ember.A(),
   resourceForm: Ember.Object.create(),
 
-  allResources: function () {
+  allResources: function computeResources() {
     // this is executed only once; cannot be in init() as model is not defined there
     // @todo add everything to validResource and remove those already in grouped
     this.get('model.resources').forEach((item) => {

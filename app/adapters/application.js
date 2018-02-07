@@ -213,8 +213,6 @@ export default DS.Adapter.extend({
     } else if (['resource', 'fence'].includes(snapshot.modelName)) {
       url = `${baseURL}/${this.pathForType(snapshot.modelName, 'update')}`;
       data = this.serialize(snapshot, { action: 'update' });
-
-      console.log(data);
     } else {
       Ember.Logger.error(`[adapter] Changes in "${snapshot.modelName}" model are not expected`);
     }

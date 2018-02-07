@@ -132,7 +132,7 @@ export default DS.Store.extend({
           const modelClass = store.modelFor('cluster');
           const normalized = ser.normalizeSingleResponse(store, modelClass, response);
 
-          const generateId = function (json, parent) {
+          const generateId = function generateId(json, parent) {
             return `${Ember.get(json, `${parent}type`)}::${Ember.get(json, `${parent}id`)}`;
           };
 
@@ -260,9 +260,6 @@ export default DS.Store.extend({
     attrs.properties.forEach((o) => {
       data += `&_res_paramne_${o.key}=${o.value}`;
     });
-
-    console.log('REAL DATA:');
-    console.log(data);
 
     this.get('ajax')
       .post(url, { data })
@@ -412,7 +409,6 @@ export default DS.Store.extend({
 
     const jsonData = {};
     agents.forEach((i) => {
-      console.log(i);
       jsonData[`resid${separator}${i.get('name')}`] = 'true';
       i.deleteRecord();
     });
