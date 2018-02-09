@@ -11,6 +11,7 @@ export default Ember.Route.extend({
 
   actions: {
     error(error, transition) {
+      this.controllerFor('application').set('errorMessage', error);
       this.transitionTo('error');
     },
   },
