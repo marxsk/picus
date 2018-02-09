@@ -35,6 +35,7 @@ Router.map(function router() {
     this.route('acl', function aclRouter() {
       this.route('role', { path: 'role/:role_name' });
     });
+    this.route('testAuth');
   });
   this.route('error');
 
