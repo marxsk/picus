@@ -21,6 +21,10 @@ export default function categorizeProperties(parameters) {
   result.validations = { ...ResourceValidations };
   result.parameters = {};
 
+  if (parameters === undefined) {
+    return result;
+  }
+
   parameters.forEach((i) => {
     result.validations[i.name] = [];
     if (i.required) {
