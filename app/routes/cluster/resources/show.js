@@ -1,9 +1,9 @@
 import Ember from 'ember';
 import { validatePresence } from 'ember-changeset-validations/validators';
-import categorizeProperties from '../../../utils/categorize-properties';
-import TabRoute from '../../tab-route';
-import ScoreValidations from '../../../validators/constraint-validations';
-import validateScore from '../../../validators/score';
+import categorizeProperties from 'picus/utils/categorize-properties';
+import TabRoute from 'picus/routes/tab-route';
+import ScoreValidations from 'picus/validators/constraint-validations';
+import validateScore from 'picus/validators/score';
 
 export default TabRoute.extend({
   modelForm: {},

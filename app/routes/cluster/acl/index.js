@@ -1,6 +1,6 @@
 import Ember from 'ember';
 import { validatePresence } from 'ember-changeset-validations/validators';
-import TabRoute from '../../tab-route';
+import TabRoute from 'picus/routes/tab-route';
 
 export default TabRoute.extend({
   notifications: Ember.inject.service('notifications'),

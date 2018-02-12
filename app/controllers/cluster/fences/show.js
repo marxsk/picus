@@ -1,5 +1,5 @@
 import Ember from 'ember';
-import TabController from '../../tab-controller';
+import TabController from 'picus/controllers/tab-controller';
 
 // @todo: absolute clone of controllers/cluster/resources/show
 

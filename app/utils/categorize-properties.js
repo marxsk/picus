@@ -1,5 +1,5 @@
 import { validatePresence, validateNumber } from 'ember-changeset-validations/validators';
-import ResourceValidations from '../validators/resource-validations';
+import ResourceValidations from 'picus/validators/resource-validations';
 
 /**
  *  Create base information for form generation from XML metadata

@@ -1,5 +1,5 @@
 import Ember from 'ember';
-import categorizeProperties from '../../../utils/categorize-properties';
+import categorizeProperties from 'picus/utils/categorize-properties';
 
 const { RSVP } = Ember;
 

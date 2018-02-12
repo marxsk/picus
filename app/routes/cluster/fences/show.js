@@ -1,6 +1,6 @@
 import Ember from 'ember';
-import TabRoute from '../../tab-route';
-import categorizeProperties from '../../../utils/categorize-properties';
+import TabRoute from 'picus/controllers/tab-route';
+import categorizeProperties from 'picus/utils/categorize-properties';
 
 export default TabRoute.extend({
   modelForm: {},
