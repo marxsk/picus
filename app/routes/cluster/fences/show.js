@@ -1,5 +1,5 @@
 import Ember from 'ember';
-import TabRoute from 'picus/controllers/tab-route';
+import TabRoute from 'picus/routes/tab-route';
 import categorizeProperties from 'picus/utils/categorize-properties';
 
 export default TabRoute.extend({

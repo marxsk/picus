@@ -10,7 +10,7 @@ const mockTickTock = Ember.Service.extend({
   now: 111,
 });
 
-moduleForAcceptance('Acceptance | cluster/my/nodes`', {
+moduleForAcceptance('Acceptance | cluster/my/*`', {
   beforeEach() {
     server.shutdown();
 
@@ -29,5 +29,14 @@ test('visiting /cluster/nodes', (assert) => {
 
   andThen(() => {
     assert.equal(currentURL(), '/cluster/my/nodes');
+  });
+});
+
+test('visiting /cluster/fences', (assert) => {
+  defaultScenario(server);
+  visit('/cluster/my/fences');
+
+  andThen(() => {
+    assert.equal(currentURL(), '/cluster/my/fences');
   });
 });
