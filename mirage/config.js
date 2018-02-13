@@ -687,6 +687,56 @@ export default function () {
     );
   });
 
+  this.post('/managec/my/add_node_attr_remote', function addMetaAttrRemote(schema, request) {
+    const params = this.normalizedRequestAttrs();
+    const node = schema.nodes.where({ name: params.node }).models[0];
+
+    // @todo: update responses to match backend
+    if (params.key === 'force') {
+      if (!(params.force === 'true')) {
+        return new Response(
+          400,
+          { 'Content-Type': 'text/text' },
+          'Error adding constraint: Error: duplicate constraint already exists, use --force to override. <br />Started attacking_clones-clone loss-policy=fence ticket=foo (id:ticket-foo-attacking_clones-clone-Started)',
+        );
+      }
+    } else if (params.key === 'error') {
+      return new Response(400, { 'Content-Type': 'text/text' }, 'Error Error Error');
+    } else if (params.key === 'delete' && params.value === '') {
+      return new Response(400, { 'Content-Type': 'text/text' }, 'Unable to delete');
+    }
+
+    return _cudAttribute(node, params, node.nodeAttributeIds, schema.nodeAttributes, 'key', x =>
+      node.createNodeAttribute(x));
+  });
+
+  this.post('/managec/my/set_node_utilization', function setResourceUtilization(schema, request) {
+    const params = this.normalizedRequestAttrs();
+    const node = schema.nodes.where({ name: params.node }).models[0];
+
+    // @todo: update responses to match backend
+    if (params.name === 'force') {
+      if (!(params.force === 'true')) {
+        return new Response(
+          400,
+          { 'Content-Type': 'text/text' },
+          'Error adding constraint: Error: duplicate constraint already exists, use --force to override. <br />Started attacking_clones-clone loss-policy=fence ticket=foo (id:ticket-foo-attacking_clones-clone-Started)',
+        );
+      }
+    } else if (params.name === 'error') {
+      return new Response(400, { 'Content-Type': 'text/text' }, 'Error Error Error');
+    }
+
+    return _cudAttribute(
+      node,
+      params,
+      node.nodeUtilizationAttributeIds,
+      schema.nodeUtilizationAttributes,
+      'name',
+      x => node.createNodeUtilizationAttribute(x),
+    );
+  });
+
   this.post('/managec/my/add_constraint_remote', function addConstraintRemote(schema, request) {
     const params = this.normalizedRequestAttrs();
     const resource = schema.resources.where({ name: params.res_id }).models[0];

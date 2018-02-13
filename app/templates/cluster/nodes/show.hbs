@@ -1,54 +1,97 @@
-{{menu-header
-  title='Nodes'
-  data=model.updatingCluster.firstObject.nodes
-  onCheckAction=(route-action 'onCheck')
-  isCollapsed=false
-  targetRoute='cluster.nodes.show'
-}}
+{{#ember-wormhole to="leftmenu"}}
+    {{menu-header
+      title='Nodes'
+      data=model.updatingCluster.firstObject.nodes
+      isCollapsed=false
+      targetRoute='cluster.nodes.show'
+    }}
+{{/ember-wormhole}}
 
-<hr />
-{{#link-to 'cluster.nodes.create'}}Add computer node to the cluster{{/link-to}}
-<hr />
+{{breadcrumb-menu active=model.params.node_name path=(array "cluster.index" "cluster.nodes")}}
 
-{{#with model.selectedNode as |selectedNode| }}
+{{#unless model.selectedNode}}
+  {{#bs-alert type="danger" dismissible=0}}
+  The resource device with ID '{{model.params.node_name}}' was not found, please select a different fence agent.
+  {{/bs-alert}}
+{{/unless}}
+
+{{#with model.selectedNode as |selNode| }}
   <h3>Editable form for Nodes</h3>
-  Name: {{ selectedNode.name }} {{ selectedNode.id}} <br />
+  Name: {{ selNode.name }}<br />
 
+  <br />
+  {{#bs-button onClick=(action (route-action 'removeNode') selNode)}}
+    Remove node
+  {{/bs-button}}
+  <br /><br />
+
+{{#bs-tab customTabs=true activeId=activeTab as |tab|}}
+
+{{bs-nav-items tab=tab onSetActiveTab=(action 'setActiveTab') items=(array
+  (hash name="status" title="Status")
+  (hash name="attributes" title="Attributes")
+)}}
+<div class="tab-content">
+  {{#tab.pane elementId="status" title="Status"}}
   Actions:
   <ul>
-    <li {{action (route-action 'nodeAction' 'start' selectedNode)}}> Start Node </li>
-    <li {{action (route-action 'nodeAction' 'stop' selectedNode)}}> Stop Node </li>
-    <li {{action (route-action 'nodeAction' 'reboot' selectedNode)}}> Reboot Node </li>
+    <li {{action (route-action 'nodeAction' 'start' selNode)}}> Start Node </li>
+    <li {{action (route-action 'nodeAction' 'stop' selNode)}}> Stop Node </li>
+    <li {{action (route-action 'nodeAction' 'reboot' selNode)}}> Reboot Node </li>
   </ul>
 
   Cluster daemons:
   <ul>
-    <li> Corosync: {{format-running selectedNode.isCorosyncRunning}} ( {{format-enabled selectedNode.isCorosyncEnabled}} ) </li>
-    <li> Pacemaker: {{format-running selectedNode.isPacemakerRunning}} ( {{format-enabled selectedNode.isPacemakerEnabled}} ) </li>
-    <li> Corosync: {{format-running selectedNode.isPcsdRunning}} ( {{format-enabled selectedNode.isPcsdEnabled}} ) </li>
+    <li> Corosync: {{format-running selNode.isCorosyncRunning}} ( {{format-enabled selNode.isCorosyncEnabled}} ) </li>
+    <li> Pacemaker: {{format-running selNode.isPacemakerRunning}} ( {{format-enabled selNode.isPacemakerEnabled}} ) </li>
+    <li> Corosync: {{format-running selNode.isPcsdRunning}} ( {{format-enabled selNode.isPcsdEnabled}} ) </li>
   </ul>
+  {{/tab.pane}}
 
-  {{#attr-list title='Node Attributes' attributes=selectedNode.nodeAttributes onDeleteAction=(route-action 'deleteNodeAttribute') onAppendAction=(route-action 'appendNodeAttribute') onDeleteMultipleAction=(route-action 'deleteMultipleAttributes') as |form mode attr|}}
-    {{#if (eq mode 'edit')}}
-      <td>{{input value=form.attr.key}}</td>
-      <td>{{input value=form.attr.value}}</td>
-    {{else}}
-      <td>{{attr.key}}</td>
-      <td>{{attr.value}}</td>
-    {{/if}}
-  {{/attr-list}}
-
-  {{#attr-list title='Node Utilization Attributes' attributes=selectedNode.nodeUtilizationAttributes onDeleteAction=(route-action 'deleteNodeAttribute') onAppendAction=(route-action 'appendNodeUtilizationAttribute')  onDeleteMultipleAction=(route-action 'deleteMultipleAttributes') as |form mode attr|}}
-    {{#if (eq mode 'edit')}}
-      <td>{{input value=form.attr.key}}</td>
-      <td>{{input value=form.attr.value}}</td>
-    {{else}}
-      <td>{{attr.key}}</td>
-      <td>{{attr.value}}</td>
-    {{/if}}
-  {{/attr-list}}
-{{else}}
-  {{#if mode.params.node_id}}
-    Node with ID '{{model.params.node_id}}' was not found, please select a different node.
-  {{/if}}
+  {{#tab.pane elementId="attributes" title="Attributes"}}
+  {{#bs-accordion selected="meta" as |acc|}}
+  {{#acc.item value="meta" title="Node Attributes"}}
+    {{#attr-form
+      visibilityTitle="Node Attribute"
+      submitTitle="Add"
+      submitAction=(route-action 'appendNodeAttribute')
+      validations=model.validations.addNodeAttribute as |f|
+    }}
+      {{f.text-field 'key'}}
+      {{f.text-field 'value'}}
+    {{/attr-form}}
+    {{#attr-list
+        title='Node Attributes'
+        attributes=selNode.nodeAttributes
+        onDeleteAction=(route-action 'deleteNodeAttribute' 'DELETE_NODE_ATTRIBUTE')
+        as |attr|
+    }}
+        <td>{{attr.key}}</td>
+        <td>{{attr.value}}</td>
+    {{/attr-list}}
+    {{/acc.item}}
+    {{#acc.item value="meta" title="Node Utilization Attributes"}}
+      {{#attr-form
+        visibilityTitle="Node Utilization Attribute"
+        submitTitle="Add"
+        submitAction=(route-action 'appendNodeUtilizationAttribute')
+        validations=model.validations.addNodeUtilizationAttribute as |f|
+      }}
+        {{f.text-field 'name'}}
+        {{f.text-field 'value'}}
+      {{/attr-form}}
+      {{#attr-list
+          title='Node Utilization Attributes'
+          attributes=selNode.nodeUtilizationAttributes
+          onDeleteAction=(route-action 'deleteNodeAttribute' 'DELETE_NODE_UTILIZATION_ATTRIBUTE')
+          as |attr|
+      }}
+          <td>{{attr.name}}</td>
+          <td>{{attr.value}}</td>
+      {{/attr-list}}
+      {{/acc.item}}
+    {{/bs-accordion}}
+  {{/tab.pane}}
+  </div>
+  {{/bs-tab}}
 {{/with}}

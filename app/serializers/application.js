@@ -34,6 +34,18 @@ export default DS.JSONAPISerializer.extend({
           name: record.get('name'),
           value: '',
         });
+      } else if (snapshot.modelName === 'node-attribute') {
+        return this._postTextSerializer({
+          node: record.get('node.name'),
+          key: record.get('key'),
+          value: '',
+        });
+      } else if (snapshot.modelName === 'node-utilization-attribute') {
+        return this._postTextSerializer({
+          node: record.get('node.name'),
+          name: record.get('name'),
+          value: '',
+        });
       } else if (snapshot.modelName === 'acl-role') {
         return this._postTextSerializer({
           'role-0': record.get('name'),
@@ -111,6 +123,20 @@ export default DS.JSONAPISerializer.extend({
       } else if (snapshot.modelName === 'utilization-attribute') {
         return this._postTextSerializer({
           resource_id: record.get('resource.name'),
+          name: record.get('name'),
+          value: record.get('value'),
+          force,
+        });
+      } else if (snapshot.modelName === 'node-attribute') {
+        return this._postTextSerializer({
+          node: record.get('node.name'),
+          key: record.get('key'),
+          value: record.get('value'),
+          force,
+        });
+      } else if (snapshot.modelName === 'node-utilization-attribute') {
+        return this._postTextSerializer({
+          node: record.get('node.name'),
           name: record.get('name'),
           value: record.get('value'),
           force,

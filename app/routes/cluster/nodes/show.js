@@ -1,44 +1,101 @@
 import Ember from 'ember';
+import TabRoute from 'picus/routes/tab-route';
+import { validatePresence, validateNumber } from 'ember-changeset-validations/validators';
 
-export default Ember.Route.extend({
-  selectedNode: undefined,
+export default TabRoute.extend({
+  modelForm: {},
+  node: undefined,
+  selectedNodes: Ember.A(),
+  notifications: Ember.inject.service('notifications'),
+  messages: Ember.inject.service('messages'),
+
+  queryParams: {
+    filterString: {
+      as: 's',
+      replace: true,
+    },
+    showInternalNames: {
+      as: 'internal',
+      replace: true,
+    },
+  },
+
+  beforeModel(transition) {
+    this.get('selectedNodes').clear();
+  },
+
+  setupController(controller, model) {
+    this._super(controller, model);
+    // hide sidebar menu
+    this.controllerFor('application').set('hideMainMenu', true);
+  },
 
   model(params) {
+    const node = this.store.peekRecordQueryName('node', params.node_name);
+    this.set('node', node);
+
+    const formValidators = {
+      addNodeAttribute: {
+        key: validatePresence(true),
+        value: validatePresence(true),
+      },
+      addNodeUtilizationAttribute: {
+        name: validatePresence(true),
+        value: validateNumber({ integer: true, allowBlank: false }),
+      },
+    };
+
     return Ember.RSVP.hash({
       params,
+      validations: formValidators,
       updatingCluster: this.store.peekAll('cluster'),
-      selectedNode: this.store.peekRecord('node', params.node_id),
+      selectedNode: node,
     });
   },
 
   actions: {
+    pageRefresh() {
+      this.refresh();
+    },
+
+    removeNode() {},
+
     onClick(component) {
       this.set('selectedNode', component);
     },
     onCheck() {},
 
-    appendNodeAttribute(attributes, attr) {
-      const { store } = this;
-      const newAttribute = store.createRecord('attribute', attr);
-      attributes.pushObject(newAttribute);
-      newAttribute.save();
-    },
-    deleteNodeAttribute(attribute) {
+    deleteNodeAttribute(actionName, attribute) {
       attribute.deleteRecord();
-      attribute.save();
+      this.get('notifications').notificationSaveRecord(attribute, actionName);
     },
+    // @bug
     deleteMultipleAttributes(attributes) {
       attributes.forEach((item) => {
         item.deleteRecord();
         item.save();
       });
     },
-    appendNodeUtilizationAttribute(attributes, attr) {
-      const { store } = this;
-      const newAttribute = store.createRecord('attribute', attr);
-      attributes.pushObject(newAttribute);
-      newAttribute.save();
+    appendNodeUtilizationAttribute(form) {
+      const attribute = this.get('store').createRecord('node-utilization-attribute', {
+        node: this.get('node'),
+        name: form.get('name'),
+        value: form.get('value'),
+      });
+      return this.get('notifications').notificationSaveRecord(
+        attribute,
+        'ADD_NODE_UTILIZATION_ATTRIBUTE',
+      );
     },
+    appendNodeAttribute(form) {
+      const attribute = this.get('store').createRecord('node-attribute', {
+        node: this.get('node'),
+        key: form.get('key'),
+        value: form.get('value'),
+      });
+      return this.get('notifications').notificationSaveRecord(attribute, 'ADD_NODE_ATTRIBUTE');
+    },
+
     nodeAction(action, component) {
       switch (action) {
         case 'start':

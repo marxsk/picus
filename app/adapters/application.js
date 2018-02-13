@@ -28,6 +28,8 @@ export default DS.Adapter.extend({
         'acl-permission': 'remove_acl',
         resource: 'remove_resource',
         fence: 'remove_resource',
+        'node-attribute': 'add_node_attr_remote',
+        'node-utilization-attribute': 'set_node_utilization',
       }[modelName];
     } else if (action === 'create') {
       resultURL = {
@@ -42,6 +44,8 @@ export default DS.Adapter.extend({
         'acl-permission': 'add_acl',
         resource: 'update_resource',
         fence: 'update_fence_device',
+        'node-attribute': 'add_node_attr_remote',
+        'node-utilization-attribute': 'set_node_utilization',
       }[modelName];
     } else if (action === 'update') {
       resultURL = {

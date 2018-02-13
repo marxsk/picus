@@ -9,13 +9,13 @@ export default function (server) {
   const cluster = server.create('cluster', { name: 'Second one' });
   const node = cluster.createNode({
     id: 222,
-    name: 'Virtual machine',
+    name: 'virtual01',
     isCorosyncRunning: true,
     isCorosyncEnabled: true,
   });
   node.createNodeAttribute({ key: 'attr #1', value: 'foo' });
   node.createNodeAttribute({ key: 'attr #2', value: 'bar' });
-  node.createNodeUtilizationAttribute({ key: 'util attr #99', value: 'bar bar' });
+  node.createNodeUtilizationAttribute({ name: 'util attr #99', value: 'bar bar' });
 
   const resource = cluster.createResource({
     id: 333,

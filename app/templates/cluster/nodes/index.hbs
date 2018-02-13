@@ -1,0 +1,17 @@
+{{breadcrumb-menu active="Nodes" path=(array "cluster.index")}}
+
+<div style="width: 100%; text-align: left; margin-bottom: 1em">
+  {{#bs-button onClick=(route-action 'linkTo' 'cluster.nodes.create')}}
+    Add
+  {{/bs-button}}
+  {{#bs-button onClick=(route-action 'removeSelectedNodes')}}
+    Remove <span class="badge">{{model.selectedNodes.length}}</span>
+  {{/bs-button}}
+</div>
+{{menu-header
+  title=''
+  data=model.updatingCluster.firstObject.nodes
+  isCollapsed=false
+  targetRoute='cluster.nodes.show'
+  onCheckAction=(route-action 'onCheck')
+}}

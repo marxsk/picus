@@ -8,5 +8,6 @@ export default Ember.Component.extend({
     clusterAcl: 'ACL',
     clusterFences: 'Fence Devices',
     clusterResources: 'Resources',
+    clusterNodes: 'Nodes',
   },
 });

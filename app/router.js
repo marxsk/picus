@@ -15,7 +15,7 @@ Router.map(function router() {
 
     this.route('nodes', function nodesRouter() {
       this.route('listing', { path: 'show/' });
-      this.route('show', { path: 'show/:node_id' });
+      this.route('show', { path: 'show/:node_name' });
       this.route('create');
     });
 
