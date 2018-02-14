@@ -38,7 +38,7 @@ export default TabRoute.extend({
       return Ember.RSVP.hash({
         listing: params.fence_id.length === 0,
         updatingCluster: this.store.peekAll('cluster'),
-        selectedResources: this.get('selectedResources'),
+        selectedFences: this.get('selectedFences'),
         params,
       });
     }
@@ -64,6 +64,7 @@ export default TabRoute.extend({
       formData: this.get('modelForm'),
       updatingCluster: this.store.peekAll('cluster'),
       selectedFence: fence,
+      selectedFences: this.get('selectedFences'),
       fences: this.store.peekAll('fence'),
       fenceValidations: validations,
     });

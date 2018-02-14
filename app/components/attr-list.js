@@ -34,7 +34,7 @@ export default Ember.Component.extend({
    * */
   emptyText: 'No Entries',
 
-  _checkedAttributes: Ember.A(),
+  _checkedAttributes: undefined,
   /**
    * Object that holds information from form used to append records.
    *
@@ -47,6 +47,7 @@ export default Ember.Component.extend({
 
   init() {
     this._super();
+    this.set('_checkedAttributes', Ember.A());
     this.set('formEntry', {});
   },
 
@@ -65,13 +66,10 @@ export default Ember.Component.extend({
      *  @private
      */
     naiveDeleteMultipleAction(attributes) {
-      if (attributes === undefined) {
-        return;
-      }
-
-      attributes.forEach((attr) => {
+      this.get('_checkedAttributes').forEach((attr) => {
         this.attrs.onDeleteAction(attr);
       });
+      this.set('_checkedAttributes', Ember.A());
     },
   },
 });

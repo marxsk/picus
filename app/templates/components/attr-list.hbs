@@ -1,8 +1,8 @@
 {{title}} ({{attributes.length}}):
 {{#if onDeleteMultipleAction}}
-  <span class='delete-attrs' onClick={{action onDeleteMultipleAction selectedAttributes}}>Delete selected</span>
+  <span class='delete-attrs' onClick={{action onDeleteMultipleAction}}>Delete selected</span>
 {{else}}
-  <span class='delete-attrs' onClick={{action 'naiveDeleteMultipleAction' selectedAttributes}}>Delete selected</span>
+  <span class='delete-attrs' onClick={{action 'naiveDeleteMultipleAction'}}>Delete selected</span>
 {{/if}}
 <table border='1'>
   {{#each attributes as |attr|}}
