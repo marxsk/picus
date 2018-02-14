@@ -8,7 +8,6 @@ import validateScore from 'picus/validators/score';
 export default TabRoute.extend({
   modelForm: {},
   resource: undefined,
-  selectedResources: Ember.A(),
   notifications: Ember.inject.service('notifications'),
   messages: Ember.inject.service('messages'),
 
@@ -21,10 +20,6 @@ export default TabRoute.extend({
       as: 'internal',
       replace: true,
     },
-  },
-
-  beforeModel() {
-    this.get('selectedResources').clear();
   },
 
   setupController(controller, model) {
@@ -41,7 +36,6 @@ export default TabRoute.extend({
       return Ember.RSVP.hash({
         listing: params.resource_id.length === 0,
         updatingCluster: this.store.peekAll('cluster'),
-        selectedResources: this.get('selectedResources'),
         params,
         ScoreValidations,
       });
@@ -137,18 +131,6 @@ export default TabRoute.extend({
       this.transitionTo('cluster.resources.index');
       this.set('modelForm', {});
       return this.get('notifications').notificationSaveRecord(resource, 'UPDATE_RESOURCE');
-    },
-    onCheckx(x) {
-      if (this.get('selectedResources').includes(x)) {
-        this.get('selectedResources').removeObject(x);
-      } else {
-        this.get('selectedResources').pushObject(x);
-      }
-    },
-    removeSelectedResources() {
-      this.store.removeAgents(this.get('selectedResources').map(x => x.get('name')), 'resource');
-      this.get('selectedResources').clear();
-      this.transitionTo('cluster.resources.index');
     },
     changeSelectedAgent() {},
 

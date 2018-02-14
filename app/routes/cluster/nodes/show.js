@@ -5,7 +5,6 @@ import { validatePresence, validateNumber } from 'ember-changeset-validations/va
 export default TabRoute.extend({
   modelForm: {},
   node: undefined,
-  selectedNodes: Ember.A(),
   notifications: Ember.inject.service('notifications'),
   messages: Ember.inject.service('messages'),
 
@@ -18,10 +17,6 @@ export default TabRoute.extend({
       as: 'internal',
       replace: true,
     },
-  },
-
-  beforeModel(transition) {
-    this.get('selectedNodes').clear();
   },
 
   setupController(controller, model) {
