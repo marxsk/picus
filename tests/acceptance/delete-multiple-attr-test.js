@@ -24,18 +24,23 @@ moduleForAcceptance('Acceptance | delete multiple attributes', {
 });
 
 test('Delete selected on node attributes', async (assert) => {
+  let tableCells;
   defaultScenario(server);
 
   await visit('/cluster/my/nodes/show/virtual01?tab=attributes');
 
-  let tableCells = find('table tr td');
-  assert.equal('attr #1', tableCells[1].innerText, 'First attribute exists as expected');
+  andThen(() => {
+    tableCells = find('table tr td');
+    assert.equal('attr #1', tableCells[1].innerText, 'First attribute exists as expected');
+  });
 
   await click(find('table tr td input')[0]);
   await click(find('span.delete-attrs')[0]);
 
-  tableCells = find('table tr td');
-  assert.equal('attr #2', tableCells[1].innerText, 'First attribute was removed');
+  andThen(() => {
+    tableCells = find('table tr td');
+    assert.equal('attr #2', tableCells[1].innerText, 'First attribute was removed');
+  });
 
   // nothing should happend as selection should be empty
   await click(find('span.delete-attrs')[0]);
