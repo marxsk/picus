@@ -12,8 +12,8 @@ export default DS.Model.extend({
   }),
   properties: DS.hasMany('resourceProperty'),
 
-  metaAttributes: DS.hasMany('attribute'),
-  utilizationAttributes: DS.hasMany('utilizationAttributes'),
+  metaAttributes: DS.hasMany('resourceAttribute'),
+  utilizationAttributes: DS.hasMany('resourceUtilizationAttributes'),
   locationPreferences: DS.hasMany('locationPreference'),
   orderingPreferences: DS.hasMany('orderingPreference'),
   colocationPreferences: DS.hasMany('colocationPreference'),

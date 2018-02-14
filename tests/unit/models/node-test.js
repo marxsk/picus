@@ -2,7 +2,7 @@ import { moduleForModel, test } from 'ember-qunit';
 import Ember from 'ember';
 
 moduleForModel('node', 'Unit | Model | node', {
-  needs: ['model:attribute'],
+  needs: ['model:nodeAttribute'],
 });
 
 test('it exists', function (assert) {

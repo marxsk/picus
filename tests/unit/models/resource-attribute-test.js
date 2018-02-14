@@ -1,6 +1,6 @@
 import { moduleForModel, test } from 'ember-qunit';
 
-moduleForModel('attribute', 'Unit | Model | attribute', {
+moduleForModel('resourceAttribute', 'Unit | Model | resourceAttribute', {
   needs: ['model:resource'],
 });
 

@@ -4,8 +4,8 @@ import Ember from 'ember';
 moduleForModel('resource', 'Unit | Model | resource', {
   needs: [
     'model:resource-property',
-    'model:attribute',
-    'model:utilization-attribute',
+    'model:resource-attribute',
+    'model:resource-utilization-attribute',
     'model:colocation-preference',
     'model:location-preference',
     'model:ordering-preference',
