@@ -1,0 +1,22 @@
+{{#with (changeset formData fenceValidations) as |changeset|}}
+  {{#form-for changeset submit=(action submitAction) as |f|}}
+    <div>
+      {{x-toggle
+        showLabels=true
+        onToggle=toggleInternalNames
+        value=(readonly showInternalName)
+        offLabel="Internal names "
+        onLabel=""
+      }}
+    </div>
+    <div>
+    {{input-filter
+      placeholder="Filter By Name"
+      value=filterString
+      keyUp=(action urlRefresh filterString)
+    }}
+  </div>
+    {{agent-properties-form changeset=changeset parameters=parameters form=f levels=(array 'basic' 'advanced' 'expert' 'standard') filter=filterString internal=showInternalNames}}
+    {{f.submit "Update"}}
+  {{/form-for}}
+{{/with}}

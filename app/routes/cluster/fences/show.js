@@ -1,6 +1,5 @@
 import Ember from 'ember';
 import TabRoute from 'picus/routes/tab-route';
-import categorizeProperties from 'picus/utils/categorize-properties';
 
 export default TabRoute.extend({
   modelForm: {},
@@ -41,9 +40,6 @@ export default TabRoute.extend({
       'fence',
       `stonith:${fence.get('agentType')}`,
     );
-    //    let parameters;
-    //    let validations;
-    const { parameters, validations } = categorizeProperties(metadata.parameters);
 
     if (fence.get('properties')) {
       fence.get('properties').forEach((item) => {
@@ -54,12 +50,10 @@ export default TabRoute.extend({
     return Ember.RSVP.hash({
       params,
       metadata,
-      parameters,
       formData: this.get('modelForm'),
       updatingCluster: this.store.peekAll('cluster'),
       selectedFence: fence,
       fences: this.store.peekAll('fence'),
-      fenceValidations: validations,
     });
   },
 
@@ -68,7 +62,8 @@ export default TabRoute.extend({
       this.refresh();
     },
 
-    onSubmitAction(fence, form) {
+    onSubmitAction(form) {
+      const fence = this.get('fence');
       form.get('changes').forEach((obj) => {
         const existingProps = this.get('store')
           .peekAll('fence-property')
