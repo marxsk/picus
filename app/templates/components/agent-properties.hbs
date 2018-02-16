@@ -16,7 +16,7 @@
       keyUp=(action urlRefresh filterString)
     }}
   </div>
-    {{agent-properties-form changeset=changeset parameters=parameters form=f levels=(array 'basic' 'advanced' 'expert' 'standard') filter=filterString internal=showInternalNames}}
+    {{agent-properties-form changeset=changeset parameters=parameters form=f levels=(array 'basic' 'standard' 'advanced' 'expert') filter=filterString internal=showInternalNames}}
     {{f.submit "Update"}}
   {{/form-for}}
 {{/with}}
