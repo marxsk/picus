@@ -81,31 +81,16 @@
 {{/tab.pane}}
 
 {{#tab.pane elementId="properties" title="Properties"}}
-{{#with (changeset model.formData model.ResourceValidations) as |changeset|}}
-  {{#form-for changeset submit=(route-action 'onSubmitAction' selResource) as |f|}}
-    {{model.metadata.shortdesc}}
-    <hr />
-    <div>
-      {{x-toggle
-        showLabels=true
-        onToggle=(action 'toggleInternalNames')
-        value=(readonly showInternalName)
-        offLabel="Internal names "
-        onLabel=""
-      }}
-    </div>
-    <div>
-    {{input-filter
-      placeholder="Filter By Name"
-      value=filterString
-      keyUp=(action 'urlRefresh' filterString)
-    }}
-  </div>
-    {{agent-properties-form changeset=changeset parameters=model.parameters form=f levels=(array 'basic' 'advanced' 'expert' 'standard') filter=filterString internal=showInternalNames}}
-
-    {{f.submit "Update"}}
-  {{/form-for}}
-{{/with}}
+  {{model.metadata.shortdesc}}
+  <hr />
+  {{agent-properties
+    formData = model.formData
+    metadata = model.metadata
+    showInternalNames = showInternalNames
+    toggleInternalNames = (action 'toggleInternalNames')
+    urlRefresh = (action 'urlRefresh')
+    submitAction = (route-action 'onSubmitAction')
+  }}
 {{/tab.pane}}
 
 {{#tab.pane elementId="constraints" title="Constraints"}}

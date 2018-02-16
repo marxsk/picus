@@ -1,6 +1,5 @@
 import Ember from 'ember';
 import { validatePresence } from 'ember-changeset-validations/validators';
-import categorizeProperties from 'picus/utils/categorize-properties';
 import TabRoute from 'picus/routes/tab-route';
 import ScoreValidations from 'picus/validators/constraint-validations';
 import validateScore from 'picus/validators/score';
@@ -42,16 +41,12 @@ export default TabRoute.extend({
     }
 
     let metadata;
-    let parameters;
-    let validations;
 
     if (resource.get('resourceType') === 'primitive') {
       metadata = await this.store.getAgentMetadata(
         'resource',
         `${resource.get('resourceProvider')}:${resource.get('agentType')}`,
       );
-      const x = categorizeProperties(metadata.parameters);
-      ({ parameters, validations } = x);
     }
 
     if (resource.get('properties')) {
@@ -95,12 +90,10 @@ export default TabRoute.extend({
     return Ember.RSVP.hash({
       params,
       metadata,
-      parameters,
       formData: this.get('modelForm'),
       updatingCluster: this.store.peekAll('cluster'),
       selectedResource: resource,
       resources: this.store.peekAll('resource'),
-      ResourceValidations: validations,
       ScoreValidations,
       validations: formValidators,
     });
@@ -110,7 +103,8 @@ export default TabRoute.extend({
     pageRefresh() {
       this.refresh();
     },
-    onSubmitAction(resource, form) {
+    onSubmitAction(form) {
+      const resource = this.get('resource');
       form.get('changes').forEach((obj) => {
         const existingProps = this.get('store')
           .peekAll('resource-property')
