@@ -1,4 +1,4 @@
-{{#with (changeset formData fenceValidations) as |changeset|}}
+{{#with (changeset formData validations) as |changeset|}}
   {{#form-for changeset submit=(action submitAction) as |f|}}
     <div>
       {{x-toggle
