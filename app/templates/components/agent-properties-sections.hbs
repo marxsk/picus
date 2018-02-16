@@ -4,7 +4,15 @@
       {{#if (eq p.default 'true')}}
         {{form.select-field p.name 'true' label=(if internal p.name p.shortdesc)}}
       {{else}}
-        {{form.select-field p.name 'default true false' label=(if internal p.name p.shortdesc)}}
+        {{form.select-field p.name (array
+            (hash name='default' title=(concat 'default (' p.default ')'))
+            (hash name='true' title='true')
+            (hash name='false' title='false'))
+          optionLabelPath='title'
+          optionValuePath='name'
+          label=(if internal p.name p.shortdesc)
+          hint=prop.shortDesc
+        }}
       {{/if}}
     {{/if}}
 

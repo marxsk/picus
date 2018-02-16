@@ -34,6 +34,14 @@ export default function categorizeProperties(parameters) {
       result.validations[i.name].push(validateNumber({ integer: true, allowBlank: true }));
     }
 
+    if (i.type === 'boolean') {
+      if (i.default === '1') {
+        i.default = true;
+      } else if (i.default === null || i.default === '0') {
+        i.default = false;
+      }
+    }
+
     const level = i.level ? i.level : 'standard';
 
     if (!(level in result.parameters)) {
