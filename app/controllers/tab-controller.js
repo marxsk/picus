@@ -1,6 +1,7 @@
 import Ember from 'ember';
+import BaseController from 'picus/controllers/base-controller';
 
-export default Ember.Controller.extend({
+export default BaseController.extend({
   queryParams: ['activeTab'],
   application: Ember.inject.controller(),
 

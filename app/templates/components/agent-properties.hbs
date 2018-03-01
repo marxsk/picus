@@ -1,5 +1,6 @@
-{{#with (changeset formData validations) as |changeset|}}
+{{#with (changeset formData validations initValidation=true) as |changeset|}}
   {{#form-for changeset submit=(action submitAction) as |f|}}
+    {{yield f}}
     <div>
       {{x-toggle
         showLabels=true
@@ -13,7 +14,7 @@
     {{input-filter
       placeholder="Filter By Name"
       value=filterString
-      keyUp=(action urlRefresh filterString)
+      keyUp=(action updateFilterString filterString)
     }}
   </div>
     {{#unless showLevels}}
@@ -21,6 +22,10 @@
     {{else}}
       {{agent-properties-form changeset=changeset parameters=parameters form=f levels=showLevels filter=filterString internal=showInternalNames}}
     {{/unless}}
-    {{f.submit "Update"}}
+    {{#unless changeset.isInvalid}}
+      {{f.submit (if submitTitle submitTitle "Update") disabled=changeset.isInvalid}}
+    {{else}}
+      {{f.submit "Fix issues" disabled=changeset.isInvalid}}
+    {{/unless}}
   {{/form-for}}
 {{/with}}
