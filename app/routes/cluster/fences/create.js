@@ -11,6 +11,17 @@ export default Ember.Route.extend({
   metadata: {},
   availables: {},
 
+  queryParams: {
+    filterString: {
+      as: 's',
+      replace: true,
+    },
+    showInternalNames: {
+      as: 'internal',
+      replace: true,
+    },
+  },
+
   beforeModel() {
     return new RSVP.Promise((resolve, reject) => {
       this.store.getAvailableAgents('fence').then(
@@ -53,6 +64,9 @@ export default Ember.Route.extend({
   },
 
   actions: {
+    pageRefresh() {
+      this.refresh();
+    },
     changeSelectedAgent(form, fieldName, selectedItem) {
       this.set('modelForm', form);
       this.set('selectedAgent', selectedItem);

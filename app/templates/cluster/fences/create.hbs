@@ -1,12 +1,15 @@
-{{#with (changeset model.formData model.ResourceValidations initValidation=true) as |changeset|}}
-
-{{#form-for changeset submit=(route-action 'onSubmitAction') as |f|}}
+{{#agent-properties
+  formData = model.formData
+  metadata = model.metadata
+  showInternalNames = showInternalNames
+  toggleInternalNames = (action 'toggleInternalNames')
+  filterString = filterString
+  urlRefresh = (action 'urlRefresh')
+  submitTitle = 'Create'
+  submitAction = (route-action 'onSubmitAction') as |f|
+}}
   {{f.text-field 'resourceName' label='Fence Device Name' hint='small help'}}
   {{f.select-field 'fenceAgent' model.availableAgents.undefinedProvider label='Fence Agent' update=(route-action 'changeSelectedAgent')}}
   {{model.metadata.shortdesc}}
   <hr />
-  {{agent-properties-form changeset=changeset parameters=model.parameters form=f levels=(array 'basic' 'advanced' 'expert' 'standard')}}
-  {{f.submit "Create" disabled=changeset.isInvalid}}
-{{/form-for}}
-
-{{/with}}
+{{/agent-properties}}
