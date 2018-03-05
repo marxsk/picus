@@ -2,16 +2,16 @@
   <div>
     {{x-toggle
       showLabels=true
-      onToggle=(action 'toggleAdvanced')
-      value=(readonly showAdvanced)
+      onToggle=onAdvancedAction
+      value=(readonly showAdvancedProperties)
       offLabel="Advanced Properties "
       onLabel=""
     }}
     <br />
     {{x-toggle
       showLabels=true
-      onToggle=(action 'toggleInternalNames')
-      value=(readonly showInternalName)
+      onToggle=onInternalAction
+      value=(readonly showInternalNames)
       offLabel="Internal names "
       onLabel=""
     }}
@@ -20,7 +20,7 @@
     {{input-filter
       placeholder="Filter By Name"
       value=filterString
-      keyUp=(action 'urlRefresh' filterString)
+      keyUp=(action updateFilterString filterString)
     }}
   </div>
 
@@ -38,7 +38,7 @@
   {{#each data as |prop| }}
     {{#if (and
         (incl prop.readableName filterString)
-        (or (eq prop.advanced false) (and (eq prop.advanced true) (eq showAdvanced true)))
+        (or (eq prop.advanced false) (and (eq prop.advanced true) (eq showAdvancedProperties true)))
         )
     }}
       <div class={{if (eq selectedInput prop.name) "selected-line" ""}}>

@@ -2,12 +2,12 @@
 
 {{properties-form
   data=model.staticCluster.properties
+  filterString=filterString
+  showAdvancedProperties=showAdvancedProperties
+  showInternalNames=showInternalNames
 
   onSubmitAction=(action 'submitProperties')
-  onSearchRefresh=(action 'onSearch')
-  onAdvancedAction=(action 'onAdvanced')
-  onInternalAction=(action 'onInternal')
-
-  presetFilter=model.filterProperties
-  showAdvanced=model.showAdvanced
+  onAdvancedAction=(action 'toggleAdvancedProperties')
+  onInternalAction=(action 'toggleInternalNames')
+  updateFilterString=(action 'updateFilterString')
 }}

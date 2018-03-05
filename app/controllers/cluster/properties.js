@@ -1,10 +1,8 @@
-import Ember from 'ember';
+import BaseController from 'picus/controllers/base-controller';
 
-export default Ember.Controller.extend({
-  queryParams: ['filterString', 'advanced', 'internal'],
-  filterString: '',
-  advanced: false,
-  internal: false,
+export default BaseController.extend({
+  queryParams: ['showAdvancedProperties'],
+  showAdvancedProperties: false,
 
   actions: {
     submitProperties(properties, changesetForm) {
@@ -25,17 +23,8 @@ export default Ember.Controller.extend({
 
       this.store.pushClusterProperties(changeset);
     },
-    onSearch(search) {
-      this.set('filterString', search);
-      this.send('pageRefresh');
-    },
-    onAdvanced(value) {
-      this.set('advanced', value);
-      this.send('pageRefresh');
-    },
-    onInternal(value) {
-      this.set('internal', value);
-      this.send('pageRefresh');
+    toggleAdvancedProperties(v) {
+      this.toggleProperty('showAdvancedProperties');
     },
   },
 });
