@@ -5,7 +5,6 @@ export default TabRoute.extend({
   modelForm: {},
   fence: undefined,
   notifications: Ember.inject.service('notifications'),
-  messages: Ember.inject.service('messages'),
 
   queryParams: {
     filterString: {
