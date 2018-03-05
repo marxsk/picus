@@ -1,16 +1,11 @@
 import Ember from 'ember';
-// import AuthenticatedRouteMixin from 'ember-simple-auth/mixins/authenticated-route-mixin';
+import BaseRoute from 'picus/routes/base-route';
 
-export default Ember.Route.extend({
+export default BaseRoute.extend({
   queryParams: {
-    filterString: {
-      as: 's',
+    showAdvancedProperties: {
+      as: 'advanced',
       replace: true,
-    },
-  },
-  actions: {
-    pageRefresh() {
-      this.refresh();
     },
   },
 
@@ -20,15 +15,12 @@ export default Ember.Route.extend({
     this.controllerFor('application').set('hideMainMenu', false);
   },
 
-  model({ filterString, advanced }) {
-    const advancedBoolean = !!advanced;
+  model() {
     const staticCluster = this.store.peekRecord('cluster', 1);
 
     this._prepareEnumFields(staticCluster);
 
     return Ember.RSVP.hash({
-      filterProperties: filterString,
-      showAdvanced: advancedBoolean,
       staticCluster: this.store.peekRecord('cluster', 1),
     });
   },

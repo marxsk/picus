@@ -1,26 +1,14 @@
 import Ember from 'ember';
+import BaseRoute from 'picus/routes/base-route';
 import categorizeProperties from 'picus/utils/categorize-properties';
 
 const { RSVP } = Ember;
 
-export default Ember.Route.extend({
-  notifications: Ember.inject.service('notifications'),
-
+export default BaseRoute.extend({
   selectedAgent: undefined,
   modelForm: {},
   metadata: {},
   availables: {},
-
-  queryParams: {
-    filterString: {
-      as: 's',
-      replace: true,
-    },
-    showInternalNames: {
-      as: 'internal',
-      replace: true,
-    },
-  },
 
   beforeModel() {
     return new RSVP.Promise((resolve, reject) => {
@@ -64,9 +52,6 @@ export default Ember.Route.extend({
   },
 
   actions: {
-    pageRefresh() {
-      this.refresh();
-    },
     changeSelectedAgent(form, fieldName, selectedItem) {
       this.set('modelForm', form);
       this.set('selectedAgent', selectedItem);

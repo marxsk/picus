@@ -1,6 +1,6 @@
-import Ember from 'ember';
+import BaseRoute from 'picus/routes/base-route';
 
-export default Ember.Route.extend({
+export default BaseRoute.extend({
   queryParams: {
     activeTab: {
       as: 'tab',

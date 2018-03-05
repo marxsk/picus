@@ -5,18 +5,6 @@ import { validatePresence, validateNumber } from 'ember-changeset-validations/va
 export default TabRoute.extend({
   modelForm: {},
   node: undefined,
-  notifications: Ember.inject.service('notifications'),
-
-  queryParams: {
-    filterString: {
-      as: 's',
-      replace: true,
-    },
-    showInternalNames: {
-      as: 'internal',
-      replace: true,
-    },
-  },
 
   setupController(controller, model) {
     this._super(controller, model);
@@ -48,10 +36,6 @@ export default TabRoute.extend({
   },
 
   actions: {
-    pageRefresh() {
-      this.refresh();
-    },
-
     removeNode() {},
 
     onClick(component) {

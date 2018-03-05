@@ -4,18 +4,6 @@ import TabRoute from 'picus/routes/tab-route';
 export default TabRoute.extend({
   modelForm: {},
   fence: undefined,
-  notifications: Ember.inject.service('notifications'),
-
-  queryParams: {
-    filterString: {
-      as: 's',
-      replace: true,
-    },
-    showInternalNames: {
-      as: 'internal',
-      replace: true,
-    },
-  },
 
   setupController(controller, model) {
     this._super(controller, model);
@@ -57,10 +45,6 @@ export default TabRoute.extend({
   },
 
   actions: {
-    pageRefresh() {
-      this.refresh();
-    },
-
     onSubmitAction(form) {
       const fence = this.get('fence');
       form.get('changes').forEach((obj) => {

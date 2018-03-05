@@ -7,18 +7,6 @@ import validateScore from 'picus/validators/score';
 export default TabRoute.extend({
   modelForm: {},
   resource: undefined,
-  notifications: Ember.inject.service('notifications'),
-
-  queryParams: {
-    filterString: {
-      as: 's',
-      replace: true,
-    },
-    showInternalNames: {
-      as: 'internal',
-      replace: true,
-    },
-  },
 
   setupController(controller, model) {
     this._super(controller, model);
@@ -99,9 +87,6 @@ export default TabRoute.extend({
   },
 
   actions: {
-    pageRefresh() {
-      this.refresh();
-    },
     onSubmitAction(form) {
       const resource = this.get('resource');
       form.get('changes').forEach((obj) => {

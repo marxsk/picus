@@ -36,9 +36,5 @@ export default Ember.Route.extend({
 
       this.get('selectedNodes').clear();
     },
-
-    linkTo(path) {
-      this.transitionTo(path);
-    },
   },
 });
