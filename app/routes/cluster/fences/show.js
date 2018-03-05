@@ -48,6 +48,13 @@ export default TabRoute.extend({
     onSubmitAction(form) {
       const fence = this.get('fence');
       form.get('changes').forEach((obj) => {
+        if (typeof obj.value === 'object') {
+          // Only primitive values can be serialized.
+          // EmptyObject is a result of value from select-field with (array)
+          // which was not changed, so it should be ignored.
+          return;
+        }
+
         const existingProps = this.get('store')
           .peekAll('fence-property')
           .filterBy('name', obj.key)
