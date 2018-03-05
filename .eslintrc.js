@@ -23,6 +23,7 @@ module.exports = {
     'import/no-unresolved': 0,
     'import/extensions': 0,
     'no-underscore-dangle': 0,
+    'no-param-reassign': ['error', { props: false }],
   },
   globals: {
     server: true,

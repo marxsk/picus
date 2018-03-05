@@ -2,8 +2,8 @@ import Ember from 'ember';
 import categorizeProperties from 'picus/utils/categorize-properties';
 
 export default Ember.Component.extend({
-  didReceiveAttrs() {
-    this._super(...arguments);
+  didReceiveAttrs(...args) {
+    this._super(...args);
 
     const { parameters, validations } = categorizeProperties(this.get('metadata.parameters'));
 
