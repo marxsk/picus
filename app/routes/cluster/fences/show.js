@@ -5,12 +5,6 @@ export default TabRoute.extend({
   modelForm: {},
   fence: undefined,
 
-  setupController(controller, model) {
-    this._super(controller, model);
-    // hide sidebar menu
-    this.controllerFor('application').set('hideMainMenu', true);
-  },
-
   async model(params) {
     const fence = this.store.peekRecordQueryName('fence', params.fence_name);
     this.set('fence', fence);

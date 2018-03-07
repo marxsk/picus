@@ -4,13 +4,6 @@ export default Ember.Route.extend({
   notifications: Ember.inject.service('notifications'),
   selectedNodes: Ember.A(),
 
-  // @todo: replace with service
-  setupController(controller, model) {
-    this._super(controller, model);
-    // hide sidebar menu
-    this.controllerFor('application').set('hideMainMenu', false);
-  },
-
   model() {
     return Ember.RSVP.hash({
       updatingCluster: this.store.peekAll('cluster'),

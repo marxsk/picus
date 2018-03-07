@@ -7,12 +7,6 @@ export default TabRoute.extend({
 
   aclRole: undefined,
 
-  setupController(controller, model) {
-    this._super(controller, model);
-    // hide sidebar menu
-    this.controllerFor('application').set('hideMainMenu', true);
-  },
-
   model(params) {
     const aclRole = this.store.peekRecordQueryName('aclRole', params.role_name);
 

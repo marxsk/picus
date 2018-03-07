@@ -9,12 +9,6 @@ export default BaseRoute.extend({
     },
   },
 
-  setupController(controller, model) {
-    this._super(controller, model);
-    // hide sidebar menu
-    this.controllerFor('application').set('hideMainMenu', false);
-  },
-
   model() {
     const staticCluster = this.store.peekRecord('cluster', 1);
 

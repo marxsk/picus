@@ -8,12 +8,6 @@ export default TabRoute.extend({
   modelForm: {},
   resource: undefined,
 
-  setupController(controller, model) {
-    this._super(controller, model);
-    // hide sidebar menu
-    this.controllerFor('application').set('hideMainMenu', true);
-  },
-
   async model(params) {
     const resource = this.store.peekRecordQueryName('resource', params.resource_name);
     this.set('resource', resource);

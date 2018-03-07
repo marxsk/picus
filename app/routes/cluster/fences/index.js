@@ -8,13 +8,6 @@ export default Ember.Route.extend({
     this.get('selectedResources').clear();
   },
 
-  // @todo: replace with service
-  setupController(controller, model) {
-    this._super(controller, model);
-    // hide sidebar menu
-    this.controllerFor('application').set('hideMainMenu', false);
-  },
-
   model() {
     return Ember.RSVP.hash({
       updatingCluster: this.store.peekAll('cluster'),
