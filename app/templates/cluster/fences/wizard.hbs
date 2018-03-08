@@ -1,0 +1,49 @@
+{{breadcrumb-menu active='Fencing Wizard' path=(array "cluster.index" "cluster.fences")}}
+
+{{#step-manager as |w|}}
+  {{#each w.steps as |step|}}
+    {{#if (gt step w.currentStep)}}
+    <button>
+      _{{step}}_
+    </button>
+    {{else}}
+    <button {{action w.transition-to step}}>
+      {{#if (eq step w.currentStep)}}*{{/if}}
+      {{step}}
+      {{#if (eq step w.currentStep)}}*{{/if}}
+    </button>
+    {{/if}}
+  {{/each}}
+
+  {{#w.step name='A'}}
+    <h3>Define Fence Agent</h3>
+
+    {{#agent-properties
+      formData = model.formData
+      metadata = model.metadata
+      showLevels=(array 'basic')
+      showInternalNames = showInternalNames
+      filterString = filterString
+      toggleInternalNames = (action 'toggleInternalNames')
+      updateFilterString = (action 'updateFilterString')
+      submitTitle = 'Next Page'
+      submitAction = (route-action 'onSubmitAction' w) as |f|
+    }}
+      {{f.text-field 'resourceName' label='Fence Device Name' hint='small help'}}
+      {{f.select-field 'fenceAgent' model.availableAgents.undefinedProvider label='Fence Agent' update=(route-action 'changeSelectedAgent')}}
+      {{model.metadata.shortdesc}}
+      <hr />
+    {{/agent-properties}}
+  {{/w.step}}
+
+  {{#w.step name='B'}}
+    <h3>Mapping</h3>
+    <button {{action w.transition-to 'A'}}>
+      Back
+    </button>
+  {{/w.step}}
+
+  {{#w.step name='C'}}
+    <h3>Done</h3>
+  {{/w.step}}
+{{/step-manager}}

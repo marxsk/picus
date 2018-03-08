@@ -7,7 +7,7 @@ export default BaseController.extend({
   actions: {
     submitProperties(properties, changesetForm) {
       const changeset = changesetForm;
-      changeset.get('change').forEach((attrName) => {
+      changeset.get('changes').forEach((attrName) => {
         properties.forEach((item) => {
           if (item.get('name') === attrName) {
             if (
@@ -21,7 +21,8 @@ export default BaseController.extend({
         });
       });
 
-      this.store.pushClusterProperties(changeset);
+      // @todo: replace with proper save + notification
+      return this.store.pushClusterProperties(changeset);
     },
     toggleAdvancedProperties(v) {
       this.toggleProperty('showAdvancedProperties');

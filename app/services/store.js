@@ -196,7 +196,7 @@ export default DS.Store.extend({
   /** Push all cluster properties to server in one request * */
   pushClusterProperties(changeset) {
     // @todo: data has to be converted to the right format; send all vs changes? [+ default = null]
-    this._sendData('update_cluster_settings', changeset.get('change'));
+    return this._sendData('update_cluster_settings', changeset.get('change'));
   },
 
   /** Push new node into cluster * */
@@ -420,7 +420,6 @@ export default DS.Store.extend({
     return this._sendData('remove_resource', jsonData);
   },
 
-  // @todo: should it be a promise?
   _sendData(endpoint, data) {
     const url = `/managec/${this.get('clusterName')}/${endpoint}`;
 
