@@ -10,7 +10,7 @@ const mockTickTock = Ember.Service.extend({
   now: 111,
 });
 
-moduleForAcceptance('Acceptance | /properties', {
+moduleForAcceptance('Acceptance | /fence', {
   beforeEach() {
     server.shutdown();
 
