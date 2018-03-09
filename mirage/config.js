@@ -489,12 +489,11 @@ export default function () {
     Object.keys(attrs).forEach((i) => {
       const cleanName = i.replace(/^_res_paramne_/, '');
 
-      let propToUpdate = schema.fenceProperties.findBy({
-        name: cleanName,
-        resourceId: fence.attrs.id,
-      });
+      let propToUpdate = schema.fenceProperties
+        .all()
+        .filter(x => x.name === `${cleanName}` && x.resourceId === fence.attrs.id);
 
-      if (propToUpdate === null) {
+      if (propToUpdate === null || propToUpdate.models.length === 0) {
         propToUpdate = fence.createProperty({
           name: cleanName,
         });
