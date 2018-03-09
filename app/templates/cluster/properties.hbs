@@ -7,7 +7,7 @@
   showInternalNames=showInternalNames
 
   onSubmitAction=(action 'submitProperties')
-  onAdvancedAction=(action 'toggleAdvancedProperties')
+  onAdvancedAction=(toggle-action 'showAdvancedProperties' this)
   onInternalAction=(action 'toggleInternalNames')
   updateFilterString=(action 'updateFilterString')
 }}

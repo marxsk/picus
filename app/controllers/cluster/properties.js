@@ -24,8 +24,5 @@ export default BaseController.extend({
       // @todo: replace with proper save + notification
       return this.store.pushClusterProperties(changeset);
     },
-    toggleAdvancedProperties(v) {
-      this.toggleProperty('showAdvancedProperties');
-    },
   },
 });
