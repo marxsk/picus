@@ -42,3 +42,12 @@ test('update election-timeout', async (assert) => {
   await click(find('div.save-button button')[0]);
   assert.ok(true, 'Properties changes were sent to the back-end');
 });
+
+test('submit with the unmodified form', async (assert) => {
+  defaultScenario(server);
+  console.log('Is there a warning from ember-cli-mirage? If yes, than this is the problematic tests :)');
+  await visit('/cluster/my/properties');
+
+  await click(find('div.save-button button')[0]);
+  assert.ok(true, 'Properties changes were sent to the back-end');
+});

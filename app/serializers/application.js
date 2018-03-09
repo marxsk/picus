@@ -3,6 +3,9 @@ import DS from 'ember-data';
 
 export default DS.JSONAPISerializer.extend({
   _postTextSerializer(params) {
+    if (Object.keys(params).length === 0) {
+      return '';
+    }
     return Object.keys(params)
       .map(key => `${encodeURIComponent(key)}=${encodeURIComponent(params[key])}`)
       .join('&');
