@@ -232,6 +232,17 @@ export default DS.JSONAPISerializer.extend({
         });
 
         return this._postTextSerializer(postData);
+      } else if (snapshot.modelName === 'cluster') {
+        const postData = {};
+
+        record.get('properties').forEach((attr) => {
+          if (attr.id === null) {
+            // @note: changed properties are always added as new
+            postData[attr.get('name')] = attr.get('value');
+          }
+        });
+
+        return this._postTextSerializer(postData);
       }
 
       Ember.Logger.error(`[serializer] model ${snapshot.modelName} for UPDATE can not be serialized`);

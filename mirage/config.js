@@ -455,11 +455,15 @@ export default function () {
   });
 
   this.post('/managec/my/update_cluster_settings', function updateClusterSettings(schema, request) {
+    const cluster = schema.clusters.find(1);
     const attrs = this.normalizedRequestAttrs();
 
     Object.keys(attrs).forEach((i) => {
       schema.db.properties.update({ name: i }, { value: attrs[i] });
     });
+
+    // @todo: remove property when attrs[i] is empty (share with fence properties?)
+    return cluster;
   });
 
   this.post('/managec/my/update_fence_device', function updateFenceDevice(schema, request) {

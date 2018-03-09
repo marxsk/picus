@@ -162,6 +162,7 @@ export default DS.Store.extend({
             'acl-user',
             'resource-property',
             'fence-property',
+            'property',
           ].forEach((modelName) => {
             store.peekAll(modelName).forEach((item) => {
               if (!knownIds.includes(`${modelName}::${item.get('id')}`)) {
@@ -191,12 +192,6 @@ export default DS.Store.extend({
     });
 
     return prom;
-  },
-
-  /** Push all cluster properties to server in one request * */
-  pushClusterProperties(changeset) {
-    // @todo: data has to be converted to the right format; send all vs changes? [+ default = null]
-    return this._sendData('update_cluster_settings', changeset.get('change'));
   },
 
   /** Push new node into cluster * */

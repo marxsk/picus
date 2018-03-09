@@ -51,6 +51,7 @@ export default DS.Adapter.extend({
       resultURL = {
         resource: 'update_resource',
         fence: 'update_fence_device',
+        cluster: 'update_cluster_settings',
       }[modelName];
     }
 
@@ -214,7 +215,7 @@ export default DS.Adapter.extend({
         }
       }
       data = _jsonToQueryString(jsonData);
-    } else if (['resource', 'fence'].includes(snapshot.modelName)) {
+    } else if (['resource', 'fence', 'cluster'].includes(snapshot.modelName)) {
       url = `${baseURL}/${this.pathForType(snapshot.modelName, 'update')}`;
       data = this.serialize(snapshot, { action: 'update' });
     } else {
