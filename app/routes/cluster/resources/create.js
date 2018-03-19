@@ -1,5 +1,6 @@
 import Ember from 'ember';
 import categorizeProperties from 'picus/utils/categorize-properties';
+import ResourceValidations from 'picus/validators/resource-validations';
 
 const { RSVP } = Ember;
 
@@ -44,7 +45,6 @@ export default Ember.Route.extend({
     metadata.parameters.forEach((i) => {
       this.set(`modelForm.${i.name}`, '');
     });
-    const { parameters, validations } = categorizeProperties(metadata.parameters);
 
     return Ember.RSVP.hash({
       availableAgents: this.get('availables'),
@@ -52,8 +52,7 @@ export default Ember.Route.extend({
       metadata,
       selectedAgent: this.get('selectedAgent'),
       selectedProvider: this.get('selectedProvider'),
-      parameters,
-      ResourceValidations: validations,
+      resourceValidation: ResourceValidations,
     });
   },
 

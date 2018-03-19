@@ -1,5 +1,4 @@
 import { validatePresence, validateNumber } from 'ember-changeset-validations/validators';
-import ResourceValidations from 'picus/validators/resource-validations';
 
 /**
  *  Create base information for form generation from XML metadata
@@ -18,7 +17,7 @@ import ResourceValidations from 'picus/validators/resource-validations';
 // output: array [level] of array [properties + validations]
 export default function categorizeProperties(parameters) {
   const result = {};
-  result.validations = { ...ResourceValidations };
+  result.validations = {};
   result.parameters = {};
 
   if (parameters === undefined) {
