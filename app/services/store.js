@@ -539,4 +539,12 @@ export default DS.Store.extend({
       .filterBy('name', name)
       .get('firstObject');
   },
+
+  getFencePlugs() {
+    const url = `/managec/${this.get('clusterName')}/mock/get-list`;
+
+    return this.get('ajax').post(url, {
+      data: _jsonToQueryString({}),
+    });
+  },
 });

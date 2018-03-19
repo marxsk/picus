@@ -4,6 +4,9 @@
   {{#bs-button onClick=(route-action 'linkTo' 'cluster.fences.create')}}
     Add
   {{/bs-button}}
+  {{#bs-button onClick=(route-action 'linkTo' 'cluster.fences.wizard')}}
+    Wizard
+  {{/bs-button}}
   {{#bs-button onClick=(route-action 'removeSelectedResources')}}
     Remove <span class="badge">{{model.selectedResources.length}}</span>
   {{/bs-button}}

@@ -1,21 +1,17 @@
 import Ember from 'ember';
+import ResourceValidations from 'picus/validators/resource-validations';
+import BaseRoute from 'picus/routes/base-route';
 
 const { RSVP } = Ember;
 
-export default Ember.Route.extend({
+export default BaseRoute.extend({
   modelForm: {},
+  agentForm: {},
+  mappingForm: {},
+  agentMetadata: {},
+  // @todo: Ember.computed.alias (?) agentForm.fenceAgent
   selectedAgent: '',
-
-  queryParams: {
-    filterString: {
-      as: 's',
-      replace: true,
-    },
-    showInternalNames: {
-      as: 'internal',
-      replace: true,
-    },
-  },
+  mapping: {},
 
   beforeModel() {
     return new RSVP.Promise((resolve, reject) => {
@@ -38,24 +34,41 @@ export default Ember.Route.extend({
       this.set('selectedAgent', agent);
     }
 
-    const metadata = await this.store.getAgentMetadata(
-      'fence',
-      `stonith:${this.get('selectedAgent')}`,
-    );
-
-    // @todo: bug in ember-form-for
     return Ember.RSVP.hash({
       availableAgents: this.get('availables'),
       params,
-      metadata,
-      formData: this.get('modelForm'),
+      agentMetadata: this.get('agentMetadata'),
+      modelForm: this.get('modelForm'),
       updatingCluster: this.store.peekAll('cluster'),
       selectedAgent: this.get('selectedAgent'),
       fences: this.store.peekAll('fence'),
+      agentForm: this.get('agentForm'),
+      mappingForm: this.get('mappingForm'),
+      resourceValidation: ResourceValidations,
     });
   },
 
   actions: {
+    selectFenceAgent(steps, form) {
+      this.set('agentForm', form);
+      this.set('selectedAgent', form.fenceAgent);
+
+      this.store
+        .getAgentMetadata('fence', `stonith:${this.get('selectedAgent')}`)
+        .then((response) => {
+          this.set('agentMetadata.response', response);
+
+          return steps['transition-to']('fenceProperties');
+        });
+
+      return steps['transition-to']('loadingMetadata');
+    },
+
+    selectMapping(steps, form) {
+      this.set('mappingForm', form);
+      return steps['transition-to']('summary');
+    },
+
     changeSelectedAgent(form, fieldName, selectedItem) {
       this.set('modelForm', form);
       this.set('selectedAgent', selectedItem);
@@ -73,8 +86,69 @@ export default Ember.Route.extend({
       });
 
       form.save();
-      steps['transition-to']('B');
-      return Ember.RSVP.Promise.resolve();
+
+      // @todo: add support for timeout
+      this.store.getFencePlugs().then((response) => {
+        this.controller.set('fenceMappingInfo', Ember.A(Object.keys(response)));
+        steps['transition-to']('mapping');
+      });
+
+      return steps['transition-to']('loadingList');
+    },
+
+    submitAgent() {
+      delete this.get('mappingForm').mappingScheme;
+
+      // copied&modified from fence/create.js (refactor-later)
+      const cluster = this.store.peekAll('cluster').objectAt(0);
+
+      const resource = this.get('store').createRecord('fence', {
+        name: this.get('modelForm.resourceName'),
+        agentType: this.get('modelForm.fenceAgent'),
+      });
+
+      Object.keys(this.get('modelForm')).forEach((obj) => {
+        if (['resourceName', 'agentType'].includes(obj.key)) {
+          return;
+        }
+
+        if (typeof this.get(`modelForm.${obj}`) === 'object') {
+          // Only primitive values can be serialized.
+          // EmptyObject is a result of value from select-field with (array)
+          // which was not changed, so it should be ignored.
+          return;
+        }
+
+        resource.get('properties').addObject(this.get('store').createRecord('fence-property', {
+          resource,
+          name: obj,
+          value: this.get(`modelForm.${obj}`),
+        }));
+      });
+
+      // save mapping info into pcmk_host_map
+      let pcmk_host_map = '';
+      Object.keys(this.get('mappingForm')).forEach((nodename) => {
+        const plugValue = this.get(`mappingForm.${nodename}`);
+        if (plugValue.trim() !== '') {
+          pcmk_host_map += `${nodename}:${plugValue};`;
+        }
+      });
+
+      resource.get('properties').addObject(this.get('store').createRecord('fence-property', {
+        resource,
+        name: 'pcmk_host_map',
+        value: pcmk_host_map,
+      }));
+
+      cluster.get('fences').addObject(resource);
+      this.transitionTo('cluster.fences.index');
+
+      this.set('modelForm', {});
+      this.set('mappingForm', {});
+      this.set('agentForm', {});
+
+      return this.get('notifications').notificationSaveRecord(resource, 'ADD_FENCE');
     },
   },
 });

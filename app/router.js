@@ -30,6 +30,7 @@ Router.map(function router() {
       this.route('listing', { path: 'show/' });
       this.route('show', { path: 'show/:fence_name' });
       this.route('create');
+      this.route('wizard');
     });
 
     this.route('acl', function aclRouter() {

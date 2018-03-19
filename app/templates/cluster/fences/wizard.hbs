@@ -1,27 +1,50 @@
 {{breadcrumb-menu active='Fencing Wizard' path=(array "cluster.index" "cluster.fences")}}
 
 {{#step-manager as |w|}}
+  {{#with (hash fenceAgent='Select Agent' fenceProperties='Properties') as |labels|}}
   {{#each w.steps as |step|}}
-    {{#if (gt step w.currentStep)}}
-    <button>
-      _{{step}}_
-    </button>
+    {{#if (contains (array 'loadingMetadata' 'loadingList') step)}}
+      {{#if (eq step w.currentStep) }}
+        *(load)*
+      {{/if}}
     {{else}}
-    <button {{action w.transition-to step}}>
-      {{#if (eq step w.currentStep)}}*{{/if}}
-      {{step}}
-      {{#if (eq step w.currentStep)}}*{{/if}}
-    </button>
+      {{#if (gt step w.currentStep)}}
+        <button>
+          {{if (get labels step) (get labels step) step}}
+        </button>
+      {{else}}
+        <button {{action w.transition-to step}}>
+          {{#if (eq step w.currentStep)}}*{{/if}}
+          {{if (get labels step) (get labels step) step}}
+          {{#if (eq step w.currentStep)}}*{{/if}}
+        </button>
+      {{/if}}
     {{/if}}
   {{/each}}
+  {{/with}}
 
-  {{#w.step name='A'}}
+  {{#w.step name='fenceAgent'}}
+    {{#form-for model.agentForm submit=(route-action 'selectFenceAgent' w) as |f|}}
+      {{f.select-field 'fenceAgent' model.availableAgents.undefinedProvider label='Fence Agent'}}
+      {{! @todo: Add description of the fence agent - this is not available in the pcsd because of rhbz#1384109 }}
+      {{f.submit "Next"}}
+    {{/form-for}}
+  {{/w.step}}
+
+  {{#w.step name='loadingMetadata'}}
+    <h3>Waiting for response from pcsd</h3>
+  {{/w.step}}
+
+  {{#w.step name='fenceProperties'}}
     <h3>Define Fence Agent</h3>
 
+    {{model.agentMetadata.parameters}}
+
     {{#agent-properties
-      formData = model.formData
-      metadata = model.metadata
-      showLevels=(array 'basic')
+      formData = model.modelForm
+      metadata = model.agentMetadata
+      appendValidations = model.resourceValidation
+      showLevels = (array 'basic')
       showInternalNames = showInternalNames
       filterString = filterString
       toggleInternalNames = (action 'toggleInternalNames')
@@ -30,20 +53,46 @@
       submitAction = (route-action 'onSubmitAction' w) as |f|
     }}
       {{f.text-field 'resourceName' label='Fence Device Name' hint='small help'}}
-      {{f.select-field 'fenceAgent' model.availableAgents.undefinedProvider label='Fence Agent' update=(route-action 'changeSelectedAgent')}}
       {{model.metadata.shortdesc}}
       <hr />
     {{/agent-properties}}
   {{/w.step}}
 
-  {{#w.step name='B'}}
-    <h3>Mapping</h3>
-    <button {{action w.transition-to 'A'}}>
-      Back
-    </button>
+  {{#w.step name='loadingList'}}
+    <h3>Waiting for response from pcsd: action list</h3>
   {{/w.step}}
 
-  {{#w.step name='C'}}
-    <h3>Done</h3>
+  {{#w.step name='mapping'}}
+    <h3>Select a mapping scheme</h3>
+
+    {{#form-for model.mappingForm submit=(route-action 'selectMapping' w) as |f|}}
+      {{f.select-field 'mappingScheme' options="select manual"}}
+
+      {{#if (eq model.mappingForm.mappingScheme 'select')}}
+        {{#each model.updatingCluster.firstObject.nodes as |node|}}
+          {{f.select-field node.name options=_fenceMappingInfo placeholder='Type in a relevant plug'}}
+        {{/each}}
+      {{/if}}
+      {{#if (eq model.mappingForm.mappingScheme 'manual')}}
+        {{#each model.updatingCluster.firstObject.nodes as |node|}}
+          {{f.text-field node.name placeholder='Type in a relevant plug'}}
+        {{/each}}
+      {{/if}}
+
+      {{f.submit "Next"}}
+    {{/form-for}}
+  {{/w.step}}
+
+  {{#w.step name='summary'}}
+      <br /> Summary: <br />
+      Name: {{model.modelForm.resourceName}} <br />
+      Type: {{model.agentForm.fenceAgent}} <br />
+      Mapping scheme: <br />
+      <ul>
+      {{#each model.updatingCluster.firstObject.nodes as |node|}}
+        <li>{{node.name}} :: {{get model.mappingForm node.name}}</li>
+      {{/each}}
+      </ul>
+    {{#bs-button onClick=(route-action 'submitAgent')}}Setup fence agent{{/bs-button}}
   {{/w.step}}
 {{/step-manager}}

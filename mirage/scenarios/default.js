@@ -16,6 +16,12 @@ export default function (server) {
   node.createNodeAttribute({ key: 'attr #1', value: 'foo' });
   node.createNodeAttribute({ key: 'attr #2', value: 'bar' });
   node.createNodeUtilizationAttribute({ name: 'util attr #99', value: 'bar bar' });
+  cluster.createNode({
+    id: 223,
+    name: 'virtual02',
+    isCorosyncRunning: true,
+    isCorosyncEnabled: true,
+  });
 
   const resource = cluster.createResource({
     id: 333,
