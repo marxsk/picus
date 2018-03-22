@@ -34,6 +34,9 @@ export default BaseController.extend({
       });
 
       this.transitionToRoute('cluster.index');
+      if (changeset.get('changes').length === 0) {
+        return Ember.RSVP.resolve();
+      }
       return this.get('notifications').notificationSaveRecord(cluster, 'UPDATE_PROPERTIES');
     },
   },
