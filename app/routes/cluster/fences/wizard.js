@@ -127,18 +127,18 @@ export default BaseRoute.extend({
       });
 
       // save mapping info into pcmk_host_map
-      let pcmk_host_map = '';
+      let pcmkHostMap = '';
       Object.keys(this.get('mappingForm')).forEach((nodename) => {
         const plugValue = this.get(`mappingForm.${nodename}`);
         if (plugValue.trim() !== '') {
-          pcmk_host_map += `${nodename}:${plugValue};`;
+          pcmkHostMap += `${nodename}:${plugValue};`;
         }
       });
 
       resource.get('properties').addObject(this.get('store').createRecord('fence-property', {
         resource,
         name: 'pcmk_host_map',
-        value: pcmk_host_map,
+        value: pcmkHostMap,
       }));
 
       cluster.get('fences').addObject(resource);

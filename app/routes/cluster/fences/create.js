@@ -1,7 +1,6 @@
 import Ember from 'ember';
 import BaseRoute from 'picus/routes/base-route';
 import ResourceValidations from 'picus/validators/resource-validations';
-import categorizeProperties from 'picus/utils/categorize-properties';
 
 const { RSVP } = Ember;
 
