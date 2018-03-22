@@ -981,18 +981,6 @@ export default function () {
     return undefined;
   });
 
-  this.post('/acl-permission', (schema, request) => {
-    const params = JSON.parse(request.requestBody);
-    const role = schema.aclRoles.where({ name: params.data.attributes.roleName }).models[0];
-
-    const attr = role.createPermission({
-      operation: params.data.attributes.operation,
-      xpath: params.data.attributes.xpath,
-    });
-
-    return attr;
-  });
-
   this.post('/managec/my/mock/get-list', (schema, request) => ({
     plug01: 'alias for this plug',
     plug02: 'other alias',

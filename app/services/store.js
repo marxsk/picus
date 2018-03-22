@@ -464,37 +464,6 @@ export default DS.Store.extend({
     );
   },
 
-  pushAppendUserToRole(roleName, user) {
-    this._sendData('add_acl', {
-      item: 'user',
-      role_id: roleName,
-      usergroup: user.name,
-    });
-  },
-  pushRemoveUserFromRole(roleName, user) {
-    this._sendData('remove_acl', {
-      item: 'usergroup',
-      item_type: 'user',
-      role_id: roleName,
-      usergroup_id: user.name,
-    });
-  },
-  pushAppendGroupToRole(roleName, group) {
-    this._sendData('add_acl', {
-      item: 'group',
-      role_id: roleName,
-      usergroup: group.name,
-    });
-  },
-  pushRemoveGroupFromRole(roleName, user) {
-    this._sendData('remove_acl', {
-      item: 'usergroup',
-      item_type: 'user',
-      role_id: roleName,
-      usergroup_id: user.name,
-    });
-  },
-
   // @note: should it return promise?
   _sendAclData(url, data) {
     this.get('ajax')
@@ -504,31 +473,6 @@ export default DS.Store.extend({
       .then(() => {
         this.reloadData();
       });
-  },
-
-  pushAppendUser(attribute) {
-    return this._sendAclData('/acl-user', {
-      type: 'acl-user',
-      attributes: { ...attribute },
-    });
-  },
-  pushAppendGroup(attribute) {
-    return this._sendAclData('/acl-group', {
-      type: 'acl-group',
-      attributes: { ...attribute },
-    });
-  },
-  pushAppendRole(attribute) {
-    return this._sendAclData('/acl-role', {
-      type: 'acl-role',
-      attributes: { ...attribute },
-    });
-  },
-  pushAppendPermission(roleName, attribute) {
-    return this._sendAclData('acl-permission', {
-      type: 'acl-permission',
-      attributes: { roleName, ...attribute },
-    });
   },
 
   /**
