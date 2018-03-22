@@ -1,5 +1,7 @@
 import Ember from 'ember';
 import categorizeProperties from 'picus/utils/categorize-properties';
+import lookupValidator from 'ember-changeset-validations';
+import Changeset from 'ember-changeset';
 
 export default Ember.Component.extend({
   didReceiveAttrs(...args) {
@@ -21,6 +23,20 @@ export default Ember.Component.extend({
         const validation = this.get(`appendValidations.${field}`);
         this.set(`_validations.${field}`, validation);
       });
+    }
+
+    // We should not create a changeset inside the template because it won't
+    // survive the changes after toggle of internal names or filter strin update
+    if (!this.get('changeset')) {
+      this.set(
+        'changeset',
+        new Changeset(
+          this.get('formData'),
+          lookupValidator(this.get('_validations')),
+          this.get('_validations'),
+        ),
+      );
+      this.get('changeset').validate();
     }
   },
 });

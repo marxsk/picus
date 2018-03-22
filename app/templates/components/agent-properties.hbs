@@ -1,4 +1,3 @@
-{{#with (changeset formData _validations initValidation=true) as |changeset|}}
   {{#form-for changeset submit=(action submitAction) as |f|}}
     {{yield f}}
     <div>
@@ -28,4 +27,3 @@
       {{f.submit "Fix issues" disabled=changeset.isInvalid}}
     {{/unless}}
   {{/form-for}}
-{{/with}}
