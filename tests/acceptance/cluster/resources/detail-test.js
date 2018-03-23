@@ -3,6 +3,7 @@ import { test } from 'qunit';
 import moduleForAcceptance from 'picus/tests/helpers/module-for-acceptance';
 import defaultScenario from 'picus/mirage/scenarios/default';
 import startApp from 'picus/tests/helpers/start-app';
+import { selectChoose } from 'ember-power-select/test-support/helpers';
 
 let application;
 
@@ -30,4 +31,21 @@ test('visiting /cluster/resources/detail', (assert) => {
   andThen(() => {
     assert.equal(currentURL(), '/cluster/my/resources/show/MyMock-01');
   });
+});
+
+test('add resource ordering preference', async (assert) => {
+  defaultScenario(server);
+
+  await visit('/cluster/my/resources/show/resource-ping?tab=constraints');
+  await click(find('h4')[5]);
+  await click(find('button')[8]);
+
+  await selectChoose(emberFormForFind('Target Resource'), 'MyMock-01');
+  await fillIn(emberFormForFind('Score'), 222);
+
+  assert.equal(
+    find('button')[9].outerText,
+    'Add',
+    'Validation do not block submitting of the form',
+  );
 });

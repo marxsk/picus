@@ -177,6 +177,7 @@
         step=(map-by 'name' model.resources)
         tabindex=record
         max=index
+        min=changeset
         pattern=(action dynamicUpdate '' index)
       }}
     {{/dynamic-fields}}
@@ -231,6 +232,7 @@
         step=(map-by 'name' (without selResource model.resources))
         tabindex=record
         max=index
+        min=changeset
         pattern=(action dynamicUpdate '' index)
       }}
       {{f.custom-field
@@ -268,6 +270,7 @@
         step=(map-by 'name' model.resources)
         tabindex=record
         max=index
+        min=changeset
         pattern=(action dynamicUpdate '' index)
       }}
     {{/dynamic-fields}}
@@ -342,6 +345,7 @@
         step=(map-by 'name' model.resources)
         tabindex=record
         max=index
+        min=changeset
         pattern=(action dynamicUpdate '' index)
       }}
     {{/dynamic-fields}}
