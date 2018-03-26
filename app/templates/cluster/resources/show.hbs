@@ -9,13 +9,11 @@
 
 {{breadcrumb-menu active=model.params.resource_name path=(array "cluster.index" "cluster.resources")}}
 
-{{#unless model.listing}}
-{{#unless model.selectedResource}}
+{{#if model.resourceNotFound}}
   {{#bs-alert type="danger" dismissible=0}}
   The resource device with ID '{{model.params.resource_name}}' was not found, please select a different resource.
   {{/bs-alert}}
-{{/unless}}
-{{/unless}}
+{{/if}}
 
 {{#with model.selectedResource as |selResource| }}
   <h3>Editable form for Resource Agents</h3>

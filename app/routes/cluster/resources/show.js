@@ -12,9 +12,9 @@ export default TabRoute.extend({
     const resource = this.store.peekRecordQueryName('resource', params.resource_name);
     this.set('resource', resource);
 
-    if (resource === null) {
+    if (!resource) {
       return Ember.RSVP.hash({
-        listing: params.resource_id.length === 0,
+        resourceNotFound: true,
         updatingCluster: this.store.peekAll('cluster'),
         params,
         ScoreValidations,

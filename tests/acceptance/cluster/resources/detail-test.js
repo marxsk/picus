@@ -33,6 +33,13 @@ test('visiting /cluster/resources/detail', (assert) => {
   });
 });
 
+test('visiting /cluster/resources/does-not-exist', async (assert) => {
+  defaultScenario(server);
+  await visit('/cluster/my/resources/show/does-not-exist');
+
+  assert.equal(currentURL(), '/cluster/my/resources/show/does-not-exist');
+});
+
 test('add resource ordering preference', async (assert) => {
   defaultScenario(server);
 
