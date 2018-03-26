@@ -28,7 +28,7 @@ export default Ember.Route.extend({
 
   async model() {
     if (!this.get('selectedProvider') || Object.keys(this.get('modelForm')).length === 0) {
-      const provider = Object.keys(this.get('availables'))[6];
+      const provider = Object.keys(this.get('availables'))[1];
       const agent = this.get(`availables.${provider}`)[0];
       this.set('selectedProvider', provider);
       this.set('selectedAgent', agent);
@@ -64,6 +64,14 @@ export default Ember.Route.extend({
     changeSelectedProvider(form, fieldName, selectedItem) {
       this.set('modelForm', form);
       this.set('selectedProvider', selectedItem);
+      this.set('selectedAgent', this.get(`availables.${this.get('selectedProvider')}`)[0]);
+      this.set('modelForm.resourceAgent', this.get('selectedAgent'));
+
+      // @todo: add loading screen
+      // @todo: improve reaction to change provider
+      // @todo: add test
+      // didReceiveAttr?
+
       this.refresh();
     },
     onSubmitAction(form) {
