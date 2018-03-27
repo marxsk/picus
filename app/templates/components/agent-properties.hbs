@@ -16,6 +16,7 @@
       keyUp=(action updateFilterString filterString)
     }}
   </div>
+  {{#if availableMetadata}}
     {{#unless showLevels}}
       {{agent-properties-form changeset=changeset parameters=parameters form=f levels=(array 'basic' 'standard' 'advanced' 'expert') filter=filterString internal=showInternalNames}}
     {{else}}
@@ -26,4 +27,7 @@
     {{else}}
       {{f.submit "Fix issues" disabled=changeset.isInvalid}}
     {{/unless}}
+  {{else}}
+    loading data ...
+  {{/if}}
   {{/form-for}}

@@ -44,6 +44,11 @@ export default BaseRoute.extend({
       this.set(`modelForm.${i.name}`, '');
     });
 
+    // @note: this.controller is not available in the first run but it is later
+    if (this.controller) {
+      this.controller.set('availableMetadata', true);
+    }
+
     return Ember.RSVP.hash({
       availableAgents: this.get('availables'),
       formData: this.get('modelForm'),
@@ -58,6 +63,7 @@ export default BaseRoute.extend({
     changeSelectedAgent(form, fieldName, selectedItem) {
       this.set('modelForm', form);
       this.set('selectedAgent', selectedItem);
+      this.controller.set('availableMetadata', false);
       this.refresh();
     },
     onSubmitAction(form) {
