@@ -11,6 +11,11 @@ export default BaseRoute.extend({
   availables: {},
 
   beforeModel() {
+    if (Object.keys(this.get('availables')).length > 0) {
+      // expectating that agents can be cached
+      return RSVP.resolve();
+    }
+
     return new RSVP.Promise((resolve, reject) => {
       this.store.getAvailableAgents('fence').then(
         (response) => {
