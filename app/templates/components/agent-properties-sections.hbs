@@ -1,5 +1,5 @@
 {{#each parameters as |p|}}
-  {{#if (incl p.name filter)}}
+  {{#if (or (incl p.name filter) (incl p.shortdesc filter))}}
     {{#if (eq p.type 'boolean')}}
       {{#if (eq p.default 'true')}}
         {{form.select-field p.name 'true' label=(if internal p.name p.shortdesc)}}
