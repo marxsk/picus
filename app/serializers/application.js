@@ -25,13 +25,13 @@ export default DS.JSONAPISerializer.extend({
         ].includes(snapshot.modelName)
       ) {
         return `constraint_id=${record.get('preferenceID')}`;
-      } else if (snapshot.modelName === 'attribute') {
+      } else if (snapshot.modelName === 'resource-attribute') {
         return this._postTextSerializer({
           res_id: record.get('resource.name'),
           key: record.get('key'),
           value: '',
         });
-      } else if (snapshot.modelName === 'utilization-attribute') {
+      } else if (snapshot.modelName === 'resource-utilization-attribute') {
         return this._postTextSerializer({
           resource_id: record.get('resource.name'),
           name: record.get('name'),
@@ -116,14 +116,14 @@ export default DS.JSONAPISerializer.extend({
           'loss-policy': record.get('lossPolicy'),
           force,
         });
-      } else if (snapshot.modelName === 'attribute') {
+      } else if (snapshot.modelName === 'resource-attribute') {
         return this._postTextSerializer({
           res_id: record.get('resource.name'),
           key: record.get('key'),
           value: record.get('value'),
           force,
         });
-      } else if (snapshot.modelName === 'utilization-attribute') {
+      } else if (snapshot.modelName === 'resource-utilization-attribute') {
         return this._postTextSerializer({
           resource_id: record.get('resource.name'),
           name: record.get('name'),

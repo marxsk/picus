@@ -205,7 +205,7 @@ export default TabRoute.extend({
     },
 
     addMetaAttribute(form) {
-      const attribute = this.get('store').createRecord('attribute', {
+      const attribute = this.get('store').createRecord('resource-attribute', {
         resource: this.get('resource'),
         key: form.get('key'),
         value: form.get('value'),
@@ -214,7 +214,7 @@ export default TabRoute.extend({
     },
 
     addUtilizationAttribute(form) {
-      const attribute = this.get('store').createRecord('utilization-attribute', {
+      const attribute = this.get('store').createRecord('resource-utilization-attribute', {
         resource: this.get('resource'),
         name: form.get('name'),
         value: form.get('value'),
