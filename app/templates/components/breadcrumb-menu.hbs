@@ -1,5 +1,13 @@
 {{#ember-wormhole to="breadcrumb"}}
   <ol class="breadcrumb">
+      <li class="breadcrumb-item">
+        {{#bs-dropdown tagName="span" as |dd|}}
+          {{#dd.button}}Cluster: my <span class="caret"></span>{{/dd.button}}
+          {{#dd.menu as |menu|}}
+            {{#menu.item}}{{#link-to "cluster.index"}}my{{/link-to}}{{/menu.item}}
+          {{/dd.menu}}
+        {{/bs-dropdown}}
+      </li>
     {{#each path as |routeName|}}
       <li class="breadcrumb-item">{{#link-to routeName}}{{get routeTitles (camelize routeName)}}{{/link-to}}</li>
     {{/each}}
