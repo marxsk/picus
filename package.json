@@ -49,7 +49,7 @@
     "ember-drag-drop": "0.4.6",
     "ember-dynamic-fields": "*",
     "ember-export-application-global": "^1.0.5",
-    "ember-form-for": "git+https://github.com/marxsk/ember-form-for.git",
+    "ember-form-for": "git+https://github.com/marxsk/ember-form-for.git#follow",
     "ember-load-initializers": "^1.0.0",
     "ember-modal-dialog": "2.3.0",
     "ember-native-dom-helpers": "^0.6.0",
