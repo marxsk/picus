@@ -2,7 +2,7 @@
   {{#if (or (incl p.name filter) (incl p.shortdesc filter))}}
     {{#if (eq p.type 'boolean')}}
       {{#if (eq p.default 'true')}}
-        {{form.select-field p.name 'true' label=(if internal p.name p.shortdesc)}}
+        {{form.select-field p.name 'true' label=(if internal p.name p.shortdesc) required=(is-required validations p.name)}}
       {{else}}
         {{form.select-field p.name (array
             (hash name='default' title=(concat 'default (' p.default ')'))
@@ -12,20 +12,21 @@
           optionTargetPath='name'
           label=(if internal p.name p.shortdesc)
           hint=prop.shortDesc
+          required=(is-required validations p.name)
         }}
       {{/if}}
     {{/if}}
 
     {{#if (eq p.type 'string')}}
-      {{form.text-field p.name label=(if internal p.name p.shortdesc) placeholder=p.default}}
+      {{form.text-field p.name label=(if internal p.name p.shortdesc) placeholder=p.default required=(is-required validations p.name)}}
     {{/if}}
 
     {{#if (eq p.type 'integer')}}
-      {{form.text-field p.name label=(if internal p.name p.shortdesc) placeholder=p.default}}
+      {{form.text-field p.name label=(if internal p.name p.shortdesc) placeholder=p.default required=(is-required validations p.name)}}
     {{/if}}
 
     {{#if (eq p.type 'secret')}}
-      {{form.password-field p.name label=(if internal p.name p.shortdesc) placeholder=p.default update=(action 'updateSecretLength')}}
+      {{form.password-field p.name label=(if internal p.name p.shortdesc) placeholder=p.default update=(action 'updateSecretLength') required=(is-required validations p.name)}}
       {{#bs-button onClick=(action 'showSecret' p.name (get changeset._content p.name))}}
         Show Password
       {{/bs-button}}

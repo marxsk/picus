@@ -12,8 +12,8 @@
   availableMetadata = availableMetadata
   submitAction = (route-action 'onSubmitAction') as |f|
 }}
-  {{f.text-field 'resourceName' label='Fence Device Name' hint='small help'}}
-  {{f.select-field 'fenceAgent' model.availableAgents.undefinedProvider label='Fence Agent' update=(route-action 'changeSelectedAgent')}}
+  {{f.text-field 'resourceName' label='Fence Device Name' hint='small help' required=true}}
+  {{f.select-field 'fenceAgent' model.availableAgents.undefinedProvider label='Fence Agent' update=(route-action 'changeSelectedAgent') required=true}}
   {{model.metadata.shortdesc}}
   <hr />
 {{/agent-properties}}

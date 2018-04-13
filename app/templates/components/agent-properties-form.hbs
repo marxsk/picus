@@ -2,7 +2,7 @@
   {{#if (gt (get (get parameters level) 'length') 0)}}
     {{#bs-accordion selected="1" as |acc|}}
       {{#acc.item value="1" title=level}}
-        {{agent-properties-sections changeset=changeset parameters=(get parameters level) filter=filter form=form internal=internal}}
+        {{agent-properties-sections changeset=changeset parameters=(get parameters level) filter=filter form=form internal=internal validations=validations}}
       {{/acc.item}}
     {{/bs-accordion}}
   {{/if}}

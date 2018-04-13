@@ -18,9 +18,9 @@
   </div>
   {{#if availableMetadata}}
     {{#unless showLevels}}
-      {{agent-properties-form changeset=changeset parameters=parameters form=f levels=(array 'basic' 'standard' 'advanced' 'expert') filter=filterString internal=showInternalNames}}
+      {{agent-properties-form changeset=changeset parameters=parameters form=f levels=(array 'basic' 'standard' 'advanced' 'expert') filter=filterString internal=showInternalNames validations=_validations}}
     {{else}}
-      {{agent-properties-form changeset=changeset parameters=parameters form=f levels=showLevels filter=filterString internal=showInternalNames}}
+      {{agent-properties-form changeset=changeset parameters=parameters form=f levels=showLevels filter=filterString internal=showInternalNames validations=_validations}}
     {{/unless}}
     {{#unless changeset.isInvalid}}
       {{f.submit (if submitTitle submitTitle "Update") disabled=changeset.isInvalid}}

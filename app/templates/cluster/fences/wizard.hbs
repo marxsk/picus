@@ -25,7 +25,7 @@
 
   {{#w.step name='fenceAgent'}}
     {{#form-for model.agentForm submit=(route-action 'selectFenceAgent' w) as |f|}}
-      {{f.select-field 'fenceAgent' model.availableAgents.undefinedProvider label='Fence Agent'}}
+      {{f.select-field 'fenceAgent' model.availableAgents.undefinedProvider label='Fence Agent' required=true}}
       {{! @todo: Add description of the fence agent - this is not available in the pcsd because of rhbz#1384109 }}
       {{f.submit "Next"}}
     {{/form-for}}
@@ -53,7 +53,7 @@
       availableMetadata = true
       submitAction = (route-action 'onSubmitAction' w) as |f|
     }}
-      {{f.text-field 'resourceName' label='Fence Device Name' hint='small help'}}
+      {{f.text-field 'resourceName' label='Fence Device Name' hint='small help' required=true}}
       {{model.metadata.shortdesc}}
       <hr />
     {{/agent-properties}}
@@ -67,7 +67,7 @@
     <h3>Select a mapping scheme</h3>
 
     {{#form-for model.mappingForm submit=(route-action 'selectMapping' w) as |f|}}
-      {{f.select-field 'mappingScheme' options="select manual"}}
+      {{f.select-field 'mappingScheme' options="select manual" required=true}}
 
       {{#if (eq model.mappingForm.mappingScheme 'select')}}
         {{#each model.updatingCluster.firstObject.nodes as |node|}}
