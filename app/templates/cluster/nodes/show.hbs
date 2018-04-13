@@ -50,26 +50,6 @@
 
   {{#tab.pane elementId="attributes" title="Attributes"}}
   {{#bs-accordion selected="meta" as |acc|}}
-  {{#acc.item value="meta" title="Node Attributes"}}
-    {{#attr-form
-      visibilityTitle="Node Attribute"
-      submitTitle="Add"
-      submitAction=(route-action 'appendNodeAttribute')
-      validations=model.validations.addNodeAttribute as |f|
-    }}
-      {{f.text-field 'key'}}
-      {{f.text-field 'value'}}
-    {{/attr-form}}
-    {{#attr-list
-        title='Node Attributes'
-        attributes=selNode.nodeAttributes
-        onDeleteAction=(route-action 'deleteNodeAttribute' 'DELETE_NODE_ATTRIBUTE')
-        as |attr|
-    }}
-        <td>{{attr.key}}</td>
-        <td>{{attr.value}}</td>
-    {{/attr-list}}
-    {{/acc.item}}
     {{#acc.item value="meta" title="Node Utilization Attributes"}}
       {{#attr-form
         visibilityTitle="Node Utilization Attribute"

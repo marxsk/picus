@@ -29,24 +29,13 @@ test('Delete selected on node attributes', async (assert) => {
   await visit('/cluster/my/nodes/show/virtual01?tab=attributes');
 
   let tableCells = find('table tr td');
-  assert.equal('attr #1', tableCells[1].innerText, 'First attribute exists as expected');
+  assert.equal('util attr #99', tableCells[1].innerText, 'First attribute exists as expected');
 
   await click(find('table tr td input')[0]);
   await click(find('span.delete-attrs')[0]);
 
   tableCells = find('table tr td');
-  assert.equal('attr #2', tableCells[1].innerText, 'First attribute was removed');
+  assert.equal(0, tableCells.length, 'First attribute was removed');
 
-  // nothing should happend as selection should be empty
-  await click(find('span.delete-attrs')[0]);
-
-  // delete also utilization attribute
-  await click(find('table tr td input')[1]);
-  await click(find('span.delete-attrs')[1]);
-
-  assert.ok(true, 'It was possible to delete attribute from different table');
-
-  andThen(() => {
-    assert.equal(currentURL(), '/cluster/my/nodes/show/virtual01?tab=attributes');
-  });
+  assert.equal(currentURL(), '/cluster/my/nodes/show/virtual01?tab=attributes');
 });
