@@ -37,7 +37,7 @@ test('add (and remove) ACL user to the ACL role', async (assert) => {
   visit('/cluster/my/acl/role/Hugo');
 
   // First button is 'Remove resource'; Second one is 'Add User'
-  await click('button:eq(1)');
+  await click('button:eq(2)');
   assert.ok(find('label.form-field--label').length > 0, 'There is an open form');
 
   await fillIn(emberFormForFind('Name'), 'foo');

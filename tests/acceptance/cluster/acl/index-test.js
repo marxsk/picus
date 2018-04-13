@@ -54,7 +54,7 @@ test('visiting /cluster/CLUSTERID/acl with specified tab and changing active tab
 test('create an ACL role with name and description', async (assert) => {
   await visit('/cluster/my/acl?tab=roles');
   assert.equal(find('label.form-field--label').length, 0, 'There are no open forms');
-  await click('button:first');
+  await click('button:eq(1)');
   assert.ok(find('label.form-field--label').length > 0, 'There is an open form');
 
   await fillIn(emberFormForFind('Name'), 'hugo');

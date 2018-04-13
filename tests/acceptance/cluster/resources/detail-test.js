@@ -45,16 +45,16 @@ test('add meta attribute', async (assert) => {
 
   await visit('/cluster/my/resources/show/resource-ping?tab=attributes');
   await click(find('h4')[0]);
-  await click(find('button')[12]);
+  await click('button:eq(13)');
 
   await fillIn(emberFormForFind('Key'), 'foo');
   await fillIn(emberFormForFind('Value'), 'bar');
 
   assert.equal(
-    find('button')[13].outerText,
+    find('button')[14].outerText,
     'Add',
     'Validation do not block submitting of the form',
   );
 
-  await click(find('button')[13]);
+  await click('button:eq(14)');
 });
