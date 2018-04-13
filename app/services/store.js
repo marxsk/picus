@@ -207,63 +207,6 @@ export default DS.Store.extend({
   },
 
   /**
-   * Push create/update agent (dynamic) properties to pcsd
-   *
-   *  @param {string} agentType - Type of agent (resource|fence)
-   *  @param {Object[]} attrs - Array of objects with properties ({key: FIELD, value: VALUE})
-   *  @param {string} operation - (create|update)
-   *
-   *  @todo Create proper error handlers
-   *  @todo Method should return promise?
-   * */
-  pushUpdateAgentProperties(agentType, attrsObjects, operation = 'update') {
-    let url = `/managec/${this.get('clusterName')}/update_`;
-    let transformedAgentType;
-    const attrs = attrsObjects;
-
-    switch (agentType) {
-      case 'resource':
-        url += 'resource';
-        transformedAgentType = `${attrs.agentProvider}:${attrs.agentType}`;
-        break;
-      case 'fence':
-        url += 'fence_device';
-        transformedAgentType = attrs.agentType;
-        break;
-      default:
-        url = undefined;
-    }
-
-    Ember.Logger.assert(typeof url !== 'undefined', `Invalid agentType (${agentType}) entered`);
-
-    // @todo: proper encoding (URIEncode?)
-    let data = `resource_type=${transformedAgentType}`;
-    if (operation === 'update') {
-      data += `&resource_id=${attrs.name}`;
-    }
-
-    if (attrs.clone) {
-      data += '&resource_clone=on';
-      attrs.properties = attrs.properties.filter(obj => obj.key !== 'clone');
-    }
-
-    if (attrs.masterslave) {
-      data += '&resource_ms=on';
-      attrs.properties = attrs.properties.filter(obj => obj.key !== 'masterslave');
-    }
-
-    attrs.properties.forEach((o) => {
-      data += `&_res_paramne_${o.key}=${o.value}`;
-    });
-
-    this.get('ajax')
-      .post(url, { data })
-      .then(() => {
-        this.reloadData();
-      });
-  },
-
-  /**
    * Download a list of installed agents from pcsd
    *
    *  @param {string} agentType - Type of agent (resource|fence)
