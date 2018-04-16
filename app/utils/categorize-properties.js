@@ -26,8 +26,13 @@ export default function categorizeProperties(parameters) {
 
   parameters.forEach((i) => {
     result.validations[i.name] = [];
+
     if (i.required) {
-      result.validations[i.name].push(validatePresence({ presence: true }));
+      if (i.name !== 'port') {
+        // @workaround: pacemaker bug; port should not be required as it automatically added
+        //    via pcmk_host_list/pcmk_host_map
+        result.validations[i.name].push(validatePresence({ presence: true }));
+      }
     }
     if (i.type === 'integer') {
       result.validations[i.name].push(validateNumber({ integer: true, allowBlank: true }));
