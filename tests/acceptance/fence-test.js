@@ -40,9 +40,7 @@ test('update required field in the form', async (assert) => {
   await fillIn(emberFormForFind('Physical plug number, name of virtual machine or UUID'), '99');
   assert.ok(true, 'Label "physical plug number" was found as expected');
 
-  const submitButton = find('button.form-button--submit')[0];
-  assert.equal('Update', submitButton.innerText.trim());
-  await click(find('button.form-button--submit')[0]);
+  await click(emberFormButton('Update'));
   assert.ok(true, 'Update was sent to the back-end');
 });
 

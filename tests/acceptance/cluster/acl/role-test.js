@@ -41,7 +41,7 @@ test('add (and remove) ACL user to the ACL role', async (assert) => {
   assert.ok(find('label.form-field--label').length > 0, 'There is an open form');
 
   await fillIn(emberFormForFind('Name'), 'foo');
-  await click(find('form button'));
+  await click(emberFormButton('Add'));
   assert.ok(true, 'It was possible to fill in form and submit it for processing');
 
   let tableCells = find('table tr td');

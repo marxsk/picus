@@ -28,5 +28,6 @@ module.exports = {
   globals: {
     server: true,
     emberFormForFind: true,
+    emberFormButton: true,
   },
 };

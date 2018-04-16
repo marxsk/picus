@@ -41,6 +41,7 @@ test('visiting /cluster/resources/does-not-exist', async (assert) => {
 
 
 test('add meta attribute', async (assert) => {
+  assert.expect(0);
   defaultScenario(server);
 
   await visit('/cluster/my/resources/show/resource-ping?tab=attributes');
@@ -50,11 +51,5 @@ test('add meta attribute', async (assert) => {
   await fillIn(emberFormForFind('Key'), 'foo');
   await fillIn(emberFormForFind('Value'), 'bar');
 
-  assert.equal(
-    find('button')[14].outerText,
-    'Add',
-    'Validation do not block submitting of the form',
-  );
-
-  await click('button:eq(14)');
+  await click(emberFormButton('Add'));
 });

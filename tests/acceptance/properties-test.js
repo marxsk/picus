@@ -39,15 +39,15 @@ test('update election-timeout', async (assert) => {
 
   await fillIn(emberFormForFind('election timeout:'), '99m');
   assert.ok(true, 'Label "election timeout" was found as expected');
-  await click(find('div.save-button button')[0]);
+  await click(emberFormButton('Save changes'));
   assert.ok(true, 'Properties changes were sent to the back-end');
 });
 
 test('submit with the unmodified form', async (assert) => {
   defaultScenario(server);
-  console.log('Is there a warning from ember-cli-mirage? If yes, than this is the problematic tests :)');
+  Ember.Logger.debug('Is there a warning from ember-cli-mirage? If yes, than this is the problematic tests :)');
   await visit('/cluster/my/properties');
 
-  await click(find('div.save-button button')[0]);
+  await click(emberFormButton('Save changes'));
   assert.ok(true, 'Properties changes were sent to the back-end');
 });
