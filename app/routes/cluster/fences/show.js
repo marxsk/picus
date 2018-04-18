@@ -3,7 +3,13 @@ import TabRoute from 'picus/routes/tab-route';
 
 export default TabRoute.extend({
   modelForm: {},
+  formMapping: {},
   fence: undefined,
+  pcmk_host_map_string: 'aa',
+
+  init(...args) {
+    this._super(...args);
+  },
 
   async model(params) {
     const fence = this.store.peekRecordQueryName('fence', params.fence_name);
@@ -28,10 +34,25 @@ export default TabRoute.extend({
       });
     }
 
+    this.set('formMapping', Ember.Object.create());
+    // @todo: this should be derived from the pcmk_host_map/pcmk_host_list
+    this.set('formMapping.mappingScheme', 'manual');
+
+    const pcmkHostMap = fence.get('properties').filterBy('name', 'pcmk_host_map');
+
+    if (pcmkHostMap.length > 0) {
+      // @note: computed property?
+      pcmkHostMap[0].get('value').split(';').forEach((entry) => {
+        const [node, plugs] = entry.split(':');
+        this.set(`formMapping.${node}`, plugs);
+      });
+    }
+
     return Ember.RSVP.hash({
       params,
       metadata,
       formData: this.get('modelForm'),
+      formMapping: this.get('formMapping'),
       updatingCluster: this.store.peekAll('cluster'),
       selectedFence: fence,
       fences: this.store.peekAll('fence'),
@@ -75,6 +96,39 @@ export default TabRoute.extend({
       resource.deleteRecord();
       this.transitionTo('cluster.fences.index');
       return this.get('notifications').notificationSaveRecord(resource, 'REMOVE_RESOURCE');
+    },
+    updateMapping(form) {
+      const fence = this.get('fence');
+
+      const nodesOnly = Object.keys(form).filter(x => x !== 'mappingScheme');
+
+      const newPcmkHostMapList = [];
+      nodesOnly.forEach((node) => {
+        const plugs = form[node].trim();
+        if (plugs !== '') {
+          newPcmkHostMapList.push(`${node}:${plugs}`);
+        }
+      });
+      const newPcmkHostMapString = newPcmkHostMapList.join(';');
+
+      // @todo: duplicate code with submitAction
+      const existingProps = this.get('store')
+        .peekAll('fence-property')
+        .filterBy('name', 'pcmk_host_map')
+        .filterBy('fence.name', fence.get('name'));
+
+      if (existingProps.length === 0) {
+        fence.get('properties').addObject(this.get('store').createRecord('fence-property', {
+          fence,
+          name: 'pcmk_host_map',
+          value: newPcmkHostMapString,
+        }));
+      } else {
+        existingProps[0].set('value', newPcmkHostMapString);
+      }
+
+      this.transitionTo('cluster.fences.index');
+      return this.get('notifications').notificationSaveRecord(fence, 'UPDATE_FENCE');
     },
   },
 });

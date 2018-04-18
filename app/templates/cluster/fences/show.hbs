@@ -37,6 +37,7 @@
 {{bs-nav-items tab=tab onSetActiveTab=(action 'setActiveTab') items=(array
   (hash name="status" title="Status")
   (hash name="properties" title="Properties")
+  (hash name="mapping" title="Mapping")
 )}}
 <div class="tab-content">
   {{#tab.pane elementId="status" title="Status"}}
@@ -57,6 +58,29 @@
       availableMetadata = true
     }}
   {{/tab.pane}}
+
+  {{#tab.pane elementId="mapping" title="Mapping"}}
+    <h3>Select a mapping scheme</h3>
+
+    {{#form-for model.formMapping submit=(route-action 'updateMapping') as |f|}}
+      {{f.select-field 'mappingScheme' options="automatic manual" required=true}}
+
+      {{#if (eq model.formMapping.mappingScheme 'automatic')}}
+        {{#each model.updatingCluster.firstObject.nodes as |node|}}
+          {{f.text-field node.name placeholder='Dynamically determined' disabled=1}}
+        {{/each}}
+      {{/if}}
+
+      {{#if (eq model.formMapping.mappingScheme 'manual')}}
+        {{#each model.updatingCluster.firstObject.nodes as |node|}}
+          {{f.text-field node.name placeholder='Type in a relevant plug'}}
+        {{/each}}
+      {{/if}}
+
+      {{f.submit "Update"}}
+    {{/form-for}}
+  {{/tab.pane}}
+
   </div>
   {{/bs-tab}}
 {{/with}}
