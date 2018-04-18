@@ -1,8 +1,8 @@
 {{title}} ({{attributes.length}}):
 {{#if onDeleteMultipleAction}}
-  <span class='delete-attrs' onClick={{action onDeleteMultipleAction}}>Delete selected</span>
+  {{#bs-button onClick=(action onDeleteMultipleAction)}} <span class="glyphicon glyphicon-remove" /> Delete <span class="badge">{{_checkedAttributes.length}}</span>{{/bs-button}}
 {{else}}
-  <span class='delete-attrs' onClick={{action 'naiveDeleteMultipleAction'}}>Delete selected</span>
+  {{#bs-button onClick=(action 'naiveDeleteMultipleAction')}} <span class="glyphicon glyphicon-remove" /> Delete <span class="badge">{{_checkedAttributes.length}}</span>{{/bs-button}}
 {{/if}}
 <table border='1'>
   {{#each attributes as |attr|}}
