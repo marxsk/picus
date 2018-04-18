@@ -13,6 +13,12 @@ export default BaseRoute.extend({
   selectedAgent: '',
   mapping: {},
 
+  init(...args) {
+    this._super(...args);
+    this.set('mappingForm.mappingScheme', 'select');
+    this.set('agentForm.fenceAgent', 'fence_apc');
+  },
+
   beforeModel() {
     return new RSVP.Promise((resolve, reject) => {
       this.store.getAvailableAgents('fence').then(
