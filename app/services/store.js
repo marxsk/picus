@@ -407,17 +407,6 @@ export default DS.Store.extend({
     );
   },
 
-  // @note: should it return promise?
-  _sendAclData(url, data) {
-    this.get('ajax')
-      .post(url, {
-        data: JSON.stringify({ data }),
-      })
-      .then(() => {
-        this.reloadData();
-      });
-  },
-
   /**
    * Query for single record on top of the already loaded data
    * */
