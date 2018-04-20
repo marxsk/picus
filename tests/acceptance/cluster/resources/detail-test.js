@@ -46,7 +46,7 @@ test('add meta attribute', async (assert) => {
 
   await visit('/cluster/my/resources/show/resource-ping?tab=attributes');
   await click(find('h4')[0]);
-  await click('button:eq(13)');
+  await click('button:eq(20)');
 
   await fillIn(emberFormForFind('Key'), 'foo');
   await fillIn(emberFormForFind('Value'), 'bar');

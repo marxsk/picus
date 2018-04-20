@@ -32,7 +32,7 @@ test('Delete selected on node attributes', async (assert) => {
   assert.equal('util attr #99', tableCells[1].innerText, 'First attribute exists as expected');
 
   await click(find('table tr td input')[0]);
-  await click(find('span.delete-attrs')[0]);
+  await click(find('button')[3]);
 
   tableCells = find('table tr td');
   assert.equal(0, tableCells.length, 'First attribute was removed');
