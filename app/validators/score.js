@@ -8,6 +8,6 @@ export default function validateScore() {
     ) {
       return true;
     }
-    return 'You have to enter integer value or +/-INFINTY';
+    return 'You have to enter integer value or +/-INFINITY';
   };
 }
