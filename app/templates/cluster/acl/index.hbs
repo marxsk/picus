@@ -23,7 +23,6 @@
     title='Roles'
     attributes=model.updatingCluster.firstObject.aclRoles
     onDeleteAction=(route-action 'delete' 'DELETE_ACL_ROLE')
-    validations=model.nameValidation
     as |attr|
 }}
     <td>
@@ -46,7 +45,6 @@
       attributes=role.permissions
       onDeleteAction=(route-action 'delete')
       onDeleteMultipleAction=(route-action 'deleteMultiple')
-      validations=model.xpathValidation
       as |form mode attr f|
   }}
     <td>{{attr.operation}}</td>
