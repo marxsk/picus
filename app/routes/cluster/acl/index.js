@@ -36,7 +36,7 @@ export default TabRoute.extend({
       const aclRole = this.get('store').createRecord('acl-role', {
         cluster,
         name: attributes.get('name'),
-        description: attributes.get('description'),
+        description: attributes.getWithDefault('description', ''),
       });
       return this.get('notifications').notificationSaveRecord(aclRole, 'ADD_ACL_ROLE');
     },
