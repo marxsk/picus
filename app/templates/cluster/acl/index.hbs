@@ -13,9 +13,9 @@
   visibilityTitle="Add Role"
   submitTitle="Add"
   submitAction=(route-action 'addRole')
-  validations=model.validations.addRole as |f changeset|
+  validations=model.validations.nameValidation as |f changeset|
 }}
-  {{f.text-field 'name'}}
+  {{f.text-field 'name' required=true}}
   {{f.text-field 'description'}}
 {{/attr-form}}
 

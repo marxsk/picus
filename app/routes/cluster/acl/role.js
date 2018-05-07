@@ -16,6 +16,9 @@ export default TabRoute.extend({
       addPermission: {
         query: validatePresence(true),
       },
+      nameValidation: {
+        name: validatePresence(true),
+      },
     };
 
     return Ember.RSVP.hash({

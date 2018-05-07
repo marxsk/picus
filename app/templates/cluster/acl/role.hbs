@@ -34,9 +34,9 @@
   visibilityTitle="Add User"
   submitTitle="Add"
   submitAction=(route-action 'addUser')
-  validations=model.validations.addUser as |f|
+  validations=model.validations.nameValidation as |f|
 }}
-  {{f.text-field 'name'}}
+  {{f.text-field 'name' required=true}}
 {{/attr-form}}
 {{#attr-list
   title='Users'
@@ -51,9 +51,9 @@
   visibilityTitle="Add Group"
   submitTitle="Add"
   submitAction=(route-action 'addGroup')
-  validations=model.validations.addGroup as |f|
+  validations=model.validations.nameValidation as |f|
 }}
-  {{f.text-field 'name'}}
+  {{f.text-field 'name' required=true}}
 {{/attr-form}}
 {{#attr-list
   title='Groups'

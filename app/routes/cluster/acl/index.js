@@ -6,17 +6,18 @@ export default TabRoute.extend({
   notifications: Ember.inject.service('notifications'),
 
   model() {
-    const nameValidation = {
-      name: [validatePresence({ presence: true })],
-    };
-    const xpathValidation = {
-      xpath: [validatePresence({ presence: true })],
+    const validations = {
+      nameValidation: {
+        name: [validatePresence({ presence: true })],
+      },
+      xpathValidation: {
+        xpath: [validatePresence({ presence: true })],
+      },
     };
 
     return Ember.RSVP.hash({
       updatingCluster: this.store.peekAll('cluster'),
-      nameValidation,
-      xpathValidation,
+      validations,
     });
   },
 
