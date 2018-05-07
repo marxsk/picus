@@ -114,7 +114,7 @@ export default TabRoute.extend({
     addLocationPreference(form) {
       const preference = this.get('store').createRecord('location-preference', {
         resource: this.get('resource'),
-        node: form.get('node'),
+        node: form.get('node.name'),
         score: form.get('score'),
       });
       return this.get('notifications').notificationSaveRecord(

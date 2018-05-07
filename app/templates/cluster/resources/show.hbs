@@ -102,7 +102,12 @@
     submitAction=(route-action 'addLocationPreference')
     validations=model.validations.addLocationPreference as |f|
   }}
-    {{f.text-field 'node'}}
+    {{f.select-field 'node'
+      options=model.updatingCluster.firstObject.nodes
+      optionValuePath="name"
+      optionLabelPath="name"
+      prompt="Select a target node"
+    }}
     {{f.text-field 'score'}}
   {{/attr-form}}
   {{#attr-list
