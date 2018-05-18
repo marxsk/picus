@@ -8,7 +8,7 @@
     {{#form-for changeset submit=(pipe (action submitAction) (toggle "_isFormVisible" this)) as |f|}}
       {{yield f changeset}}
       {{#if changeset.isInvalid}}
-        {{#bs-button}}Fix issues!{{/bs-button}}
+        {{#bs-button disabled=1}}Fix issues!{{/bs-button}}
       {{else}}
         {{f.submit submitTitle}}
       {{/if}}
