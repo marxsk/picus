@@ -40,6 +40,15 @@ export default BaseRoute.extend({
       this.set('selectedAgent', agent);
     }
 
+    this.set('mappingForm', Ember.Object.create());
+    // initialize fence mapping so we can edit it in the component
+    const nodes = this.store.peekAll('cluster').get('firstObject.nodes');
+    nodes.forEach((n) => {
+      this.set(`mappingForm.fence_${n.get('name')}`, Ember.Object.create({
+        name: n.get('name'),
+      }));
+    });
+
     return Ember.RSVP.hash({
       availableAgents: this.get('availables'),
       params,
@@ -103,8 +112,6 @@ export default BaseRoute.extend({
     },
 
     submitAgent() {
-      delete this.get('mappingForm').mappingScheme;
-
       // copied&modified from fence/create.js (refactor-later)
       const cluster = this.store.peekAll('cluster').objectAt(0);
 
@@ -132,14 +139,19 @@ export default BaseRoute.extend({
         }));
       });
 
-      // save mapping info into pcmk_host_map
-      let pcmkHostMap = '';
-      Object.keys(this.get('mappingForm')).forEach((nodename) => {
-        const plugValue = this.get(`mappingForm.${nodename}`);
-        if (plugValue.trim() !== '') {
-          pcmkHostMap += `${nodename}:${plugValue};`;
+      // save mapping info into pcmk_host_map // @todo: pcmk_host_list & etc ..
+      // @refactor: same code is also in show.js
+      const newPcmkHostMapList = [];
+      const nodesOnly = Object.keys(this.get('mappingForm')).filter(x => x !== 'mappingScheme');
+      nodesOnly.forEach((nodeIndex) => {
+        const node = this.get('mappingForm').get(nodeIndex);
+
+        if (node.get('checked')) {
+          const plugs = node.getWithDefault('plugs', '').trim();
+          newPcmkHostMapList.push(`${node.get('name')}:${plugs}`);
         }
       });
+      const pcmkHostMap = newPcmkHostMapList.join(';');
 
       resource.get('properties').addObject(this.get('store').createRecord('fence-property', {
         resource,

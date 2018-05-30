@@ -5,7 +5,6 @@ export default TabRoute.extend({
   modelForm: {},
   formMapping: {},
   fence: undefined,
-  pcmk_host_map_string: 'aa',
 
   init(...args) {
     this._super(...args);
@@ -40,12 +39,24 @@ export default TabRoute.extend({
 
     const pcmkHostMap = fence.get('properties').filterBy('name', 'pcmk_host_map');
 
+    // initialize fence mapping so we can edit it in the component
+    const nodes = this.store.peekAll('cluster').get('firstObject.nodes');
+    nodes.forEach((n) => {
+      this.set(`formMapping.fence_${n.get('name')}`, Ember.Object.create({
+        name: n.get('name'),
+      }));
+    });
+
     if (pcmkHostMap.length > 0) {
       // @note: computed property?
-      pcmkHostMap[0].get('value').split(';').forEach((entry) => {
-        const [node, plugs] = entry.split(':');
-        this.set(`formMapping.${node}`, plugs);
-      });
+      pcmkHostMap[0]
+        .get('value')
+        .split(';')
+        .forEach((entry) => {
+          const [node, plugs] = entry.split(':');
+          this.set(`formMapping.fence_${node}.plugs`, plugs);
+          this.set(`formMapping.fence_${node}.checked`, true);
+        });
     }
 
     return Ember.RSVP.hash({
@@ -99,14 +110,15 @@ export default TabRoute.extend({
     },
     updateMapping(form) {
       const fence = this.get('fence');
-
       const nodesOnly = Object.keys(form).filter(x => x !== 'mappingScheme');
 
       const newPcmkHostMapList = [];
-      nodesOnly.forEach((node) => {
-        const plugs = form[node].trim();
-        if (plugs !== '') {
-          newPcmkHostMapList.push(`${node}:${plugs}`);
+      nodesOnly.forEach((nodeIndex) => {
+        const node = form.get(nodeIndex);
+
+        if (node.get('checked')) {
+          const plugs = node.getWithDefault('plugs', '').trim();
+          newPcmkHostMapList.push(`${node.get('name')}:${plugs}`);
         }
       });
       const newPcmkHostMapString = newPcmkHostMapList.join(';');
@@ -127,6 +139,7 @@ export default TabRoute.extend({
         existingProps[0].set('value', newPcmkHostMapString);
       }
 
+      this.set('formMapping', Ember.Object.create());
       this.transitionTo('cluster.fences.index');
       return this.get('notifications').notificationSaveRecord(fence, 'UPDATE_FENCE');
     },

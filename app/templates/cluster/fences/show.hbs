@@ -65,17 +65,9 @@
     {{#form-for model.formMapping submit=(route-action 'updateMapping') as |f|}}
       {{f.select-field 'mappingScheme' options="automatic manual" required=true}}
 
-      {{#if (eq model.formMapping.mappingScheme 'automatic')}}
-        {{#each model.updatingCluster.firstObject.nodes as |node|}}
-          {{f.text-field node.name placeholder='Dynamically determined' disabled=1}}
-        {{/each}}
-      {{/if}}
-
-      {{#if (eq model.formMapping.mappingScheme 'manual')}}
-        {{#each model.updatingCluster.firstObject.nodes as |node|}}
-          {{f.text-field node.name placeholder='Type in a relevant plug'}}
-        {{/each}}
-      {{/if}}
+      {{#each model.updatingCluster.firstObject.nodes as |node|}}
+        {{f.fence-field (concat 'fence_' node.name) label=node.name port=(array-contains model.metadata.parameters 'port' property='name')}}
+      {{/each}}
 
       {{f.submit "Update"}}
     {{/form-for}}

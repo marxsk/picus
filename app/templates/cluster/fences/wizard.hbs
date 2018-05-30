@@ -67,18 +67,11 @@
     <h3>Select a mapping scheme</h3>
 
     {{#form-for model.mappingForm submit=(route-action 'selectMapping' w) as |f|}}
-      {{f.select-field 'mappingScheme' options="select manual" required=true}}
+      {{f.select-field 'mappingScheme' options="automatic manual" required=true}}
 
-      {{#if (eq model.mappingForm.mappingScheme 'select')}}
-        {{#each model.updatingCluster.firstObject.nodes as |node|}}
-          {{f.select-field node.name options=_fenceMappingInfo placeholder='Type in a relevant plug'}}
-        {{/each}}
-      {{/if}}
-      {{#if (eq model.mappingForm.mappingScheme 'manual')}}
-        {{#each model.updatingCluster.firstObject.nodes as |node|}}
-          {{f.text-field node.name placeholder='Type in a relevant plug'}}
-        {{/each}}
-      {{/if}}
+      {{#each model.updatingCluster.firstObject.nodes as |node|}}
+        {{f.fence-field (concat 'fence_' node.name) label=node.name port=(array-contains model.agentMetadata.response.parameters 'port' property='name')}}
+      {{/each}}
 
       {{f.submit "Next"}}
     {{/form-for}}
