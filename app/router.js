@@ -40,6 +40,8 @@ Router.map(function router() {
   });
   this.route('error');
 
+  this.route('create-cluster');
+
   return true;
 });
 

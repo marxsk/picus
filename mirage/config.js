@@ -666,4 +666,13 @@ export default function () {
     plug01: 'alias for this plug',
     plug02: 'other alias',
   }));
+
+  this.post('/xyz', function xyz(schema, request) {
+    const attrs = this.normalizedRequestAttrs();
+
+    if (attrs.nodename === 'fail') {
+      return new Response(400);
+    }
+    return new Response(200, { 'Content-Type': 'text/plain' }, 'Everything was ok');
+  });
 }

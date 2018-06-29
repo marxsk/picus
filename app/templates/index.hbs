@@ -4,3 +4,6 @@ Clusters:
     <li>{{#link-to "cluster.index" cluster.cluster_name}}{{cluster.cluster_name}}{{/link-to}}</li>
   {{/each}}
 </ul>
+
+{{#bs-button onClick=(route-action 'linkTo' 'create-cluster')}} Create new cluster {{/bs-button}}
+{{#bs-button onClick=(route-action 'linkTo' 'add-existing-cluster')}} Add existing cluster to the UI {{/bs-button}}

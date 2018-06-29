@@ -423,4 +423,22 @@ export default DS.Store.extend({
       data: _jsonToQueryString({}),
     });
   },
+
+  getAuthorizeNode(nodeinfo) {
+    const url = '/xyz';
+
+    const node = {
+      nodename: nodeinfo.get('nodename'),
+    };
+
+    return new Ember.RSVP.Promise((resolve, reject) =>
+      Ember.$.post(url, { data: _jsonToQueryString(node) }).then(
+        (response) => {
+          resolve(response);
+        },
+        (xhr) => {
+          reject(xhr);
+        },
+      ));
+  },
 });

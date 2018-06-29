@@ -81,6 +81,14 @@ export default TabRoute.extend({
   },
 
   actions: {
+    setConstraintSet(record, value, z) {
+      record.set('selected', value);
+    },
+    setIsEmpty(record) {
+      if (!record) return false;
+      return record.getWithDefault('selected.length', 0) === 0;
+    },
+
     onSubmitAction(form) {
       const resource = this.get('resource');
       form.get('changes').forEach((obj) => {
