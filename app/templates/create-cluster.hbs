@@ -1,0 +1,55 @@
+{{#step-manager as |w|}}
+  {{#with (hash authorizeNodes='Authorize Nodes' fenceProperties='Properties') as |labels|}}
+    {{#each w.steps as |step|}}
+      {{#if (gt step w.currentStep)}}
+        <button>
+          {{if (get labels step) (get labels step) step}}
+        </button>
+      {{else}}
+        <button {{action w.transition-to step}}>
+          {{#if (eq step w.currentStep)}}*{{/if}}
+          {{if (get labels step) (get labels step) step}}
+          {{#if (eq step w.currentStep)}}*{{/if}}
+        </button>
+      {{/if}}
+    {{/each}}
+  {{/with}}
+
+  {{#w.step name='authorizeNodes'}}
+    {{#form-for model.authorizedNodesForm submit=(route-action 'linkTo') as |f|}}
+      {{f.text-field 'clusterName'}}
+
+      {{#form-dynamic
+        dataObject=model.authorizedNodesForm
+        dataObjectKey='nodes'
+        isEmpty=(route-action 'emptyNode')
+        as |record index dynamicUpdate|
+      }}
+        {{f.node-field
+          (concat 'nodes_' index)
+          index=index
+          authorize=(route-action 'authorizeNode')
+          update=(action (pipe (route-action 'xyz' record) (action dynamicUpdate index)))
+        }}
+      {{/form-dynamic}}
+    {{/form-for}}
+    <button {{action w.transition-to 'summary'}}>NEXT</button>
+  {{/w.step}}
+
+  {{#w.step name='loadingMetadata'}}
+    <h3>Waiting for response from pcsd</h3>
+  {{/w.step}}
+
+  {{#w.step name='summary'}}
+      <br /> Summary: <br />
+      Name: {{model.modelForm.resourceName}} <br />
+      Type: {{model.agentForm.fenceAgent}} <br />
+      Mapping scheme: <br />
+      <ul>
+      {{#each model.updatingCluster.firstObject.nodes as |node|}}
+        <li>{{node.name}} :: {{get model.mappingForm node.name}}</li>
+      {{/each}}
+      </ul>
+    {{#bs-button onClick=(route-action 'submitAgent')}}Setup fence agent{{/bs-button}}
+  {{/w.step}}
+{{/step-manager}}

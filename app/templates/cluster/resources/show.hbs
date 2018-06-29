@@ -129,7 +129,7 @@
     validations=model.validations.addColocationPreference as |f changeset|
   }}
 
-  {{#dynamic-fields
+  {{#form-dynamic
     dataObject=changeset
     dataObjectKey='targetResources'
     max=1
@@ -151,7 +151,7 @@
       (concat '_targetResources_' index)
       errorsOnly=true
     }}
-  {{/dynamic-fields}}
+  {{/form-dynamic}}
 
     {{f.select-field 'colocationType' 'Together Apart'}}
     {{f.text-field 'score'}}
@@ -163,13 +163,14 @@
     submitAction=(route-action 'addSetColocationPreference')
     validations=model.validations.addSetColocationPreference as |f changeset|
   }}
+
     {{#warning-set data=changeset.resources selfName=selResource.name}}
       None, of your sets contain this resource. You might want to fix this
     {{/warning-set}}
-
-    {{#dynamic-fields
+    {{#form-dynamic
       dataObject=changeset
       dataObjectKey='resources'
+      isEmpty=(route-action 'setIsEmpty')
       as |record index dynamicUpdate|
     }}
       {{f.custom-field
@@ -179,12 +180,12 @@
         multiple=true
         placeholder='Select resources'
         step=(map-by 'name' model.resources)
-        tabindex=record
+        tabindex=record.selected
         max=index
         min=changeset
-        pattern=(action dynamicUpdate '' index)
+        pattern=(action (pipe (route-action 'setConstraintSet' record) (action dynamicUpdate index)))
       }}
-    {{/dynamic-fields}}
+    {{/form-dynamic}}
   {{/attr-form}}
 
   {{#attr-list
@@ -221,7 +222,7 @@
     submitAction=(route-action 'addOrderingPreference')
     validations=model.validations.addOrderingPreference as |f changeset|
   }}
-    {{#dynamic-fields
+    {{#form-dynamic
       dataObject=changeset
       dataObjectKey='targetResources'
       max=1
@@ -243,7 +244,7 @@
         (concat '_targetResources_' index)
         errorsOnly=true
       }}
-    {{/dynamic-fields}}
+    {{/form-dynamic}}
     {{f.select-field 'targetAction' 'starts promotes demotes stops'}}
     {{f.select-field 'order' 'before after'}}
     {{f.select-field 'action' 'starts promotes demotes stops'}}
@@ -260,7 +261,7 @@
       None, of your sets contain this resource. You might want to fix this
     {{/warning-set}}
 
-    {{#dynamic-fields
+    {{#form-dynamic
       dataObject=changeset
       dataObjectKey='resources'
       as |record index dynamicUpdate|
@@ -277,7 +278,7 @@
         min=changeset
         pattern=(action dynamicUpdate '' index)
       }}
-    {{/dynamic-fields}}
+    {{/form-dynamic}}
   {{/attr-form}}
 
   {{#attr-list
@@ -335,7 +336,7 @@
       None, of your sets contain this resource. You might want to fix this
     {{/warning-set}}
 
-    {{#dynamic-fields
+    {{#form-dynamic
       dataObject=changeset
       dataObjectKey='resources'
       as |record index dynamicUpdate|
@@ -352,7 +353,7 @@
         min=changeset
         pattern=(action dynamicUpdate '' index)
       }}
-    {{/dynamic-fields}}
+    {{/form-dynamic}}
   {{/attr-form}}
 
   {{#attr-list

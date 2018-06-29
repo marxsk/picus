@@ -47,7 +47,6 @@
     "ember-data-change-tracker": "^0.7.1",
     "ember-data-filter": "1.13.0",
     "ember-drag-drop": "0.4.6",
-    "ember-dynamic-fields": "*",
     "ember-export-application-global": "^1.0.5",
     "ember-form-for": "git+https://github.com/marxsk/ember-form-for.git#fence-field",
     "ember-load-initializers": "^1.0.0",
@@ -69,6 +68,7 @@
     "loader.js": "^4.0.1"
   },
   "dependencies": {
+    "dynamic": "git+https://github.com/marxsk/ember-dynamic-fields.git#rewrite",
     "ember-array-contains-helper": "^2.0.0"
   }
 }
