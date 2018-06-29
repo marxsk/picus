@@ -7,10 +7,14 @@ export default Ember.Component.extend({
         return false;
       }
 
-      return this.get('data').some((textField) => {
-        if (!textField) {
+      console.log(this.get('data'));
+
+      return this.get('data').some((obj) => {
+        if (!obj.get('resources')) {
           return false;
         }
+
+        console.log(obj);
 
         return textField.some(name => this.get('selfName') === name);
       });
