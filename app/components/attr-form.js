@@ -56,7 +56,14 @@ export default Ember.Component.extend({
    * @property _empty
    * @private
    */
-  _empty: {},
+  _empty: undefined,
 
   _isFormVisible: false,
+
+  init() {
+    this._super();
+    const x = Ember.Object.create({ resources: Ember.A() });
+    x.get('resources').pushObject(Ember.Object.create());
+    this.set('_empty', x);
+  },
 });
